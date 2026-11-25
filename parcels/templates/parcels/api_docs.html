@@ -1,0 +1,106 @@
+{% extends 'parcels/base.html' %}
+
+{% block title %}Open REST APIs & Developer Hub | GeoLand DPI{% endblock %}
+
+{% block content %}
+<div class="container py-2">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-0"><i class="bi bi-code-slash text-primary me-2"></i>DPI Open API & Developer Documentation</h3>
+            <div class="text-muted small">Interoperable REST Endpoints for Crop Insurance, Agri-Credits, PM-KISAN, and Spatial GIS</div>
+        </div>
+        <span class="badge bg-success p-2">OpenAPI / GeoJSON Standard</span>
+    </div>
+
+    <!-- Overview Banner -->
+    <div class="card border-0 shadow-sm p-4 bg-white rounded-3 mb-4">
+        <h5 class="fw-bold text-dark mb-2">Digital Public Infrastructure (DPI) Principles</h5>
+        <p class="text-secondary mb-0">
+            Land data is published through open REST APIs with standardized GeoJSON geometry. Third-party institutions like credit rating agencies, crop insurance aggregators, and satellite monitoring systems can query parcel boundaries, ownership validation, and crop records with zero friction.
+        </p>
+    </div>
+
+    <!-- API Endpoints List -->
+    <div class="row g-4">
+        
+        <!-- Endpoint 1 -->
+        <div class="col-12">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge bg-success font-monospace px-3 py-2">GET /api/parcels/</span>
+                    <a href="{% url 'api_parcels_geojson' %}" target="_blank" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-box-arrow-up-right me-1"></i> Try Live API
+                    </a>
+                </div>
+                <h5 class="fw-bold text-dark mt-2">Cadastral Parcels GeoJSON FeatureCollection</h5>
+                <p class="text-muted small">Returns all digitized cadastral polygons with embedded ownership, crop, and status attributes in standard WGS84 GeoJSON format.</p>
+                
+                <h6 class="fw-bold small text-secondary">Supported Query Parameters:</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm small">
+                        <thead class="table-light">
+                            <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>q</code></td><td>string</td><td>Full-text search across Khasra number, ULPIN, or Owner name</td></tr>
+                            <tr><td><code>village</code></td><td>string</td><td>Filter by village name (e.g. Rampur Khurd)</td></tr>
+                            <tr><td><code>land_use</code></td><td>string</td><td>Filter by land use type (e.g. Irrigated Agri)</td></tr>
+                            <tr><td><code>status</code></td><td>string</td><td>Filter by title legality (Clear, Disputed, Under Mutation)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="p-3 bg-dark text-light rounded font-monospace small mt-2">
+                    <span class="text-info">{</span><br>
+                    &nbsp;&nbsp;<span class="text-warning">"type"</span>: <span class="text-success">"FeatureCollection"</span>,<br>
+                    &nbsp;&nbsp;<span class="text-warning">"features"</span>: [<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{ <span class="text-warning">"type"</span>: <span class="text-success">"Feature"</span>, <span class="text-warning">"properties"</span>: { <span class="text-warning">"khasra_no"</span>: <span class="text-success">"101/1"</span>, <span class="text-warning">"owner_name"</span>: <span class="text-success">"Ramesh Chandra Yadav"</span>, <span class="text-warning">"pm_kisan"</span>: <span class="text-info">true</span> } ... }<br>
+                    &nbsp;&nbsp;]<br>
+                    <span class="text-info">}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Endpoint 2 -->
+        <div class="col-12">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge bg-primary font-monospace px-3 py-2">GET /api/parcels/{parcel_id}/</span>
+                    <a href="/api/parcels/IN-UP-VNS-2024-1000/" target="_blank" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-box-arrow-up-right me-1"></i> Try Live API
+                    </a>
+                </div>
+                <h5 class="fw-bold text-dark mt-2">Single Parcel Comprehensive RoR Record</h5>
+                <p class="text-muted small">Returns complete nested details of a single land parcel using its unique ULPIN ID including co-owners, historical mutations, and crop sowing history.</p>
+                
+                <div class="p-3 bg-dark text-light rounded font-monospace small">
+                    <span class="text-info">{</span><br>
+                    &nbsp;&nbsp;<span class="text-warning">"parcel_id"</span>: <span class="text-success">"IN-UP-VNS-2024-1000"</span>,<br>
+                    &nbsp;&nbsp;<span class="text-warning">"khasra_no"</span>: <span class="text-success">"101/1"</span>,<br>
+                    &nbsp;&nbsp;<span class="text-warning">"ownership_records"</span>: [{ <span class="text-warning">"owner"</span>: { <span class="text-warning">"name"</span>: <span class="text-success">"Ramesh Chandra Yadav"</span>, <span class="text-warning">"aadhaar_masked"</span>: <span class="text-success">"XXXX-XXXX-4102"</span> } }],<br>
+                    &nbsp;&nbsp;<span class="text-warning">"crop_records"</span>: [{ <span class="text-warning">"crop"</span>: <span class="text-success">"Wheat (HD-2967)"</span>, <span class="text-warning">"estimated_yield_quintals"</span>: <span class="text-info">38.5</span> }]<br>
+                    <span class="text-info">}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Endpoint 3 -->
+        <div class="col-12">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge bg-secondary font-monospace px-3 py-2">GET /api/stats/</span>
+                    <a href="{% url 'api_dpi_stats' %}" target="_blank" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-box-arrow-up-right me-1"></i> Try Live API
+                    </a>
+                </div>
+                <h5 class="fw-bold text-dark mt-2">Macro DPI Aggregates & FoodTech Stats</h5>
+                <p class="text-muted small">Returns aggregated data for agricultural planners, policy makers, and food storage corporations.</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

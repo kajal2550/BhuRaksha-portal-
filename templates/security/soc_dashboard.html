@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}Security Operations Center (SOC) | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-lg-4 py-3">
+
+    <!-- SOC Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="fw-bold text-white mb-0 font-monospace">
+                <span class="spinner-grow text-danger spinner-grow-sm me-2" role="status"></span>
+                SECURITY_OPERATIONS_CENTER // SOC_TELEMETRY
+            </h4>
+            <div class="text-muted small">Real-time Cryptographic Audit Stream, Anomaly Threat Alerts & Integrity Telemetry</div>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'audit_trail' %}" class="btn btn-cyber-outline btn-sm">
+                <i class="bi bi-link-45deg me-1"></i> Verify Hash Chain
+            </a>
+            <a href="{% url 'integrity_verify' %}" class="btn btn-cyber-green btn-sm">
+                <i class="bi bi-shield-check me-1"></i> Run 50-Parcel Scan
+            </a>
+            <a href="{% url 'anomalies_list' %}" class="btn btn-cyber-outline btn-sm text-warning">
+                <i class="bi bi-search me-1"></i> Run Threat Detectors
+            </a>
+        </div>
+    </div>
+
+    <!-- SOC Top Telemetry Gauges -->
+    <div class="row g-3 mb-4">
+        
+        <div class="col-md-3">
+            <div class="cyber-card p-3 border-start border-3 {% if chain_valid %}border-success{% else %}border-danger{% endif %}">
+                <div class="text-muted small font-monospace">HASH CHAIN VALIDITY</div>
+                <div class="fs-4 fw-bold {% if chain_valid %}text-success{% else %}text-danger{% endif %} mt-1">
+                    {% if chain_valid %}P-OK (TAMPER-FREE){% else %}BREACH DETECTED{% endif %}
+                </div>
+                <small class="text-muted font-monospace" style="font-size:0.75rem;">SHA-256 Chain Sealed</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="cyber-card p-3 border-start border-3 border-info">
+                <div class="text-muted small font-monospace">INTEGRITY RATE</div>
+                <div class="fs-4 fw-bold text-info mt-1">{{ integrity_rate }}%</div>
+                <small class="text-muted">{{ total_parcels }} Cadastral Fingerprints</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="cyber-card p-3 border-start border-3 border-danger">
+                <div class="text-muted small font-monospace">ACTIVE THREAT ALERTS</div>
+                <div class="fs-4 fw-bold text-danger mt-1">{{ alerts|length }}</div>
+                <small class="text-danger font-monospace">Geometry / Velocity / PII</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="cyber-card p-3 border-start border-3 border-warning">
+                <div class="text-muted small font-monospace">INSTITUTIONAL API TOKENS</div>
+                <div class="fs-4 fw-bold text-warning mt-1">{{ active_tokens|length }} Active</div>
+                <small class="text-muted">SBI & AIC PMFBY Gateways</small>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Live Terminal Stream & Anomaly Grid -->
+    <div class="row g-4 mb-4">
+        
+        <!-- Live Terminal Stream -->
+        <div class="col-lg-7">
+            <div class="cyber-card p-3 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-info font-monospace small fw-bold">
+                        <i class="bi bi-terminal me-2"></i>LIVE_AUDIT_LOG_TELEMETRY (SHA-256 HASH CHAIN)
+                    </span>
+                    <span class="badge bg-dark border border-secondary text-success" style="font-size: 0.65rem;">POLLING ACTIVE</span>
+                </div>
+
+                <div class="terminal-window p-3" style="height: 480px;" id="terminalLogBox">
+                    {% for l in logs %}
+                    <div class="terminal-line">
+                        <span class="text-secondary">[{{ l.timestamp|date:"H:i:s" }}]</span>
+                        <span class="terminal-tag">[{{ l.action }}]</span>
+                        <span class="text-white">{{ l.parcel_ref }}</span>
+                        by <span class="text-warning">{{ l.user_role }}:{{ l.user.username|default:"SYSTEM" }}</span>
+                        <br>
+                        <span class="terminal-hash small ms-4">CHAIN_HASH: {{ l.current_hash|default:"000000000000" }}</span>
+                    </div>
+                    {% empty %}
+                    <div class="terminal-line text-muted">Awaiting security events...</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Threat Alerts & Failed Login Radar -->
+        <div class="col-lg-5">
+            
+            <!-- Threat Alerts Feed -->
+            <div class="cyber-card p-3 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-danger font-monospace small fw-bold">
+                        <i class="bi bi-exclamation-octagon me-2"></i>ACTIVE_ANOMALY_ALERTS
+                    </span>
+                    <span class="badge-glow-red px-2 py-0 small">{{ alerts|length }}</span>
+                </div>
+
+                <div style="max-height: 250px; overflow-y: auto;">
+                    {% for a in alerts %}
+                    <div class="p-2 mb-2 bg-dark rounded border border-secondary font-monospace small">
+                        <div class="d-flex justify-content-between">
+                            <strong class="text-warning">{{ a.alert_type }}</strong>
+                            <span class="badge {% if a.severity == 'CRITICAL' %}bg-danger{% else %}bg-warning text-dark{% endif %} px-2 py-0" style="font-size:0.6rem;">
+                                {{ a.severity }}
+                            </span>
+                        </div>
+                        <div class="text-muted small mt-1">{{ a.description }}</div>
+                        <div class="text-secondary small mt-1" style="font-size: 0.7rem;">Target: {{ a.parcel_ref|default:"GLOBAL" }}</div>
+                    </div>
+                    {% empty %}
+                    <div class="text-muted small p-3 text-center">No active threat alerts. Anomaly radar clear.</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Failed Logins & Axes Lockout Radar -->
+            <div class="cyber-card p-3">
+                <span class="text-warning font-monospace small fw-bold d-block mb-2">
+                    <i class="bi bi-shield-lock me-2"></i>AUTHENTICATION_RADAR (AXES GUARD)
+                </span>
+                <div class="table-responsive" style="max-height: 180px; overflow-y: auto;">
+                    <table class="table table-cyber table-sm font-monospace small mb-0">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Username</th>
+                                <th>IP Address</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for f in failed_logins %}
+                            <tr>
+                                <td class="text-muted">{{ f.timestamp|date:"H:i:s" }}</td>
+                                <td class="text-white">{{ f.username_attempted }}</td>
+                                <td class="text-info">{{ f.ip_address }}</td>
+                                <td><span class="text-danger">FAILED</span></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-muted text-center py-2">No failed attempts detected.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

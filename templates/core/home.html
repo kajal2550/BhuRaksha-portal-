@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+
+{% block title %}BhuRaksha - Integrated GIS Land Governance Portal{% endblock %}
+
+{% block content %}
+
+<!-- 2. Vibrant Royal Blue Hero Section -->
+<section class="hero-blue-section">
+    <div class="container">
+        
+        <!-- Pill Badge with Green Pulsing Dot -->
+        <div class="hero-pill-badge">
+            <span class="pulse-dot"></span>
+            <span>Digital Public Infrastructure • Multi-State National Cadastre (UP, PB, MP, MH, JH)</span>
+        </div>
+
+        <!-- Big Bold Hero Title -->
+        <h1 class="hero-title">
+            Secure Digital Infrastructure for<br>Land Records & Cadastre Maps
+        </h1>
+
+        <!-- Hero Subtitle -->
+        <p class="hero-subtitle">
+            BhuRaksha unifies GIS parcel maps with verified land titles, crop profiles, and mutation workflows to eliminate land fraud, boundary disputes, and record tampering.
+        </p>
+
+        <!-- Rounded Pill Search Bar with Blue Search Button -->
+        <form method="GET" action="{% url 'map_view' %}" class="hero-search-box">
+            <i class="bi bi-search text-muted me-2 fs-5"></i>
+            <input type="text" name="q" class="hero-search-input" placeholder="Search parcel by Khasra number (e.g. 101/1), ULPIN, or owner name...">
+            <button type="submit" class="hero-search-btn">
+                Search
+            </button>
+        </form>
+
+        <!-- "Start Your Journey" Floating Card -->
+        <a href="{% url 'map_view' %}" class="cta-floating-card text-decoration-none">
+            <div class="cta-icon-box">
+                <i class="bi bi-map-fill"></i>
+            </div>
+            <div class="cta-text-content">
+                <div class="cta-main-title">
+                    <span>Explore Cadastre Map</span>
+                    <span class="cta-badge-tag">50 PLOTS</span>
+                </div>
+                <p class="cta-sub-title">
+                    Inspect Khasra Boundaries • Check Ownership Titles • Download RoR
+                </p>
+            </div>
+            <div class="cta-arrow-btn">
+                <i class="bi bi-arrow-right"></i>
+            </div>
+        </a>
+
+    </div>
+</section>
+
+<!-- 3. Enterprise Capabilities Section (Every Single Card Is 100% Fully Clickable) -->
+<section class="section-capabilities">
+    <div class="container">
+        
+        <h2 class="section-heading-title">
+            Core Land Governance Capabilities
+        </h2>
+        <p class="section-heading-subtitle">
+            Click any module below to launch the live GIS cadastral tool
+        </p>
+
+        <!-- Row 1: 4 Cards -->
+        <div class="row g-4 mb-4">
+            
+            <!-- Card 1: GIS Map -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'map_view' %}" class="capability-card">
+                    <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=600&auto=format&fit=crop&q=80" alt="Cadastral GIS Map" class="capability-img">
+                    <div class="capability-body">
+                        <div class="capability-header">
+                            <i class="bi bi-geo-alt-fill capability-icon"></i>
+                            <h5 class="capability-title">Interactive GIS Cadastre</h5>
+                        </div>
+                        <p class="capability-desc">
+                            Full-screen Leaflet map displaying 50 digitized parcels in Punjab with layer toggles for satellite, status, and crops.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+                            <span class="small fw-semibold text-primary">Launch Map</span>
+                            <i class="bi bi-arrow-right text-primary"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Card 2: Batwara / Split Simulator -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'parcel_split' %}" class="capability-card">
+                    <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&auto=format&fit=crop&q=80" alt="Parcel Split Simulator" class="capability-img">
+                    <div class="capability-body">
+                        <div class="capability-header">
+                            <i class="bi bi-grid-3x3-gap-fill capability-icon"></i>
+                            <h5 class="capability-title">Parcel Split Simulator</h5>
+                        </div>
+                        <p class="capability-desc">
+                            Partition land holdings among legal heirs (Batwara) with automated sub-plot geometry division and sub-ULPINs.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+                            <span class="small fw-semibold text-primary">Simulate Split</span>
+                            <i class="bi bi-arrow-right text-primary"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Card 3: Land Valuation & Stamp Duty -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'land_valuation' %}" class="capability-card">
+                    <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&auto=format&fit=crop&q=80" alt="Land Valuation & Stamp Duty" class="capability-img">
+                    <div class="capability-body">
+                        <div class="capability-header">
+                            <i class="bi bi-calculator-fill capability-icon"></i>
+                            <h5 class="capability-title">Valuation & Stamp Duty</h5>
+                        </div>
+                        <p class="capability-desc">
+                            Calculate government circle rates, 7% state stamp duty, and registration charges for property sales and mutations.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+                            <span class="small fw-semibold text-primary">Calculate Taxes</span>
+                            <i class="bi bi-arrow-right text-primary"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Card 4: RoR / Jamabandi Certificate -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'download_ror_pdf' pk=1 %}" target="_blank" class="capability-card">
+                    <img src="https://images.unsplash.com/photo-1450133064473-71024230f91b?w=600&auto=format&fit=crop&q=80" alt="Record of Rights Certificate" class="capability-img">
+                    <div class="capability-body">
+                        <div class="capability-header">
+                            <i class="bi bi-file-earmark-check-fill capability-icon"></i>
+                            <h5 class="capability-title">Record of Rights (RoR)</h5>
+                        </div>
+                        <p class="capability-desc">
+                            Generate and print official land title certificates complete with verification QR code and SHA-256 digital seal.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+                            <span class="small fw-semibold text-primary">Download Fard (PDF)</span>
+                            <i class="bi bi-arrow-up-right text-primary"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Row 2: 4 Cards -->
+        <div class="row g-4">
+            
+            <!-- Card 5: Mutation Workflow -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'mutations' %}" class="capability-card">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&auto=format&fit=crop&q=80" alt="Mutation Tracking" class="capability-img">
+                    <div class="capability-body">
+                        <div class="capability-header">
+                            <i class="bi bi-arrow-left-right capability-icon"></i>
+                            <h5 class="capability-title">Mutation Tracking</h5>
+                        </div>
+                        <p class="capability-desc">
+                            End-to-end processing for sale, inheritance, and partition deeds with objection logging and Patwari sign-off.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+                            <span class="small fw-semibold text-primary">Manage Mutations</span>
+                            <i class="bi bi-arrow-right text-primary"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Card 6: Tamper-Proof Cryptography -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'audit_trail' %}" class="capability-card">
+                    <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=600&auto=format&fit=crop&q=80" alt="Tamper-Proof Audit Chain" class="capability-img">
+                    <div class="capability-body">
+                        <div class="capability-header">
+                            <i class="bi bi-shield-lock-fill capability-icon"></i>
+                            <h5 class="capability-title">Tamper-Proof Audit Chain</h5>
+                        </div>
+                        <p class="capability-desc">
+                            Blockchain-style SHA-256 hash chains log every land record modification. Any unauthorized database edit is detected instantly.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+                            <span class="small fw-semibold text-primary">Inspect Audit Chain</span>
+                            <i class="bi bi-arrow-right text-primary"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Card 7: Precision Agro & Weather -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'weather_advisory' %}" class="capability-card">
+                    <img src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=600&auto=format&fit=crop&q=80" alt="Agro Advisory" class="capability-img">
+                    <div class="capability-body">
+                        <div class="capability-header">
+                            <i class="bi bi-cloud-sun-fill capability-icon"></i>
+                            <h5 class="capability-title">Agro & Weather Advisory</h5>
+                        </div>
+                        <p class="capability-desc">
+                            Micro-climate spray window recommendations, soil moisture tracking, and Kharif/Rabi crop management for registered plots.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+                            <span class="small fw-semibold text-primary">View Agro Advisory</span>
+                            <i class="bi bi-arrow-right text-primary"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Card 8: Farmer e-KYC Identity -->
+            <div class="col-md-6 col-lg-3">
+                <a href="{% url 'farmer_kyc' %}" class="capability-card">
+                    <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=600&auto=format&fit=crop&q=80" alt="Aadhaar Land Linking" class="capability-img">
+                    <div class="capability-body">
+                        <div class="capability-header">
+                            <i class="bi bi-person-check-fill capability-icon"></i>
+                            <h5 class="capability-title">Aadhaar Titleholder Link</h5>
+                        </div>
+                        <p class="capability-desc">
+                            Secure farmer identity verification with Fernet AES-128 PII encryption, linking land titles to direct benefit transfers.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+                            <span class="small fw-semibold text-primary">Open e-KYC Lab</span>
+                            <i class="bi bi-arrow-right text-primary"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

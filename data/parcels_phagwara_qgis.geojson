@@ -1,0 +1,2105 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.768053,
+              31.220017
+            ],
+            [
+              75.769953,
+              31.220017
+            ],
+            [
+              75.769953,
+              31.221417
+            ],
+            [
+              75.768053,
+              31.221417
+            ],
+            [
+              75.768053,
+              31.220017
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1000",
+        "khasra_no": "101/1",
+        "village": "Kot Rani",
+        "owner": "Jarnail Singh",
+        "area_ha": 0.6,
+        "land_use": "Irrigated Agri",
+        "crop": "Wheat (PBW-725)",
+        "status": "Verified",
+        "fingerprint": "8351bfe0021089f387397392a3339510f3bb0c6bc11f6df22e224a33fec01a75"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.770227,
+              31.219918
+            ],
+            [
+              75.772127,
+              31.219918
+            ],
+            [
+              75.772127,
+              31.221318
+            ],
+            [
+              75.770227,
+              31.221318
+            ],
+            [
+              75.770227,
+              31.219918
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1001",
+        "khasra_no": "101/2",
+        "village": "Kot Rani",
+        "owner": "Gurmeet Sandhu",
+        "area_ha": 0.74,
+        "land_use": "Irrigated Agri",
+        "crop": "Paddy / Basmati (Pusa-1121)",
+        "status": "Verified",
+        "fingerprint": "18ef935f3e44b73c0c77ddfd881ea7938247aafeb29a3f372faa1305e1d5ad06"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.772447,
+              31.219951
+            ],
+            [
+              75.774347,
+              31.219951
+            ],
+            [
+              75.774347,
+              31.221351
+            ],
+            [
+              75.772447,
+              31.221351
+            ],
+            [
+              75.772447,
+              31.219951
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1002",
+        "khasra_no": "102/1",
+        "village": "Kot Rani",
+        "owner": "Harbhajan Virk",
+        "area_ha": 0.88,
+        "land_use": "Irrigated Agri",
+        "crop": "Mustard (Giriraj)",
+        "status": "Verified",
+        "fingerprint": "bfb84ed6ec88eaf97600efe2309fafb48b1fdd73145067d8a5c0aa217a53b0b7"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.774528,
+              31.22005
+            ],
+            [
+              75.776428,
+              31.22005
+            ],
+            [
+              75.776428,
+              31.22145
+            ],
+            [
+              75.774528,
+              31.22145
+            ],
+            [
+              75.774528,
+              31.22005
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1003",
+        "khasra_no": "102/2",
+        "village": "Kot Rani",
+        "owner": "Manpreet Deol",
+        "area_ha": 1.02,
+        "land_use": "Irrigated Agri",
+        "crop": "Potato (Kufri Pukhraj)",
+        "status": "Verified",
+        "fingerprint": "19ffb9384c8a89aebcb101a001359592eb696b950c2091188104c17ebaccf0c0"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.776738,
+              31.220086
+            ],
+            [
+              75.778638,
+              31.220086
+            ],
+            [
+              75.778638,
+              31.221486
+            ],
+            [
+              75.776738,
+              31.221486
+            ],
+            [
+              75.776738,
+              31.220086
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1004",
+        "khasra_no": "103/1",
+        "village": "Kot Rani",
+        "owner": "Balwinder Pannu",
+        "area_ha": 1.16,
+        "land_use": "Irrigated Agri",
+        "crop": "Maize (PMH-1)",
+        "status": "Mutation Pending",
+        "fingerprint": "920374c71aac30d84477da802b0d4c0653110eeee6a49e7c3d0eaa6964802d2a"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.768016,
+              31.221527
+            ],
+            [
+              75.769916,
+              31.221527
+            ],
+            [
+              75.769916,
+              31.222927
+            ],
+            [
+              75.768016,
+              31.222927
+            ],
+            [
+              75.768016,
+              31.221527
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1005",
+        "khasra_no": "103/2",
+        "village": "Kot Rani",
+        "owner": "Kuldeep Dhillon",
+        "area_ha": 1.3,
+        "land_use": "Irrigated Agri",
+        "crop": "Sugarcane (CoJ-88)",
+        "status": "Verified",
+        "fingerprint": "a265d2796925cf709e5d54777f7f7cd25401b2a078cb95a0131a57f1c505f79c"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.770262,
+              31.221664
+            ],
+            [
+              75.772162,
+              31.221664
+            ],
+            [
+              75.772162,
+              31.223064
+            ],
+            [
+              75.770262,
+              31.223064
+            ],
+            [
+              75.770262,
+              31.221664
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1006",
+        "khasra_no": "104/1",
+        "village": "Kot Rani",
+        "owner": "Sukhdev Sidhu",
+        "area_ha": 1.44,
+        "land_use": "Irrigated Agri",
+        "crop": "Summer Moong (SML-668)",
+        "status": "Verified",
+        "fingerprint": "d09aa482d332f40488bc2f2b2e03e3224f86de71812e9fae9809bcd63aa5057c"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.772441,
+              31.221648
+            ],
+            [
+              75.774341,
+              31.221648
+            ],
+            [
+              75.774341,
+              31.223048
+            ],
+            [
+              75.772441,
+              31.223048
+            ],
+            [
+              75.772441,
+              31.221648
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1007",
+        "khasra_no": "104/2",
+        "village": "Kot Rani",
+        "owner": "Jaswinder Cheema",
+        "area_ha": 1.58,
+        "land_use": "Irrigated Agri",
+        "crop": "Wheat (PBW-725)",
+        "status": "Disputed",
+        "fingerprint": "727b54b893345945dd0fca2715b59473eb36af2a87f6c871c36ee7222b6e7a47"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.774666,
+              31.221631
+            ],
+            [
+              75.776566,
+              31.221631
+            ],
+            [
+              75.776566,
+              31.223031
+            ],
+            [
+              75.774666,
+              31.223031
+            ],
+            [
+              75.774666,
+              31.221631
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1008",
+        "khasra_no": "105/1",
+        "village": "Kot Rani",
+        "owner": "Amardeep Gill",
+        "area_ha": 1.72,
+        "land_use": "Irrigated Agri",
+        "crop": "Paddy / Basmati (Pusa-1121)",
+        "status": "Verified",
+        "fingerprint": "78324915fca2f7da4ab54fc7ed84a3cc2690493f723c91832e3a6e730780b3ca"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.776737,
+              31.221539
+            ],
+            [
+              75.778637,
+              31.221539
+            ],
+            [
+              75.778637,
+              31.222939
+            ],
+            [
+              75.776737,
+              31.222939
+            ],
+            [
+              75.776737,
+              31.221539
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1009",
+        "khasra_no": "105/2",
+        "village": "Kot Rani",
+        "owner": "Davinder Kaur",
+        "area_ha": 1.86,
+        "land_use": "Irrigated Agri",
+        "crop": "Mustard (Giriraj)",
+        "status": "Verified",
+        "fingerprint": "afab1e098e87fde9fd2be13a368ff487f83463d094fc7a185022c26462e378f5"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.767923,
+              31.223176
+            ],
+            [
+              75.769823,
+              31.223176
+            ],
+            [
+              75.769823,
+              31.224576
+            ],
+            [
+              75.767923,
+              31.224576
+            ],
+            [
+              75.767923,
+              31.223176
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1010",
+        "khasra_no": "106/1",
+        "village": "Kot Rani",
+        "owner": "Surinder Grewal",
+        "area_ha": 2.0,
+        "land_use": "Irrigated Agri",
+        "crop": "Potato (Kufri Pukhraj)",
+        "status": "Verified",
+        "fingerprint": "bc8a9b7466b22619ca5167fd7bc1354780acac76e005eb0b032f4a59cc903eaa"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.770201,
+              31.223141
+            ],
+            [
+              75.772101,
+              31.223141
+            ],
+            [
+              75.772101,
+              31.224541
+            ],
+            [
+              75.770201,
+              31.224541
+            ],
+            [
+              75.770201,
+              31.223141
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1011",
+        "khasra_no": "106/2",
+        "village": "Kot Rani",
+        "owner": "Satnam Bains",
+        "area_ha": 2.14,
+        "land_use": "Irrigated Agri",
+        "crop": "Maize (PMH-1)",
+        "status": "Verified",
+        "fingerprint": "134368526f8b962f6c5fc13914d0664e85d4334b9e36eb99fc2e4efffb569647"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.77248,
+              31.223249
+            ],
+            [
+              75.77438,
+              31.223249
+            ],
+            [
+              75.77438,
+              31.224649
+            ],
+            [
+              75.77248,
+              31.224649
+            ],
+            [
+              75.77248,
+              31.223249
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1012",
+        "khasra_no": "107/1",
+        "village": "Kot Rani",
+        "owner": "Paramjit Mann",
+        "area_ha": 2.28,
+        "land_use": "Residential/Abadi",
+        "crop": "Sugarcane (CoJ-88)",
+        "status": "Verified",
+        "fingerprint": "56bd3b58a715023998cce8b290eae7148eef3ae8ec1f1f4346ec5ab6d7aec48d"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 14,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.774533,
+              31.2231
+            ],
+            [
+              75.776433,
+              31.2231
+            ],
+            [
+              75.776433,
+              31.2245
+            ],
+            [
+              75.774533,
+              31.2245
+            ],
+            [
+              75.774533,
+              31.2231
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1013",
+        "khasra_no": "107/2",
+        "village": "Kot Rani",
+        "owner": "Gursharan Singh",
+        "area_ha": 2.42,
+        "land_use": "Irrigated Agri",
+        "crop": "Summer Moong (SML-668)",
+        "status": "Verified",
+        "fingerprint": "b437aa5703e32e2c93c4d6f9c708c44c6c778712340ec50332f3e6f24e3a03dd"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 15,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.776823,
+              31.223218
+            ],
+            [
+              75.778723,
+              31.223218
+            ],
+            [
+              75.778723,
+              31.224618
+            ],
+            [
+              75.776823,
+              31.224618
+            ],
+            [
+              75.776823,
+              31.223218
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1014",
+        "khasra_no": "108/1",
+        "village": "Kot Rani",
+        "owner": "Bhupinder Sandhu",
+        "area_ha": 2.56,
+        "land_use": "Irrigated Agri",
+        "crop": "Wheat (PBW-725)",
+        "status": "Verified",
+        "fingerprint": "e133914353980164b1a244b96cfb03d71392a2f8b868570a9fc2f0e2ac9078ef"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 16,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.767942,
+              31.224878
+            ],
+            [
+              75.769842,
+              31.224878
+            ],
+            [
+              75.769842,
+              31.226278
+            ],
+            [
+              75.767942,
+              31.226278
+            ],
+            [
+              75.767942,
+              31.224878
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1015",
+        "khasra_no": "108/2",
+        "village": "Kot Rani",
+        "owner": "Joginder Virk",
+        "area_ha": 2.7,
+        "land_use": "Irrigated Agri",
+        "crop": "Paddy / Basmati (Pusa-1121)",
+        "status": "Mutation Pending",
+        "fingerprint": "222136558468c28e91540dac70d4c98bbb3f0e548175f78e82231cca63aea38e"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 17,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.770172,
+              31.224786
+            ],
+            [
+              75.772072,
+              31.224786
+            ],
+            [
+              75.772072,
+              31.226186
+            ],
+            [
+              75.770172,
+              31.226186
+            ],
+            [
+              75.770172,
+              31.224786
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1016",
+        "khasra_no": "109/1",
+        "village": "Kot Rani",
+        "owner": "Jarnail Deol",
+        "area_ha": 2.84,
+        "land_use": "Irrigated Agri",
+        "crop": "Mustard (Giriraj)",
+        "status": "Verified",
+        "fingerprint": "a1a91c6336d2ffd4fbc5358243848470bf43423c608b058695209d23e609c284"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 18,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.772397,
+              31.224816
+            ],
+            [
+              75.774297,
+              31.224816
+            ],
+            [
+              75.774297,
+              31.226216
+            ],
+            [
+              75.772397,
+              31.226216
+            ],
+            [
+              75.772397,
+              31.224816
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1017",
+        "khasra_no": "109/2",
+        "village": "Kot Rani",
+        "owner": "Gurmeet Pannu",
+        "area_ha": 2.98,
+        "land_use": "Irrigated Agri",
+        "crop": "Potato (Kufri Pukhraj)",
+        "status": "Verified",
+        "fingerprint": "95cbff4d3421aef1a6dad5e9853a471c3ecbffb3e18e5e7876ad7c1d4434b7a8"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 19,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.774698,
+              31.224808
+            ],
+            [
+              75.776598,
+              31.224808
+            ],
+            [
+              75.776598,
+              31.226208
+            ],
+            [
+              75.774698,
+              31.226208
+            ],
+            [
+              75.774698,
+              31.224808
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1018",
+        "khasra_no": "110/1",
+        "village": "Kot Rani",
+        "owner": "Harbhajan Dhillon",
+        "area_ha": 3.12,
+        "land_use": "Irrigated Agri",
+        "crop": "Maize (PMH-1)",
+        "status": "Disputed",
+        "fingerprint": "c506e3bf61055c7078d96869b144542f587d7e30816a569cf86e85d3f517d98e"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 20,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.776785,
+              31.224708
+            ],
+            [
+              75.778685,
+              31.224708
+            ],
+            [
+              75.778685,
+              31.226108
+            ],
+            [
+              75.776785,
+              31.226108
+            ],
+            [
+              75.776785,
+              31.224708
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1019",
+        "khasra_no": "110/2",
+        "village": "Kot Rani",
+        "owner": "Manpreet Sidhu",
+        "area_ha": 3.26,
+        "land_use": "Irrigated Agri",
+        "crop": "Sugarcane (CoJ-88)",
+        "status": "Verified",
+        "fingerprint": "8c8ab95d478add940de3b0034b9edcda116550f2eeaf0a4b6f3d7085491708fd"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 21,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.768062,
+              31.226417
+            ],
+            [
+              75.769962,
+              31.226417
+            ],
+            [
+              75.769962,
+              31.227817
+            ],
+            [
+              75.768062,
+              31.227817
+            ],
+            [
+              75.768062,
+              31.226417
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1020",
+        "khasra_no": "111/1",
+        "village": "Kot Rani",
+        "owner": "Balwinder Cheema",
+        "area_ha": 3.4,
+        "land_use": "Commercial/FoodTech",
+        "crop": "Summer Moong (SML-668)",
+        "status": "Verified",
+        "fingerprint": "99edf83b8901f2203939614559b7344f1def9c5ed68450ce92eaa6f13d29cfc7"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 22,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.77018,
+              31.226427
+            ],
+            [
+              75.77208,
+              31.226427
+            ],
+            [
+              75.77208,
+              31.227827
+            ],
+            [
+              75.77018,
+              31.227827
+            ],
+            [
+              75.77018,
+              31.226427
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1021",
+        "khasra_no": "111/2",
+        "village": "Kot Rani",
+        "owner": "Kuldeep Gill",
+        "area_ha": 3.54,
+        "land_use": "Irrigated Agri",
+        "crop": "Wheat (PBW-725)",
+        "status": "Verified",
+        "fingerprint": "b06ec3093527ca0333eb012570e29db8a2832e96c678703c855c96825f370624"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 23,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.772336,
+              31.226453
+            ],
+            [
+              75.774236,
+              31.226453
+            ],
+            [
+              75.774236,
+              31.227853
+            ],
+            [
+              75.772336,
+              31.227853
+            ],
+            [
+              75.772336,
+              31.226453
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1022",
+        "khasra_no": "112/1",
+        "village": "Kot Rani",
+        "owner": "Sukhdev Kaur",
+        "area_ha": 3.68,
+        "land_use": "Irrigated Agri",
+        "crop": "Paddy / Basmati (Pusa-1121)",
+        "status": "Verified",
+        "fingerprint": "ce10329d326e4999867b25148eb095f59c2e8004d2bb94621b42a72e161b2006"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 24,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.774513,
+              31.226374
+            ],
+            [
+              75.776413,
+              31.226374
+            ],
+            [
+              75.776413,
+              31.227774
+            ],
+            [
+              75.774513,
+              31.227774
+            ],
+            [
+              75.774513,
+              31.226374
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1023",
+        "khasra_no": "112/2",
+        "village": "Kot Rani",
+        "owner": "Jaswinder Grewal",
+        "area_ha": 0.62,
+        "land_use": "Irrigated Agri",
+        "crop": "Mustard (Giriraj)",
+        "status": "Verified",
+        "fingerprint": "19646edc590da5f7eeb8c31e24b970cfbea550abe40db4f9532e8067134ea9fe"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 25,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.776862,
+              31.226481
+            ],
+            [
+              75.778762,
+              31.226481
+            ],
+            [
+              75.778762,
+              31.227881
+            ],
+            [
+              75.776862,
+              31.227881
+            ],
+            [
+              75.776862,
+              31.226481
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1024",
+        "khasra_no": "113/1",
+        "village": "Kot Rani",
+        "owner": "Amardeep Bains",
+        "area_ha": 0.76,
+        "land_use": "Irrigated Agri",
+        "crop": "Potato (Kufri Pukhraj)",
+        "status": "Verified",
+        "fingerprint": "c0019ce75a64a141d767cabf114044630e2c427797d5fb4e7d6051ad2a90cc59"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 26,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.768049,
+              31.228015
+            ],
+            [
+              75.769949,
+              31.228015
+            ],
+            [
+              75.769949,
+              31.229415
+            ],
+            [
+              75.768049,
+              31.229415
+            ],
+            [
+              75.768049,
+              31.228015
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1025",
+        "khasra_no": "113/2",
+        "village": "Kot Rani",
+        "owner": "Davinder Mann",
+        "area_ha": 0.9,
+        "land_use": "Forest/Pasture",
+        "crop": "Maize (PMH-1)",
+        "status": "Verified",
+        "fingerprint": "c400684e5f004f75176e499de2a560ddeec8c5af22ff9c43c0d8d71d39496df1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 27,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.770192,
+              31.227979
+            ],
+            [
+              75.772092,
+              31.227979
+            ],
+            [
+              75.772092,
+              31.229379
+            ],
+            [
+              75.770192,
+              31.229379
+            ],
+            [
+              75.770192,
+              31.227979
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1026",
+        "khasra_no": "114/1",
+        "village": "Kot Rani",
+        "owner": "Surinder Singh",
+        "area_ha": 1.04,
+        "land_use": "Irrigated Agri",
+        "crop": "Sugarcane (CoJ-88)",
+        "status": "Mutation Pending",
+        "fingerprint": "aa83fc96be63a2b8bcedf3fef78e061115ae5fbe5cb39a8cf2063135a309cfcf"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.772433,
+              31.2281
+            ],
+            [
+              75.774333,
+              31.2281
+            ],
+            [
+              75.774333,
+              31.2295
+            ],
+            [
+              75.772433,
+              31.2295
+            ],
+            [
+              75.772433,
+              31.2281
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1027",
+        "khasra_no": "114/2",
+        "village": "Kot Rani",
+        "owner": "Satnam Sandhu",
+        "area_ha": 1.18,
+        "land_use": "Irrigated Agri",
+        "crop": "Summer Moong (SML-668)",
+        "status": "Verified",
+        "fingerprint": "71ca0ae9dfd86a52a1253ec28c1780256b60a211cb4ad332a670f227a9d2b2dc"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 29,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.774569,
+              31.227931
+            ],
+            [
+              75.776469,
+              31.227931
+            ],
+            [
+              75.776469,
+              31.229331
+            ],
+            [
+              75.774569,
+              31.229331
+            ],
+            [
+              75.774569,
+              31.227931
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1028",
+        "khasra_no": "115/1",
+        "village": "Kot Rani",
+        "owner": "Paramjit Virk",
+        "area_ha": 1.32,
+        "land_use": "Irrigated Agri",
+        "crop": "Wheat (PBW-725)",
+        "status": "Verified",
+        "fingerprint": "0d3dfe707c8e086294680378147d33707534fe4d83e7bcdb7c7046760319b962"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 30,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.776836,
+              31.227927
+            ],
+            [
+              75.778736,
+              31.227927
+            ],
+            [
+              75.778736,
+              31.229327
+            ],
+            [
+              75.776836,
+              31.229327
+            ],
+            [
+              75.776836,
+              31.227927
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1029",
+        "khasra_no": "115/2",
+        "village": "Kot Rani",
+        "owner": "Gursharan Deol",
+        "area_ha": 1.46,
+        "land_use": "Irrigated Agri",
+        "crop": "Paddy / Basmati (Pusa-1121)",
+        "status": "Verified",
+        "fingerprint": "89f6f6240911a00953eb687d9753926451e3813ddb3d95be1ee56706f0d00a19"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 31,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.768019,
+              31.229681
+            ],
+            [
+              75.769919,
+              31.229681
+            ],
+            [
+              75.769919,
+              31.231081
+            ],
+            [
+              75.768019,
+              31.231081
+            ],
+            [
+              75.768019,
+              31.229681
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1030",
+        "khasra_no": "116/1",
+        "village": "Khera Dehat",
+        "owner": "Bhupinder Pannu",
+        "area_ha": 1.6,
+        "land_use": "Irrigated Agri",
+        "crop": "Mustard (Giriraj)",
+        "status": "Verified",
+        "fingerprint": "6f3b09a1595a8cd8fb1d8db9448c2fedcf50a1fda6f585ee654554ad36065ff9"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 32,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.770159,
+              31.22952
+            ],
+            [
+              75.772059,
+              31.22952
+            ],
+            [
+              75.772059,
+              31.23092
+            ],
+            [
+              75.770159,
+              31.23092
+            ],
+            [
+              75.770159,
+              31.22952
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1031",
+        "khasra_no": "116/2",
+        "village": "Khera Dehat",
+        "owner": "Joginder Dhillon",
+        "area_ha": 1.74,
+        "land_use": "Irrigated Agri",
+        "crop": "Potato (Kufri Pukhraj)",
+        "status": "Disputed",
+        "fingerprint": "6c957c94cd3b0a2ba5388dd1e9e7b446c8a29efce673802fbb1e95e5c40c5a52"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 33,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.772348,
+              31.22953
+            ],
+            [
+              75.774248,
+              31.22953
+            ],
+            [
+              75.774248,
+              31.23093
+            ],
+            [
+              75.772348,
+              31.23093
+            ],
+            [
+              75.772348,
+              31.22953
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1032",
+        "khasra_no": "117/1",
+        "village": "Khera Dehat",
+        "owner": "Jarnail Sidhu",
+        "area_ha": 1.88,
+        "land_use": "Irrigated Agri",
+        "crop": "Maize (PMH-1)",
+        "status": "Verified",
+        "fingerprint": "ba6dbd002a3f8a97e9fd3b8ba3077ca7241dc555d27f4c17b5c589f610d237c7"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 34,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.77469,
+              31.22966
+            ],
+            [
+              75.77659,
+              31.22966
+            ],
+            [
+              75.77659,
+              31.23106
+            ],
+            [
+              75.77469,
+              31.23106
+            ],
+            [
+              75.77469,
+              31.22966
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1033",
+        "khasra_no": "117/2",
+        "village": "Khera Dehat",
+        "owner": "Gurmeet Cheema",
+        "area_ha": 2.02,
+        "land_use": "Irrigated Agri",
+        "crop": "Sugarcane (CoJ-88)",
+        "status": "Verified",
+        "fingerprint": "15e047bea45556a24e722c2105af28ef7b0cb7b525091a34091958d720f9d477"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 35,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.776726,
+              31.229627
+            ],
+            [
+              75.778626,
+              31.229627
+            ],
+            [
+              75.778626,
+              31.231027
+            ],
+            [
+              75.776726,
+              31.231027
+            ],
+            [
+              75.776726,
+              31.229627
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1034",
+        "khasra_no": "118/1",
+        "village": "Khera Dehat",
+        "owner": "Harbhajan Gill",
+        "area_ha": 2.16,
+        "land_use": "Irrigated Agri",
+        "crop": "Summer Moong (SML-668)",
+        "status": "Verified",
+        "fingerprint": "65ff0b4d1da8ec60aff12b8effc834793f4355eca4091fa66cea8879dfad33f6"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 36,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.768065,
+              31.231233
+            ],
+            [
+              75.769965,
+              31.231233
+            ],
+            [
+              75.769965,
+              31.232633
+            ],
+            [
+              75.768065,
+              31.232633
+            ],
+            [
+              75.768065,
+              31.231233
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1035",
+        "khasra_no": "118/2",
+        "village": "Khera Dehat",
+        "owner": "Manpreet Kaur",
+        "area_ha": 2.3,
+        "land_use": "Residential/Abadi",
+        "crop": "Wheat (PBW-725)",
+        "status": "Verified",
+        "fingerprint": "d956bdd45b69a1fcd19c5c5328bb265310715e7824fa59b7477381e1b72592b3"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 37,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.770259,
+              31.23129
+            ],
+            [
+              75.772159,
+              31.23129
+            ],
+            [
+              75.772159,
+              31.23269
+            ],
+            [
+              75.770259,
+              31.23269
+            ],
+            [
+              75.770259,
+              31.23129
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1036",
+        "khasra_no": "119/1",
+        "village": "Khera Dehat",
+        "owner": "Balwinder Grewal",
+        "area_ha": 2.44,
+        "land_use": "Irrigated Agri",
+        "crop": "Paddy / Basmati (Pusa-1121)",
+        "status": "Verified",
+        "fingerprint": "4c79e0b993c171e97e156724952906b7e885bc71307717a388775a7832dc4c5e"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 38,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.772303,
+              31.231118
+            ],
+            [
+              75.774203,
+              31.231118
+            ],
+            [
+              75.774203,
+              31.232518
+            ],
+            [
+              75.772303,
+              31.232518
+            ],
+            [
+              75.772303,
+              31.231118
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1037",
+        "khasra_no": "119/2",
+        "village": "Khera Dehat",
+        "owner": "Kuldeep Bains",
+        "area_ha": 2.58,
+        "land_use": "Irrigated Agri",
+        "crop": "Mustard (Giriraj)",
+        "status": "Verified",
+        "fingerprint": "21c0143d09f5177ac8f7937cd4b11add2eb6c4b15e862c55c8c466d0524c00b6"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 39,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.774674,
+              31.231172
+            ],
+            [
+              75.776574,
+              31.231172
+            ],
+            [
+              75.776574,
+              31.232572
+            ],
+            [
+              75.774674,
+              31.232572
+            ],
+            [
+              75.774674,
+              31.231172
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1038",
+        "khasra_no": "120/1",
+        "village": "Khera Dehat",
+        "owner": "Sukhdev Mann",
+        "area_ha": 2.72,
+        "land_use": "Irrigated Agri",
+        "crop": "Potato (Kufri Pukhraj)",
+        "status": "Verified",
+        "fingerprint": "b38d53fa0b9f75365182b31ce03c89c33b44e6de91138253e557a1e2f5542ab2"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 40,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.77674,
+              31.23116
+            ],
+            [
+              75.77864,
+              31.23116
+            ],
+            [
+              75.77864,
+              31.23256
+            ],
+            [
+              75.77674,
+              31.23256
+            ],
+            [
+              75.77674,
+              31.23116
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1039",
+        "khasra_no": "120/2",
+        "village": "Khera Dehat",
+        "owner": "Jaswinder Singh",
+        "area_ha": 2.86,
+        "land_use": "Irrigated Agri",
+        "crop": "Maize (PMH-1)",
+        "status": "Verified",
+        "fingerprint": "96e5f784e715298ead75ceace3c256242dde3251a8b28aaffd53102f84a03694"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 41,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.767999,
+              31.232832
+            ],
+            [
+              75.769899,
+              31.232832
+            ],
+            [
+              75.769899,
+              31.234232
+            ],
+            [
+              75.767999,
+              31.234232
+            ],
+            [
+              75.767999,
+              31.232832
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1040",
+        "khasra_no": "121/1",
+        "village": "Khera Dehat",
+        "owner": "Jarnail Singh",
+        "area_ha": 3.0,
+        "land_use": "Irrigated Agri",
+        "crop": "Sugarcane (CoJ-88)",
+        "status": "Verified",
+        "fingerprint": "c60b223624eb5f8c425d4129339032d59f3db3f7ebd637fc00b29dd13e4e50b5"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 42,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.770204,
+              31.232754
+            ],
+            [
+              75.772104,
+              31.232754
+            ],
+            [
+              75.772104,
+              31.234154
+            ],
+            [
+              75.770204,
+              31.234154
+            ],
+            [
+              75.770204,
+              31.232754
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1041",
+        "khasra_no": "121/2",
+        "village": "Khera Dehat",
+        "owner": "Gurmeet Sandhu",
+        "area_ha": 3.14,
+        "land_use": "Irrigated Agri",
+        "crop": "Summer Moong (SML-668)",
+        "status": "Verified",
+        "fingerprint": "0438ca51d8ffbc85c28bfe98cf287c601e3414781895097f971dabf5df2a9d33"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 43,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.772414,
+              31.232736
+            ],
+            [
+              75.774314,
+              31.232736
+            ],
+            [
+              75.774314,
+              31.234136
+            ],
+            [
+              75.772414,
+              31.234136
+            ],
+            [
+              75.772414,
+              31.232736
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1042",
+        "khasra_no": "122/1",
+        "village": "Khera Dehat",
+        "owner": "Harbhajan Virk",
+        "area_ha": 3.28,
+        "land_use": "Irrigated Agri",
+        "crop": "Wheat (PBW-725)",
+        "status": "Disputed",
+        "fingerprint": "6a6a02d4f585b29378d648323a2a54581b3b50d6ec5369d82c041605a44349e2"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 44,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.774685,
+              31.232811
+            ],
+            [
+              75.776585,
+              31.232811
+            ],
+            [
+              75.776585,
+              31.234211
+            ],
+            [
+              75.774685,
+              31.234211
+            ],
+            [
+              75.774685,
+              31.232811
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1043",
+        "khasra_no": "122/2",
+        "village": "Khera Dehat",
+        "owner": "Manpreet Deol",
+        "area_ha": 3.42,
+        "land_use": "Irrigated Agri",
+        "crop": "Paddy / Basmati (Pusa-1121)",
+        "status": "Verified",
+        "fingerprint": "f44746b6de6add2a1be0d4d994de259f6eefb87a09a6ad6c9c09f0d9307a6091"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 45,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.776751,
+              31.232761
+            ],
+            [
+              75.778651,
+              31.232761
+            ],
+            [
+              75.778651,
+              31.234161
+            ],
+            [
+              75.776751,
+              31.234161
+            ],
+            [
+              75.776751,
+              31.232761
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1044",
+        "khasra_no": "123/1",
+        "village": "Khera Dehat",
+        "owner": "Balwinder Pannu",
+        "area_ha": 3.56,
+        "land_use": "Irrigated Agri",
+        "crop": "Mustard (Giriraj)",
+        "status": "Verified",
+        "fingerprint": "c3319c38a899095bc2577f5d839fd042e49ad89ae67c4991a390c448af76c290"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 46,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.768063,
+              31.234477
+            ],
+            [
+              75.769963,
+              31.234477
+            ],
+            [
+              75.769963,
+              31.235877
+            ],
+            [
+              75.768063,
+              31.235877
+            ],
+            [
+              75.768063,
+              31.234477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1045",
+        "khasra_no": "123/2",
+        "village": "Khera Dehat",
+        "owner": "Kuldeep Dhillon",
+        "area_ha": 3.7,
+        "land_use": "Irrigated Agri",
+        "crop": "Potato (Kufri Pukhraj)",
+        "status": "Verified",
+        "fingerprint": "fde64fcdaefbccc5c6f375e01f7eea135c952cdc413cba09fa28d4728584811b"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 47,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.770168,
+              31.234358
+            ],
+            [
+              75.772068,
+              31.234358
+            ],
+            [
+              75.772068,
+              31.235758
+            ],
+            [
+              75.770168,
+              31.235758
+            ],
+            [
+              75.770168,
+              31.234358
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1046",
+        "khasra_no": "124/1",
+        "village": "Khera Dehat",
+        "owner": "Sukhdev Sidhu",
+        "area_ha": 0.64,
+        "land_use": "Irrigated Agri",
+        "crop": "Maize (PMH-1)",
+        "status": "Verified",
+        "fingerprint": "9219e3d179a42345880f19c291084b7d6dd13c72ff60b0b131a5d87bf7e87ce9"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 48,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.772467,
+              31.234367
+            ],
+            [
+              75.774367,
+              31.234367
+            ],
+            [
+              75.774367,
+              31.235767
+            ],
+            [
+              75.772467,
+              31.235767
+            ],
+            [
+              75.772467,
+              31.234367
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1047",
+        "khasra_no": "124/2",
+        "village": "Khera Dehat",
+        "owner": "Jaswinder Cheema",
+        "area_ha": 0.78,
+        "land_use": "Irrigated Agri",
+        "crop": "Sugarcane (CoJ-88)",
+        "status": "Verified",
+        "fingerprint": "83c017a1a619ab4c7db0715eec10710003762fd1e4e2c76ca57c23a615b34bc3"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 49,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.774507,
+              31.234319
+            ],
+            [
+              75.776407,
+              31.234319
+            ],
+            [
+              75.776407,
+              31.235719
+            ],
+            [
+              75.774507,
+              31.235719
+            ],
+            [
+              75.774507,
+              31.234319
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1048",
+        "khasra_no": "125/1",
+        "village": "Khera Dehat",
+        "owner": "Amardeep Gill",
+        "area_ha": 0.92,
+        "land_use": "Commercial/FoodTech",
+        "crop": "Summer Moong (SML-668)",
+        "status": "Verified",
+        "fingerprint": "47d695aa806fe84f3909706afd926e8813134af354c13c333d371ba4e6a238d8"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 50,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.776865,
+              31.23442
+            ],
+            [
+              75.778765,
+              31.23442
+            ],
+            [
+              75.778765,
+              31.23582
+            ],
+            [
+              75.776865,
+              31.23582
+            ],
+            [
+              75.776865,
+              31.23442
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "parcel_id": "PB-KPT-2024-1049",
+        "khasra_no": "125/2",
+        "village": "Khera Dehat",
+        "owner": "Davinder Kaur",
+        "area_ha": 1.06,
+        "land_use": "Irrigated Agri",
+        "crop": "Wheat (PBW-725)",
+        "status": "Verified",
+        "fingerprint": "62f712e9da383193ade3819134f346fabb60d1a4de8ff63148ff5871ac88e08e"
+      }
+    }
+  ]
+}

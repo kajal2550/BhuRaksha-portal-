@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Tamper-Evident Audit Hash Chain | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-lg-4 py-3">
+
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-link-45deg text-info me-2"></i>CRYPTOGRAPHIC_AUDIT_HASH_CHAIN</h4>
+            <div class="text-muted small">Append-Only SHA-256 Chained Blocks • Provably Immutable Accountability Ledger</div>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'verify_chain_action' %}" class="btn btn-cyber-green btn-sm fw-bold">
+                <i class="bi bi-shield-check me-1"></i> Verify Full Hash Chain
+            </a>
+            <a href="?export=csv" class="btn btn-cyber-outline btn-sm">
+                <i class="bi bi-download me-1"></i> Export Chain CSV
+            </a>
+        </div>
+    </div>
+
+    <!-- Verification Status Banner -->
+    <div class="cyber-card p-3 mb-4 {% if chain_valid %}border-success{% else %}border-danger{% endif %}">
+        <div class="d-flex align-items-center">
+            {% if chain_valid %}
+                <i class="bi bi-check-circle-fill text-success fs-3 me-3"></i>
+                <div>
+                    <h6 class="fw-bold text-success font-monospace mb-0">HASH CHAIN INTEGRITY: 100% VALID & INTACT</h6>
+                    <small class="text-muted">{{ chain_message }}</small>
+                </div>
+            {% else %}
+                <i class="bi bi-x-octagon-fill text-danger fs-3 me-3"></i>
+                <div>
+                    <h6 class="fw-bold text-danger font-monospace mb-0">HASH CHAIN BREACH DETECTED AT BLOCK #{{ broken_id }}</h6>
+                    <small class="text-danger">{{ chain_message }}</small>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="cyber-card p-3 mb-3">
+        <form method="GET" action="{% url 'audit_trail' %}" class="row g-2 align-items-center">
+            <div class="col-md-5">
+                <input type="text" name="q" value="{{ q }}" class="form-control cyber-input" placeholder="Search by Parcel Reference (e.g. PB-KPT-2024-1000)...">
+            </div>
+            <div class="col-md-5">
+                <input type="text" name="action" value="{{ action }}" class="form-control cyber-input" placeholder="Filter by Action Type (e.g. APPLY_MUTATION, RAISE_LEGAL_DISPUTE)...">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-cyber-primary w-100">Filter Chain</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Audit Chain Table -->
+    <div class="cyber-card p-0">
+        <div class="table-responsive">
+            <table class="table table-cyber align-middle font-monospace small mb-0">
+                <thead>
+                    <tr>
+                        <th>Block ID</th>
+                        <th>Timestamp</th>
+                        <th>Action</th>
+                        <th>Parcel Ref</th>
+                        <th>User (Role)</th>
+                        <th>Previous Hash (SHA-256)</th>
+                        <th>Current Sealed Hash</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for l in logs %}
+                    <tr>
+                        <td class="fw-bold text-info">#{{ l.id }}</td>
+                        <td class="text-muted">{{ l.timestamp|date:"Y-m-d H:i:s" }}</td>
+                        <td>
+                            <span class="badge bg-dark border border-secondary text-white">{{ l.action }}</span>
+                        </td>
+                        <td class="fw-bold text-white">{{ l.parcel_ref }}</td>
+                        <td>
+                            <span class="text-warning">{{ l.user.username|default:"SYSTEM" }}</span>
+                            <small class="text-muted">({{ l.user_role }})</small>
+                        </td>
+                        <td class="text-muted text-truncate" style="max-width: 140px;" title="{{ l.prev_hash }}">
+                            {{ l.prev_hash|slice:":16" }}...
+                        </td>
+                        <td class="text-success fw-bold text-truncate" style="max-width: 140px;" title="{{ l.current_hash }}">
+                            {{ l.current_hash|slice:":16" }}...
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">No audit chain entries recorded.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

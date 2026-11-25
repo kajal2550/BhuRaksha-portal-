@@ -1,0 +1,256 @@
+{% extends 'parcels/base.html' %}
+
+{% block title %}GeoLand DPI - Home & National Land Governance Overview{% endblock %}
+
+{% block content %}
+<div class="container py-3">
+
+    <!-- Hero Section -->
+    <div class="p-5 mb-4 bg-white rounded-4 shadow-sm border border-light">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-semibold mb-3">
+                    <i class="bi bi-shield-check me-1"></i> Digital Public Infrastructure (DPI)
+                </span>
+                <h1 class="display-5 fw-bold text-dark lh-tight mb-3">
+                    Integrated GIS-Based Land Governance Platform
+                </h1>
+                <p class="lead text-secondary mb-4">
+                    Eliminating land disputes, accelerating dakhil-kharij (mutations), and powering transparent agriculture scheme targeting through unified spatial parcels and verifiable digital records.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'map_view' %}" class="btn btn-primary btn-lg px-4 fw-semibold shadow-sm">
+                        <i class="bi bi-map-fill me-2"></i> Launch WebGIS Map
+                    </a>
+                    <a href="{% url 'register' %}" class="btn btn-outline-secondary btn-lg px-4 fw-semibold">
+                        <i class="bi bi-table me-2"></i> Search Land Records
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 mt-4 mt-lg-0 text-center">
+                <div class="p-4 bg-light rounded-4 border">
+                    <i class="bi bi-geo-alt-fill text-primary display-1 mb-2"></i>
+                    <h5 class="fw-bold text-dark">Cadastral Core Integration</h5>
+                    <p class="small text-muted mb-3">Unique Parcel ID (ULPIN) links Land Records, Crop Cultivation, and Revenue Mutating Authorities seamlessly.</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <span class="badge bg-primary">ULPIN Key</span>
+                        <span class="badge bg-success">Leaflet WebGIS</span>
+                        <span class="badge bg-dark">QGIS Ready</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live DPI Key Metrics Cards -->
+    <div class="row g-3 mb-5">
+        <div class="col-md-4 col-xl-2">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-primary">
+                <div class="text-muted small fw-semibold text-uppercase">Cadastral Parcels</div>
+                <div class="fs-2 fw-bold text-dark mt-1">{{ total_parcels }}</div>
+                <small class="text-muted">Digitized in QGIS</small>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-2">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-success">
+                <div class="text-muted small fw-semibold text-uppercase">Total Land Area</div>
+                <div class="fs-2 fw-bold text-success mt-1">{{ total_area_ha }} <span class="fs-6 text-muted">ha</span></div>
+                <small class="text-muted">Varanasi Division</small>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-2">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-info">
+                <div class="text-muted small fw-semibold text-uppercase">Registered Owners</div>
+                <div class="fs-2 fw-bold text-info mt-1">{{ total_owners }}</div>
+                <small class="text-muted">Aadhaar Linked</small>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-2">
+            <div class="card card-stat bg-white p-3 border-start border-warning">
+                <div class="text-muted small fw-semibold text-uppercase">PM-KISAN DBT</div>
+                <div class="fs-2 fw-bold text-warning mt-1">{{ pm_kisan_count }}</div>
+                <small class="text-muted">Direct Subsidies</small>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-2">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-danger">
+                <div class="text-muted small fw-semibold text-uppercase">Disputed Plots</div>
+                <div class="fs-2 fw-bold text-danger mt-1">{{ disputed_count }}</div>
+                <small class="text-danger">Action required</small>
+            </div>
+        </div>
+        <div class="col-md-4 col-xl-2">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-secondary">
+                <div class="text-muted small fw-semibold text-uppercase">Villages Covered</div>
+                <div class="fs-2 fw-bold text-dark mt-1">{{ villages|length }}</div>
+                <small class="text-muted">Rampur & Shivpur</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Hub (Interactive Modules Grid) -->
+    <h4 class="fw-bold text-dark mb-4"><i class="bi bi-grid-fill text-primary me-2"></i>Integrated System Modules</h4>
+    
+    <div class="row g-4 mb-5">
+        
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100 p-4 bg-white rounded-3">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-3 bg-primary-subtle text-primary rounded-3 me-3 fs-3">
+                        <i class="bi bi-map"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">WebGIS Cadastre</h5>
+                        <small class="text-muted">Interactive Spatial Viewer</small>
+                    </div>
+                </div>
+                <p class="text-secondary small">
+                    Explore polygon boundaries, inspect land ownership, switch between satellite and street tiles, and filter by crop/land-use.
+                </p>
+                <a href="{% url 'map_view' %}" class="btn btn-outline-primary btn-sm mt-auto">Open Map <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100 p-4 bg-white rounded-3">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-3 bg-success-subtle text-success rounded-3 me-3 fs-3">
+                        <i class="bi bi-flower1"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Agri & Crop Hub</h5>
+                        <small class="text-muted">FoodTech & Cultivation</small>
+                    </div>
+                </div>
+                <p class="text-secondary small">
+                    Track Kharif, Rabi & Zaid crops, soil classifications, estimated harvest yields, and irrigation sources for precision farming.
+                </p>
+                <a href="{% url 'agriculture_hub' %}" class="btn btn-outline-success btn-sm mt-auto">Open Agri Hub <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100 p-4 bg-white rounded-3">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-3 bg-warning-subtle text-warning-emphasis rounded-3 me-3 fs-3">
+                        <i class="bi bi-arrow-left-right"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Mutations & Disputes</h5>
+                        <small class="text-muted">Dakhil Kharij & Partition</small>
+                    </div>
+                </div>
+                <p class="text-secondary small">
+                    Submit digital mutation requests (Varasat, Sale Deed, Partition) and monitor legal dispute settlement workflows.
+                </p>
+                <a href="{% url 'mutations' %}" class="btn btn-outline-warning text-dark btn-sm mt-auto">Open Portal <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100 p-4 bg-white rounded-3">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-3 bg-info-subtle text-info rounded-3 me-3 fs-3">
+                        <i class="bi bi-pie-chart"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Analytics DSS</h5>
+                        <small class="text-muted">Decision Support System</small>
+                    </div>
+                </div>
+                <p class="text-secondary small">
+                    Visual dashboards, crop yield totals, land use percentage share, and dispute risk distribution charts powered by Chart.js.
+                </p>
+                <a href="{% url 'analytics' %}" class="btn btn-outline-info text-dark btn-sm mt-auto">View Analytics <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100 p-4 bg-white rounded-3">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-3 bg-secondary-subtle text-secondary rounded-3 me-3 fs-3">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">DPI Audit Trail</h5>
+                        <small class="text-muted">Immutable Accountability</small>
+                    </div>
+                </div>
+                <p class="text-secondary small">
+                    Every transaction, status update, and mutation is logged cryptographically with officer IP, old values, and timestamp.
+                </p>
+                <a href="{% url 'audit_trail' %}" class="btn btn-outline-secondary btn-sm mt-auto">Inspect Logs <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100 p-4 bg-white rounded-3">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-3 bg-dark text-white rounded-3 me-3 fs-3">
+                        <i class="bi bi-code-square"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Open REST APIs</h5>
+                        <small class="text-muted">Interoperable DPI Services</small>
+                    </div>
+                </div>
+                <p class="text-secondary small">
+                    Public GeoJSON and REST APIs allowing banks, insurance companies, and agri-startups to integrate land records safely.
+                </p>
+                <a href="{% url 'api_docs' %}" class="btn btn-outline-dark btn-sm mt-auto">API Documentation <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Recent Mutations Activity & Quick Register Lookup -->
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-3 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-clock-history text-primary me-2"></i>Recent Mutation Cases</h5>
+                    <a href="{% url 'mutations' %}" class="small text-decoration-none fw-semibold">View All</a>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for m in recent_mutations %}
+                    <li class="list-group-item px-0 py-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong class="text-dark">{{ m.case_number }}</strong>
+                            <div class="small text-muted">{{ m.applicant_name }} • {{ m.transaction_type }}</div>
+                            <small class="text-primary font-monospace">{{ m.parcel.parcel_id }} (Khasra {{ m.parcel.khasra_no }})</small>
+                        </div>
+                        <span class="badge {% if 'Approved' in m.status %}bg-success{% else %}bg-warning text-dark{% endif %}">
+                            {{ m.status }}
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-3 h-100">
+                <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-search text-success me-2"></i>Quick Land Record (Khatauni) Lookup</h5>
+                <form action="{% url 'register' %}" method="GET" class="mb-4">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control form-control-lg" placeholder="Enter Khasra No. or Owner Name...">
+                        <button class="btn btn-success px-4" type="submit">Search</button>
+                    </div>
+                </form>
+
+                <h6 class="fw-bold small text-muted text-uppercase mb-2">Cadastral Jurisdictions Enrolled</h6>
+                {% for v in villages %}
+                <div class="p-3 bg-light rounded-3 mb-2 d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong class="text-dark">{{ v.name }}</strong>
+                        <div class="small text-muted">{{ v.block_tehsil }}, {{ v.district }}</div>
+                    </div>
+                    <span class="badge bg-primary rounded-pill">{{ v.parcel_count }} Plots</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

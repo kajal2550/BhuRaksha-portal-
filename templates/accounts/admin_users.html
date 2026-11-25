@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}User Management & RBAC | BhuRaksha Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-lg-4 py-3">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-sliders text-warning me-2"></i>ADMIN_USER_MANAGEMENT // RBAC</h4>
+            <div class="text-muted small">Role-Based Access Control • Profile Provisioning • MFA State & Login History</div>
+        </div>
+        <a href="/admin/auth/user/add/" target="_blank" class="btn btn-cyber-primary btn-sm">
+            <i class="bi bi-person-plus me-1"></i> Provision New Officer
+        </a>
+    </div>
+
+    <!-- Users Table -->
+    <div class="cyber-card p-0">
+        <div class="table-responsive">
+            <table class="table table-cyber align-middle mb-0 font-monospace small">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Assigned Role</th>
+                        <th>Department</th>
+                        <th>MFA Status</th>
+                        <th>Staff Status</th>
+                        <th>Date Registered</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td class="fw-bold text-info">{{ u.username }}</td>
+                        <td class="text-white">{{ u.get_full_name|default:u.username }}</td>
+                        <td>
+                            {% if u.profile.role == 'admin' %}
+                                <span class="badge-glow-red px-2 py-0">ADMIN</span>
+                            {% elif u.profile.role == 'auditor' %}
+                                <span class="badge-glow-amber px-2 py-0">AUDITOR</span>
+                            {% elif u.profile.role == 'revenue_officer' %}
+                                <span class="badge-glow-cyan px-2 py-0">REVENUE_OFFICER</span>
+                            {% elif u.profile.role == 'agri_officer' %}
+                                <span class="badge-glow-green px-2 py-0">AGRI_OFFICER</span>
+                            {% elif u.profile.role == 'farmer' %}
+                                <span class="badge bg-success-subtle text-success px-2 py-0">FARMER</span>
+                            {% else %}
+                                <span class="badge bg-secondary px-2 py-0">PUBLIC</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted">{{ u.profile.department|default:"Standard" }}</td>
+                        <td>
+                            {% if u.profile.mfa_enabled %}
+                                <span class="text-success"><i class="bi bi-shield-check me-1"></i>ENABLED</span>
+                            {% else %}
+                                <span class="text-muted"><i class="bi bi-shield-slash me-1"></i>DISABLED</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if u.is_superuser %}
+                                <span class="text-warning">SUPERUSER</span>
+                            {% else %}
+                                <span class="text-muted">STANDARD</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted">{{ u.date_joined|date:"Y-m-d" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="7" class="text-center py-4 text-muted">No users found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

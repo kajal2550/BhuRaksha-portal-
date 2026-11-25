@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block title %}Dossier & Record of Rights (RoR) - Khasra {{ parcel.khasra_no }} | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header & Verification Actions -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <a href="{% url 'map_view' %}" class="btn btn-cyber-outline btn-sm mb-2">
+                <i class="bi bi-arrow-left me-1"></i> Return to GIS Map
+            </a>
+            <h3 class="fw-bold text-white mb-0">Record of Rights (RoR / Khatauni)</h3>
+            <div class="text-muted small font-monospace">ULPIN: <strong class="text-info">{{ parcel.parcel_id }}</strong> | Village: {{ parcel.village.name }}</div>
+        </div>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn btn-cyber-outline btn-sm">
+                <i class="bi bi-printer me-1"></i> Print / Download PDF
+            </button>
+            <a href="{% url 'verify_public' %}?parcel_id={{ parcel.parcel_id }}" class="btn btn-cyber-green btn-sm">
+                <i class="bi bi-shield-check me-1"></i> Verify Hash Authenticity
+            </a>
+        </div>
+    </div>
+
+    <!-- Official Certificate Card -->
+    <div class="cyber-card p-4 p-md-5 mb-5 border-secondary">
+        
+        <!-- Header Banner -->
+        <div class="row align-items-center border-bottom border-secondary pb-4 mb-4">
+            <div class="col-md-2 text-center text-md-start mb-3 mb-md-0">
+                <i class="bi bi-shield-shaded display-4 text-info"></i>
+            </div>
+            <div class="col-md-8 text-center">
+                <h4 class="fw-bold text-white mb-1 font-monospace">GOVERNMENT OF PUNJAB • REVENUE DEPARTMENT</h4>
+                <div class="text-secondary small fw-bold">Integrated Digital Public Infrastructure for Land Governance (BhuRaksha)</div>
+                <div class="text-muted small font-monospace">Cadastral Record Form C-12 • Cryptographically Sealed</div>
+            </div>
+            <div class="col-md-2 text-center text-md-end">
+                {% if parcel.status == 'Verified' %}
+                    <span class="badge-glow-green px-3 py-2 small fw-bold"><i class="bi bi-shield-check"></i> VERIFIED</span>
+                {% elif parcel.status == 'Disputed' %}
+                    <span class="badge-glow-red px-3 py-2 small fw-bold"><i class="bi bi-exclamation-triangle"></i> DISPUTED</span>
+                {% else %}
+                    <span class="badge-glow-amber px-3 py-2 small fw-bold">{{ parcel.status|upper }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Section 1: Spatial & Cadastral Attributes -->
+        <h5 class="fw-bold text-info mb-3 font-monospace"><i class="bi bi-geo-alt-fill me-2"></i>1. SPATIAL CADASTRE & BOUNDARY</h5>
+        <div class="row g-3 mb-4 p-3 bg-dark rounded border border-secondary">
+            <div class="col-md-3">
+                <small class="text-muted d-block font-monospace">KHASRA NUMBER</small>
+                <span class="fs-4 fw-bold text-white">{{ parcel.khasra_no }}</span>
+            </div>
+            <div class="col-md-3">
+                <small class="text-muted d-block font-monospace">UNIQUE PARCEL ID (ULPIN)</small>
+                <span class="font-monospace text-info fw-bold">{{ parcel.parcel_id }}</span>
+            </div>
+            <div class="col-md-3">
+                <small class="text-muted d-block font-monospace">TOTAL AREA</small>
+                <strong class="text-white">{{ parcel.area_hectares }} Ha</strong> ({{ parcel.area_acres }} Acres)
+            </div>
+            <div class="col-md-3">
+                <small class="text-muted d-block font-monospace">WGS84 COORDINATES</small>
+                <span class="small font-monospace text-light">{{ parcel.centroid_lat }}° N, {{ parcel.centroid_lng }}° E</span>
+            </div>
+        </div>
+
+        <!-- Section 2: Ownership Rights -->
+        <h5 class="fw-bold text-info mb-3 font-monospace"><i class="bi bi-people-fill me-2"></i>2. REGISTERED OWNERSHIP (KHATEDARI)</h5>
+        <div class="table-responsive mb-4">
+            <table class="table table-cyber table-sm align-middle">
+                <thead>
+                    <tr>
+                        <th>Title Holder</th>
+                        <th>National ID (Aadhaar)</th>
+                        <th>Phone</th>
+                        <th>Share %</th>
+                        <th>PM-KISAN Status</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for own in ownerships %}
+                    <tr>
+                        <td class="fw-bold text-white">{{ own.owner.name }}</td>
+                        <td class="font-monospace small">
+                            {% if can_view_pii %}
+                                <span class="text-warning">{{ own.owner.plain_aadhaar }}</span> <span class="badge bg-secondary" style="font-size:0.6rem;">OFFICER VIEW</span>
+                            {% else %}
+                                <span>{{ own.owner.masked_aadhaar }}</span> <i class="bi bi-lock-fill text-muted" title="Encrypted at rest"></i>
+                            {% endif %}
+                        </td>
+                        <td class="small">
+                            {% if can_view_pii %}
+                                {{ own.owner.plain_phone }}
+                            {% else %}
+                                {{ own.owner.masked_phone }}
+                            {% endif %}
+                        </td>
+                        <td><span class="badge bg-primary">{{ own.share_percentage }}%</span></td>
+                        <td>
+                            {% if own.owner.pm_kisan_id %}
+                                <span class="badge-glow-green px-2 py-0 small"><i class="bi bi-check-circle"></i> Linked ({{ own.owner.pm_kisan_id }})</span>
+                            {% else %}
+                                <span class="badge bg-secondary small">Not Enrolled</span>
+                            {% endif %}
+                        </td>
+                        <td><span class="badge bg-success">{{ own.status }}</span></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" class="text-center text-muted">No active ownership records found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section 3: Crops & Agronomic Profile -->
+        <h5 class="fw-bold text-info mb-3 font-monospace"><i class="bi bi-flower1 me-2"></i>3. CROP CULTIVATION & YIELD LOGS</h5>
+        <div class="table-responsive mb-4">
+            <table class="table table-cyber table-sm">
+                <thead>
+                    <tr>
+                        <th>Crop & Variety</th>
+                        <th>Season</th>
+                        <th>Sowing Date</th>
+                        <th>Estimated Harvest</th>
+                        <th>Estimated Yield</th>
+                        <th>Irrigation Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in crops %}
+                    <tr>
+                        <td class="fw-bold text-success">{{ c.crop }} ({{ c.variety }})</td>
+                        <td><span class="badge bg-dark border border-secondary">{{ c.season }}</span></td>
+                        <td>{{ c.sowing_date }}</td>
+                        <td>{{ c.harvest_date|default:"In Season" }}</td>
+                        <td><strong>{{ c.estimated_yield_quintals }} Quintals</strong></td>
+                        <td>{{ c.irrigation_used }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" class="text-center text-muted">No crop records logged for this parcel.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section 4: Cryptographic Fingerprint Verification Box -->
+        <h5 class="fw-bold text-info mb-3 font-monospace"><i class="bi bi-fingerprint me-2"></i>4. RECORD INTEGRITY & SHA-256 FINGERPRINT</h5>
+        <div class="p-3 bg-dark rounded border border-secondary mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-muted small font-monospace">STORED HASH FINGERPRINT:</span>
+                {% if integrity_ok %}
+                    <span class="badge-glow-green px-2 py-1 small"><i class="bi bi-check-circle-fill me-1"></i>INTEGRITY VERIFIED</span>
+                {% else %}
+                    <span class="badge-glow-red px-2 py-1 small"><i class="bi bi-exclamation-triangle-fill me-1"></i>TAMPER DETECTED</span>
+                {% endif %}
+            </div>
+            <div class="font-monospace text-info small text-break">{{ parcel.fingerprint }}</div>
+        </div>
+
+        <!-- Footer Verification Bar -->
+        <div class="border-top border-secondary pt-3 text-muted small d-flex flex-wrap justify-content-between align-items-center font-monospace">
+            <span><i class="bi bi-qr-code text-info me-2"></i> Digitally Signed under BhuRaksha Protocol • Phagwara Division</span>
+            <span>Issued on {% now "Y-m-d H:i:s" %}</span>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

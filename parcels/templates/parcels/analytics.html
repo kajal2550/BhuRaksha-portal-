@@ -1,0 +1,181 @@
+{% extends 'parcels/base.html' %}
+
+{% block title %}Analytics & Decision Support System (DSS) | GeoLand DPI{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-2">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-0"><i class="bi bi-pie-chart-fill text-info me-2"></i>Analytics & Decision Support System (DSS)</h3>
+            <div class="text-muted small">Macro Land Governance, Agronomic Distribution & Dispute Risk Metrics</div>
+        </div>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn btn-outline-dark btn-sm">
+                <i class="bi bi-printer me-1"></i> Print Intelligence Report
+            </button>
+            <a href="{% url 'map_view' %}" class="btn btn-primary btn-sm">
+                <i class="bi bi-map me-1"></i> Open WebGIS
+            </a>
+        </div>
+    </div>
+
+    <!-- Summary KPI Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-primary">
+                <div class="text-muted small fw-semibold text-uppercase">Total Cadastral Area</div>
+                <div class="fs-2 fw-bold text-dark mt-1">{{ total_hectares }} <span class="fs-5 text-muted">ha</span></div>
+                <small class="text-muted">Digitized across {{ total_parcels }} parcels</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-success">
+                <div class="text-muted small fw-semibold text-uppercase">Estimated Agronomic Yield</div>
+                <div class="fs-2 fw-bold text-success mt-1">{{ total_yield }} <span class="fs-5 text-muted">Qt</span></div>
+                <small class="text-muted">Combined Kharif/Rabi harvest</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-danger">
+                <div class="text-muted small fw-semibold text-uppercase">Litigated / Disputed Plots</div>
+                <div class="fs-2 fw-bold text-danger mt-1">{{ total_disputed }}</div>
+                <small class="text-danger">Plots under revenue court stay</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-warning">
+                <div class="text-muted small fw-semibold text-uppercase">Land Use Efficiency</div>
+                <div class="fs-2 fw-bold text-warning mt-1">94.2%</div>
+                <small class="text-muted">Active cultivation & Abadi usage</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4 Interactive Charts Grid -->
+    <div class="row g-4 mb-4">
+        
+        <!-- Chart 1: Land Use Breakdown -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-3 h-100">
+                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-pie-chart text-primary me-2"></i>Land Use Classification by Area (Ha)</h5>
+                <div style="height: 280px;">
+                    <canvas id="landUseChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 2: Crop Production Profile -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-3 h-100">
+                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-bar-chart-steps text-success me-2"></i>Crop Yield Estimates (Quintals)</h5>
+                <div style="height: 280px;">
+                    <canvas id="cropChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 3: Soil Types Distribution -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-3 h-100">
+                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-circle-square text-warning me-2"></i>Soil Classification Breakdown</h5>
+                <div style="height: 280px;">
+                    <canvas id="soilChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 4: Title Verification Status -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-3 h-100">
+                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-shield-check text-info me-2"></i>Land Title Status Ratio</h5>
+                <div style="height: 280px;">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const landUseData = {{ landuse_chart_data|safe }};
+    const cropData = {{ crop_chart_data|safe }};
+    const soilData = {{ soil_chart_data|safe }};
+    const statusData = {{ status_chart_data|safe }};
+
+    // 1. Land Use Chart
+    new Chart(document.getElementById('landUseChart'), {
+        type: 'doughnut',
+        data: {
+            labels: landUseData.map(d => d.land_use_type),
+            datasets: [{
+                data: landUseData.map(d => d.total_area),
+                backgroundColor: ['#28a745', '#17a2b8', '#0d6efd', '#fd7e14', '#6c757d']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'right' } }
+        }
+    });
+
+    // 2. Crop Yield Chart
+    new Chart(document.getElementById('cropChart'), {
+        type: 'bar',
+        data: {
+            labels: cropData.slice(0, 7).map(d => d.crop),
+            datasets: [{
+                label: 'Yield (Quintals)',
+                data: cropData.slice(0, 7).map(d => d.total_yield),
+                backgroundColor: '#198754',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    // 3. Soil Distribution Chart
+    new Chart(document.getElementById('soilChart'), {
+        type: 'polarArea',
+        data: {
+            labels: soilData.map(d => d.soil_type),
+            datasets: [{
+                data: soilData.map(d => d.count),
+                backgroundColor: ['rgba(255, 193, 7, 0.7)', 'rgba(40, 167, 69, 0.7)', 'rgba(13, 110, 253, 0.7)', 'rgba(108, 117, 125, 0.7)']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'right' } }
+        }
+    });
+
+    // 4. Status Chart
+    new Chart(document.getElementById('statusChart'), {
+        type: 'pie',
+        data: {
+            labels: statusData.map(d => d.status),
+            datasets: [{
+                data: statusData.map(d => d.count),
+                backgroundColor: ['#28a745', '#dc3545', '#ffc107']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'right' } }
+        }
+    });
+</script>
+{% endblock %}

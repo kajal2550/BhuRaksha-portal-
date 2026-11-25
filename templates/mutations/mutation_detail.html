@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Mutation Docket {{ mutation.case_number }} | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a href="{% url 'mutations' %}" class="btn btn-cyber-outline btn-sm mb-2">
+                <i class="bi bi-arrow-left me-1"></i> Back to Mutation Docket
+            </a>
+            <h3 class="fw-bold text-white mb-0 font-monospace">CASE: {{ mutation.case_number }}</h3>
+            <div class="text-muted small">Target: Khasra {{ mutation.parcel.khasra_no }} ({{ mutation.parcel.parcel_id }})</div>
+        </div>
+        <span class="badge-glow-amber px-3 py-1 font-monospace fs-6">{{ mutation.status|upper }}</span>
+    </div>
+
+    <div class="row g-4">
+        
+        <!-- Left: Case Details & Timeline -->
+        <div class="col-lg-7">
+            <div class="cyber-card p-4 mb-4">
+                <h5 class="fw-bold text-white mb-3 font-monospace"><i class="bi bi-info-circle text-info me-2"></i>CASE_ATTRIBUTES</h5>
+                <div class="row g-2 font-monospace small">
+                    <div class="col-sm-4 text-muted">MUTATION TYPE:</div>
+                    <div class="col-sm-8 text-white fw-bold">{{ mutation.get_mutation_type_display }}</div>
+
+                    <div class="col-sm-4 text-muted">APPLICANT:</div>
+                    <div class="col-sm-8 text-white">{{ mutation.applicant_name }}</div>
+
+                    <div class="col-sm-4 text-muted">TRANSFEROR:</div>
+                    <div class="col-sm-8 text-white">{{ mutation.transferor_name }}</div>
+
+                    <div class="col-sm-4 text-muted">ASSIGNED OFFICER:</div>
+                    <div class="col-sm-8 text-info">{{ mutation.assigned_officer.get_full_name|default:"Revenue Patwari Phagwara" }}</div>
+
+                    <div class="col-sm-4 text-muted">APPLICATION DATE:</div>
+                    <div class="col-sm-8 text-white">{{ mutation.applied_date }}</div>
+
+                    <div class="col-sm-4 text-muted">REMARKS:</div>
+                    <div class="col-sm-8 text-secondary">{{ mutation.remarks|default:"Standard field verification mandated" }}</div>
+                </div>
+            </div>
+
+            <!-- Steps & Audit Comments -->
+            <div class="cyber-card p-4">
+                <h5 class="fw-bold text-white mb-3 font-monospace"><i class="bi bi-clock-history text-info me-2"></i>WORKFLOW_TIMELINE</h5>
+                <ul class="list-unstyled mb-0">
+                    {% for step in steps %}
+                    <li class="p-3 bg-dark rounded border border-secondary mb-2">
+                        <div class="d-flex justify-content-between">
+                            <strong class="text-info font-monospace">{{ step.step_name }}</strong>
+                            <small class="text-muted font-monospace">{{ step.timestamp|date:"Y-m-d H:i" }}</small>
+                        </div>
+                        <p class="text-secondary small mb-1 mt-1">{{ step.comment }}</p>
+                        <small class="text-muted font-monospace">&gt; Logged by: {{ step.officer.username|default:"System" }}</small>
+                    </li>
+                    {% empty %}
+                    <li class="text-muted small">No workflow steps logged yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right: Revenue Officer Action Panel -->
+        <div class="col-lg-5">
+            <div class="cyber-card p-4">
+                <h5 class="fw-bold text-white mb-3 font-monospace"><i class="bi bi-shield-check text-success me-2"></i>OFFICER_ACTIONS</h5>
+                
+                {% if is_officer %}
+                <form method="POST" action="{% url 'mutation_detail' mutation.id %}">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">UPDATE WORKFLOW STATUS</label>
+                        <select name="status" class="form-select cyber-select" required>
+                            <option value="Under Review" {% if mutation.status == 'Under Review' %}selected{% endif %}>Under Review</option>
+                            <option value="Approved" {% if mutation.status == 'Approved' %}selected{% endif %}>Approved (Ready to Commit)</option>
+                            <option value="Completed" {% if mutation.status == 'Completed' %}selected{% endif %}>Completed (Update Ownership Now)</option>
+                            <option value="Rejected" {% if mutation.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">OFFICIAL REVENUE COMMENT</label>
+                        <textarea name="comment" class="form-control cyber-input" rows="3" placeholder="Enter findings from field survey, registrar deed check..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-cyber-green w-100 py-2 fw-bold">
+                        <i class="bi bi-check2-circle me-1"></i> Commit Status Update
+                    </button>
+                </form>
+                {% else %}
+                <div class="p-3 bg-dark rounded border border-secondary text-muted small">
+                    <i class="bi bi-lock-fill text-warning me-1"></i>
+                    Status updates require Revenue Officer or Administrator permissions.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

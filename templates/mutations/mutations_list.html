@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}Mutation Docket Workflow | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-lg-4 py-3">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-arrow-left-right text-warning me-2"></i>MUTATION_WORKFLOW_DOCKET</h4>
+            <div class="text-muted small">Dakhil-Kharij Lifecycle • Sale, Inheritance, Partition, Correction</div>
+        </div>
+        <button class="btn btn-cyber-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newMutationModal">
+            <i class="bi bi-file-earmark-plus me-1"></i> File Mutation Application
+        </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="cyber-card p-3 border-start border-3 border-warning">
+                <div class="text-muted small font-monospace">APPLIED / UNDER REVIEW</div>
+                <div class="fs-3 fw-bold text-warning mt-1">{{ applied_count|add:review_count }}</div>
+                <small class="text-muted">Field verification queue</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="cyber-card p-3 border-start border-3 border-success">
+                <div class="text-muted small font-monospace">COMPLETED MUTATIONS</div>
+                <div class="fs-3 fw-bold text-success mt-1">{{ completed_count }}</div>
+                <small class="text-muted">Ownership automatically updated</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="cyber-card p-3 border-start border-3 border-info">
+                <div class="text-muted small font-monospace">TOTAL MUTATIONS DOCKETED</div>
+                <div class="fs-3 fw-bold text-info mt-1">{{ mutations|length }}</div>
+                <small class="text-muted">Tracked via hash chain</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mutations List -->
+    <div class="cyber-card p-0">
+        <div class="table-responsive">
+            <table class="table table-cyber align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Case Number</th>
+                        <th>Target Parcel</th>
+                        <th>Mutation Type</th>
+                        <th>Applicant (Buyer/Heir)</th>
+                        <th>Transferor (Seller)</th>
+                        <th>Submission Date</th>
+                        <th>Status</th>
+                        <th class="text-end">Lifecycle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in mutations %}
+                    <tr>
+                        <td class="font-monospace fw-bold text-info">{{ m.case_number }}</td>
+                        <td>
+                            <strong class="text-white">Khasra {{ m.parcel.khasra_no }}</strong><br>
+                            <span class="font-monospace small text-muted">{{ m.parcel.parcel_id }}</span>
+                        </td>
+                        <td><span class="badge bg-dark border border-secondary">{{ m.get_mutation_type_display }}</span></td>
+                        <td class="fw-semibold text-white">{{ m.applicant_name }}</td>
+                        <td class="text-muted">{{ m.transferor_name }}</td>
+                        <td>{{ m.applied_date }}</td>
+                        <td>
+                            {% if m.status == 'Completed' %}
+                                <span class="badge-glow-green px-2 py-0 small"><i class="bi bi-check-circle"></i> Completed</span>
+                            {% elif m.status == 'Approved' %}
+                                <span class="badge-glow-cyan px-2 py-0 small">Approved</span>
+                            {% elif m.status == 'Under Review' %}
+                                <span class="badge-glow-amber px-2 py-0 small">In Review</span>
+                            {% else %}
+                                <span class="badge bg-secondary small">{{ m.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <a href="{% url 'mutation_detail' m.id %}" class="btn btn-cyber-outline btn-sm">
+                                View Docket <i class="bi bi-chevron-right ms-1"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-4 text-muted">No mutation cases on file.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal: New Mutation -->
+<div class="modal fade" id="newMutationModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content cyber-card p-0">
+            <form method="POST" action="{% url 'mutations' %}">
+                {% csrf_token %}
+                <div class="cyber-card-header text-white font-monospace">
+                    <i class="bi bi-file-earmark-plus text-warning me-1"></i> SUBMIT_MUTATION_APPLICATION
+                </div>
+                <div class="p-4">
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">TARGET PARCEL</label>
+                        <select name="parcel_id" class="form-select cyber-select" required>
+                            <option value="">-- Choose Parcel --</option>
+                            {% for p in parcels %}
+                            <option value="{{ p.id }}">Khasra {{ p.khasra_no }} [{{ p.parcel_id }}] - {{ p.village.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">MUTATION TYPE</label>
+                        <select name="mutation_type" class="form-select cyber-select" required>
+                            <option value="sale">Sale Deed / Registry Transfer</option>
+                            <option value="inheritance">Inheritance / Varasat</option>
+                            <option value="partition">Partition / Batwara</option>
+                            <option value="gift">Gift Deed</option>
+                            <option value="correction">Record Rectification</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">APPLICANT NAME</label>
+                        <input type="text" name="applicant_name" class="form-control cyber-input" placeholder="Full name of transferee..." required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">TRANSFEROR NAME</label>
+                        <input type="text" name="transferor_name" class="form-control cyber-input" placeholder="Full name of seller/deceased..." required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">REMARKS / REGISTRY DEED DETAILS</label>
+                        <textarea name="remarks" class="form-control cyber-input" rows="2" placeholder="Sub-Registrar registration serial, date..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-cyber-outline" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-cyber-primary">File Application</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

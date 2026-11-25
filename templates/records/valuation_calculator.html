@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Land Valuation & Circle Rate Calculator | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-calculator-fill text-info me-2"></i>GOVERNMENT_LAND_VALUATION_CALCULATOR</h4>
+            <div class="text-muted small">Official Punjab Circle Rates, Market Valuation, 7% Stamp Duty & Registry Cess</div>
+        </div>
+        <span class="badge-glow-cyan px-3 py-1 font-monospace small"><i class="bi bi-bank me-1"></i>REVENUE VALUATION</span>
+    </div>
+
+    <!-- Calculator Form -->
+    <div class="cyber-card p-4 mb-4">
+        <form method="POST" action="{% url 'land_valuation' %}">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <label class="form-label text-muted small font-monospace">SELECT CADASTRE PARCEL</label>
+                    <select name="parcel_id" class="form-select cyber-select" required>
+                        <option value="">-- Choose Cadastral Parcel --</option>
+                        {% for p in parcels %}
+                        <option value="{{ p.id }}">Khasra {{ p.khasra_no }} [{{ p.parcel_id }}] - {{ p.area_acres }} Acres ({{ p.village.name }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small font-monospace">COLLECTOR / CIRCLE RATE (₹ PER ACRE)</label>
+                    <input type="number" name="circle_rate_per_acre" class="form-control cyber-input" value="4500000" step="50000" required>
+                </div>
+                <div class="col-md-3 d-flex flex-column justify-content-end">
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" name="road_facing" id="roadCheck">
+                        <label class="form-check-label text-muted small font-monospace" for="roadCheck">National / State Highway Touch (+20%)</label>
+                    </div>
+                    <button type="submit" class="btn btn-cyber-primary w-100 fw-bold">Calculate Official Valuation</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Valuation Breakdown Result -->
+    {% if valuation %}
+    <div class="cyber-card p-4 border-info">
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <h5 class="fw-bold text-info font-monospace mb-3"><i class="bi bi-receipt me-2"></i>GOVERNMENT CHARGES BREAKDOWN</h5>
+                <div class="table-responsive">
+                    <table class="table table-cyber font-monospace small mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="text-muted">Target Plot:</td>
+                                <td class="text-white fw-bold">Khasra {{ valuation.parcel.khasra_no }} ({{ valuation.parcel.area_acres }} Acres)</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Effective Circle Rate:</td>
+                                <td class="text-white">₹{{ valuation.effective_rate|floatformat:2 }} / Acre</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Total Cadastral Value:</td>
+                                <td class="text-success fw-bold fs-5">₹{{ valuation.base_market_value|floatformat:2 }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Stamp Duty (7.0%):</td>
+                                <td class="text-warning">₹{{ valuation.stamp_duty|floatformat:2 }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Registration Fees (1.0%):</td>
+                                <td class="text-warning">₹{{ valuation.registration_fee|floatformat:2 }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Mutation Docket Cess:</td>
+                                <td class="text-warning">₹{{ valuation.mutation_cess|floatformat:2 }}</td>
+                            </tr>
+                            <tr class="border-top border-secondary">
+                                <td class="text-info fw-bold">Total Transfer & Registry Cost:</td>
+                                <td class="text-info fw-bold fs-5">₹{{ valuation.total_government_charges|floatformat:2 }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-lg-6 d-flex flex-column justify-content-center">
+                <div class="p-4 bg-dark rounded border border-secondary text-center">
+                    <i class="bi bi-cash-stack display-3 text-success mb-2"></i>
+                    <h6 class="text-muted font-monospace">ESTIMATED TOTAL LAND VALUATION</h6>
+                    <div class="display-6 fw-bold text-white mb-2">₹{{ valuation.base_market_value|floatformat:0 }}</div>
+                    <span class="badge-glow-green px-3 py-1 font-monospace">OFFICIAL COLLECTOR CIRCLE VALUATION</span>
+                    <p class="text-muted small mt-3 mb-0">
+                        Calculated according to Punjab Revenue Manual guidelines. Can be submitted as collateral valuation for bank agricultural loans.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile & Security | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="row g-4">
+        
+        <!-- Left: Profile Dossier -->
+        <div class="col-lg-4">
+            <div class="cyber-card p-4 text-center">
+                <i class="bi bi-person-circle display-1 text-info mb-2"></i>
+                <h4 class="fw-bold text-white mb-0 font-monospace">{{ user.username }}</h4>
+                <div class="badge-glow-cyan px-2 py-1 small my-2">{{ user.profile.get_role_display|default:CURRENT_ROLE }}</div>
+                <div class="text-secondary small font-monospace">{{ user.email|default:"no-email@bhuraksha.gov.in" }}</div>
+
+                <hr class="border-secondary my-4">
+
+                <div class="text-start font-monospace small">
+                    <div class="mb-2"><span class="text-muted">DEPARTMENT:</span> <span class="text-white">{{ user.profile.department|default:"Cadastral Revenue" }}</span></div>
+                    <div class="mb-2"><span class="text-muted">CONTACT:</span> <span class="text-white">{{ user.profile.phone|default:"+91 98144 00000" }}</span></div>
+                    <div class="mb-3">
+                        <span class="text-muted">MFA (TOTP):</span> 
+                        {% if user.profile.mfa_enabled %}
+                            <span class="text-success fw-bold"><i class="bi bi-shield-check"></i> ACTIVE</span>
+                        {% else %}
+                            <span class="text-warning"><i class="bi bi-shield-slash"></i> INACTIVE</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <a href="{% url 'mfa_setup' %}" class="btn btn-cyber-primary btn-sm w-100">
+                    <i class="bi bi-qr-code me-1"></i> Configure Authenticator App (MFA)
+                </a>
+            </div>
+        </div>
+
+        <!-- Right: Login Telemetry History -->
+        <div class="col-lg-8">
+            <div class="cyber-card p-4">
+                <h5 class="fw-bold text-white mb-3 font-monospace"><i class="bi bi-clock-history text-info me-2"></i>MY_AUTHENTICATION_HISTORY</h5>
+                <div class="table-responsive">
+                    <table class="table table-cyber font-monospace small mb-0">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>IP Address</th>
+                                <th>Authentication Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for h in history %}
+                            <tr>
+                                <td class="text-muted">{{ h.timestamp|date:"Y-m-d H:i:s" }}</td>
+                                <td class="text-info">{{ h.ip_address }}</td>
+                                <td>
+                                    {% if h.status == 'SUCCESS' %}
+                                        <span class="badge-glow-green px-2 py-0">SUCCESS</span>
+                                    {% elif h.status == 'FAILED' %}
+                                        <span class="badge-glow-red px-2 py-0">FAILED</span>
+                                    {% else %}
+                                        <span class="badge-glow-amber px-2 py-0">{{ h.status }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="text-muted text-center py-3">No login logs recorded for this account.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

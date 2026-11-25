@@ -1,0 +1,502 @@
+{% extends 'parcels/base.html' %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    
+    <!-- Top KPI Summary Bar (DPI Metrics) -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-primary">
+                <div class="text-muted small fw-semibold text-uppercase">Cadastral Plots</div>
+                <div class="fs-3 fw-bold text-dark mt-1">{{ total_parcels }}</div>
+                <small class="text-muted"><i class="bi bi-layers me-1"></i>32 QGIS Polygons</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-success">
+                <div class="text-muted small fw-semibold text-uppercase">Total Land Area</div>
+                <div class="fs-3 fw-bold text-success mt-1">{{ total_area_ha }} <span class="fs-6 text-muted">ha</span></div>
+                <small class="text-muted">{{ total_area_acres }} Acres</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-info">
+                <div class="text-muted small fw-semibold text-uppercase">Verified Titles</div>
+                <div class="fs-3 fw-bold text-info mt-1">{{ verified_count }}</div>
+                <small class="text-success"><i class="bi bi-shield-check me-1"></i>Clear Ownership</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-danger">
+                <div class="text-muted small fw-semibold text-uppercase">Disputed Plots</div>
+                <div class="fs-3 fw-bold text-danger mt-1">{{ disputed_count }}</div>
+                <small class="text-danger"><i class="bi bi-flag-fill me-1"></i>Under Litigation</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-warning">
+                <div class="text-muted small fw-semibold text-uppercase">Mutation Cases</div>
+                <div class="fs-3 fw-bold text-warning mt-1">{{ mutations_count }}</div>
+                <small class="text-muted">Dakhil-Kharij Tracked</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-secondary">
+                <div class="text-muted small fw-semibold text-uppercase">Villages Covered</div>
+                <div class="fs-4 fw-bold text-dark mt-1 text-truncate">Rampur & Shivpur</div>
+                <small class="text-muted">Varanasi, UP</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Workspace: Interactive Web GIS Map & Parcel Inspector -->
+    <div class="row g-3 mb-4">
+        
+        <!-- Left: GIS Map with Filters & Visual Layering -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm p-3 bg-white rounded-3 h-100">
+                
+                <!-- Search & Filter Ribbon -->
+                <div class="row g-2 align-items-center mb-3">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-search"></i></span>
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search Khasra / Owner / ULPIN...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filterLandUse" class="form-select">
+                            <option value="">All Land Uses</option>
+                            <option value="Irrigated Agri">Irrigated Agri</option>
+                            <option value="Rain-fed Agri">Rain-fed Agri</option>
+                            <option value="Residential/Abadi">Residential / Abadi</option>
+                            <option value="Commercial/Agri-Hub">Commercial / Agri-Hub</option>
+                            <option value="Fallow/Barren">Fallow / Barren</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filterStatus" class="form-select">
+                            <option value="">All Statuses</option>
+                            <option value="Clear">Clear / Verified</option>
+                            <option value="Disputed">Disputed / Flagged</option>
+                            <option value="Under Mutation">Under Mutation</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 text-end">
+                        <button class="btn btn-outline-secondary w-100" id="resetBtn" title="Reset Filters">
+                            <i class="bi bi-arrow-counterclockwise"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Leaflet Interactive Map -->
+                <div class="position-relative">
+                    <div id="map"></div>
+                    
+                    <!-- Dynamic Map Legend -->
+                    <div class="position-absolute bottom-0 start-0 m-3 map-overlay-box d-none d-sm-block">
+                        <h6 class="fw-bold mb-2 small text-uppercase text-secondary">Cadastral Classification</h6>
+                        <div class="d-flex align-items-center mb-1">
+                            <span style="display:inline-block;width:16px;height:14px;background:#28a745;opacity:0.75;margin-right:8px;border:1px solid #1e7e34;border-radius:2px;"></span>
+                            <small>Irrigated Agri</small>
+                        </div>
+                        <div class="d-flex align-items-center mb-1">
+                            <span style="display:inline-block;width:16px;height:14px;background:#17a2b8;opacity:0.75;margin-right:8px;border:1px solid #117a8b;border-radius:2px;"></span>
+                            <small>Rain-fed Agri</small>
+                        </div>
+                        <div class="d-flex align-items-center mb-1">
+                            <span style="display:inline-block;width:16px;height:14px;background:#0d6efd;opacity:0.75;margin-right:8px;border:1px solid #0a58ca;border-radius:2px;"></span>
+                            <small>Residential / Abadi</small>
+                        </div>
+                        <div class="d-flex align-items-center mb-1">
+                            <span style="display:inline-block;width:16px;height:14px;background:#fd7e14;opacity:0.75;margin-right:8px;border:1px solid #d9660c;border-radius:2px;"></span>
+                            <small>Commercial / Agri-Hub</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span style="display:inline-block;width:16px;height:14px;background:#dc3545;opacity:0.85;margin-right:8px;border:1px dashed #721c24;border-radius:2px;"></span>
+                            <small class="text-danger fw-bold">Disputed / Litigated</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-2 text-muted small d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-hand-index-thumb me-1"></i> Click on any cadastral polygon to open real-time DPI record.</span>
+                    <span><a href="{% url 'export_qgis_geojson' %}" class="fw-semibold text-decoration-none text-primary"><i class="bi bi-file-earmark-arrow-down-fill me-1"></i> Export 32 Parcels GeoJSON</a></span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Right: Real-time Parcel Inspector & DPI Record Sheet -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-3 h-100 bg-white" id="parcelInspectorCard">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-journal-text text-primary me-2"></i>DPI Parcel Inspector</h5>
+                    <span id="inspectorStatusBadge" class="badge bg-secondary">Select Plot</span>
+                </div>
+                <div class="card-body p-4" id="inspectorBody">
+                    <div class="text-center text-muted py-5" id="inspectorPlaceholder">
+                        <i class="bi bi-bounding-box-circles fs-1 text-primary opacity-50 mb-3 d-block"></i>
+                        <h6 class="fw-bold">No Parcel Selected</h6>
+                        <p class="small text-muted mb-0">Select any parcel on the GIS map or cadastral register below to inspect ownership, agronomic crop data, mutation records, and audit status.</p>
+                    </div>
+
+                    <!-- Populated Details Section -->
+                    <div id="inspectorDetails" class="d-none">
+                        <div class="border-bottom pb-3 mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted small">Khasra / Survey No:</span>
+                                <span class="fw-bold fs-5 text-primary" id="dispKhasra">-</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted small">Unique ID (ULPIN):</span>
+                                <span class="font-monospace fw-semibold small text-secondary" id="dispUlpin">-</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted small">Village / Block:</span>
+                                <span class="small fw-semibold text-dark" id="dispVillage">-</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="small fw-bold text-uppercase text-muted mb-1">Registered Khatedar (Owner)</div>
+                            <div class="fw-bold text-dark fs-6" id="dispOwner">-</div>
+                            <div class="d-flex justify-content-between align-items-center mt-1">
+                                <span class="small text-muted font-monospace" id="dispAadhaar">-</span>
+                                <span id="dispPmKisanBadge"></span>
+                            </div>
+                        </div>
+
+                        <div class="row g-2 mb-3 bg-light p-2 rounded">
+                            <div class="col-6">
+                                <span class="text-muted small d-block">Cadastral Area</span>
+                                <strong id="dispArea" class="text-dark">-</strong>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted small d-block">Land Use</span>
+                                <strong id="dispLandUse" class="text-dark">-</strong>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted small d-block">Soil Type</span>
+                                <strong id="dispSoil" class="text-dark">-</strong>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted small d-block">Irrigation</span>
+                                <strong id="dispIrrigation" class="text-dark">-</strong>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <span class="text-muted small d-block">Recorded Agriculture Crop</span>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle p-2 w-100 text-start" id="dispCrop">-</span>
+                        </div>
+
+                        <div class="mb-3 p-2 border rounded bg-white">
+                            <div class="small text-muted mb-1">Mutation / Dakhil Kharij Status</div>
+                            <span class="fw-semibold small text-dark" id="dispMutation">-</span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <a href="#" id="viewFullRecordBtn" class="btn btn-primary btn-sm flex-grow-1">
+                                <i class="bi bi-file-earmark-check me-1"></i> Full RoR / Khatauni
+                            </a>
+                            <a href="#" id="flagDisputeBtn" class="btn btn-outline-danger btn-sm" title="Flag or Resolve Legal Dispute">
+                                <i class="bi bi-flag"></i> Flag
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Phase 6 Dashboard: Analytics Charts (Chart.js) -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm p-3 bg-white rounded-3">
+                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-pie-chart-fill text-primary me-2"></i>Land Use Distribution (Hectares)</h6>
+                <div style="height: 240px;">
+                    <canvas id="landUseChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm p-3 bg-white rounded-3">
+                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-bar-chart-fill text-success me-2"></i>Crop Area & Yield Profile</h6>
+                <div style="height: 240px;">
+                    <canvas id="cropChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cadastral Register Table -->
+    <div class="card border-0 shadow-sm rounded-3 bg-white mb-5">
+        <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-table text-primary me-2"></i>Cadastral Parcel Register (Integrated RoR Records)</h5>
+            <span class="badge bg-primary text-white">{{ total_parcels }} Cadastral Parcels</span>
+        </div>
+        <div class="table-responsive" style="max-height: 480px; overflow-y: auto;">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light sticky-top">
+                    <tr>
+                        <th>Khasra No.</th>
+                        <th>ULPIN</th>
+                        <th>Village</th>
+                        <th>Owner (Khatedar)</th>
+                        <th>Land Use</th>
+                        <th>Area (Ha)</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in parcels %}
+                    <tr id="row-{{ p.id }}" style="cursor: pointer;" onclick="locateParcelOnMap({{ p.id }}, {{ p.centroid_lat }}, {{ p.centroid_lng }})">
+                        <td class="fw-bold text-primary">{{ p.khasra_no }}</td>
+                        <td class="font-monospace small text-secondary">{{ p.parcel_id }}</td>
+                        <td>{{ p.village.name }}</td>
+                        <td>
+                            {% with owner_rec=p.ownership_records.first %}
+                                <div class="fw-semibold">{{ owner_rec.owner.name|default:"Gram Sabha" }}</div>
+                                <small class="text-muted">{{ owner_rec.owner.aadhaar_masked }}</small>
+                            {% endwith %}
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">{{ p.land_use_type }}</span>
+                        </td>
+                        <td>{{ p.area_hectares }} ha <br><small class="text-muted">({{ p.area_acres }} ac)</small></td>
+                        <td>
+                            {% if p.status == 'Clear' %}
+                                <span class="badge bg-success"><i class="bi bi-check-circle"></i> Clear</span>
+                            {% elif p.status == 'Disputed' %}
+                                <span class="badge bg-danger"><i class="bi bi-flag-fill"></i> Disputed</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">{{ p.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end" onclick="event.stopPropagation();">
+                            <a href="{% url 'parcel_detail' p.id %}" class="btn btn-outline-primary btn-sm" title="View RoR Sheet">
+                                <i class="bi bi-eye"></i> RoR
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize Web GIS Leaflet Map
+    const map = L.map('map', {
+        center: [25.3275, 82.9835],
+        zoom: 15,
+        zoomControl: true
+    });
+
+    const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19,
+        attribution: 'Tiles © Esri'
+    });
+
+    L.control.layers({
+        "Cartographic (OSM)": osmLayer,
+        "Satellite Imagery (ESRI)": satelliteLayer
+    }, null, { position: 'topright' }).addTo(map);
+
+    let geojsonLayerGroup = L.geoJSON(null).addTo(map);
+    let currentHighlightedLayer = null;
+
+    function getParcelStyle(feature) {
+        const use = feature.properties.land_use_type;
+        let fillColor = '#6c757d';
+        if (use === 'Irrigated Agri') fillColor = '#28a745';
+        else if (use === 'Rain-fed Agri') fillColor = '#17a2b8';
+        else if (use === 'Residential/Abadi') fillColor = '#0d6efd';
+        else if (use === 'Commercial/Agri-Hub') fillColor = '#fd7e14';
+        else if (use === 'Fallow/Barren') fillColor = '#6c757d';
+
+        if (feature.properties.status === 'Disputed') {
+            fillColor = '#dc3545';
+        }
+
+        return {
+            fillColor: fillColor,
+            weight: 2,
+            opacity: 1,
+            color: '#1a252f',
+            dashArray: feature.properties.status === 'Disputed' ? '4, 4' : '',
+            fillOpacity: 0.65
+        };
+    }
+
+    function onEachFeature(feature, layer) {
+        layer.bindTooltip(`<strong>Khasra: ${feature.properties.khasra_no}</strong><br>${feature.properties.owner_name}`, {
+            direction: 'center',
+            className: 'badge bg-dark text-white p-1'
+        });
+
+        layer.on({
+            mouseover: function(e) {
+                const target = e.target;
+                target.setStyle({ weight: 3.5, color: '#ffc107', fillOpacity: 0.85 });
+                target.bringToFront();
+            },
+            mouseout: function(e) {
+                if (currentHighlightedLayer !== e.target) {
+                    geojsonLayerGroup.resetStyle(e.target);
+                }
+            },
+            click: function(e) {
+                selectParcel(feature, e.target);
+            }
+        });
+    }
+
+    function selectParcel(feature, layer) {
+        if (currentHighlightedLayer) {
+            geojsonLayerGroup.resetStyle(currentHighlightedLayer);
+        }
+        currentHighlightedLayer = layer;
+        if (layer) {
+            layer.setStyle({ weight: 4, color: '#ff9800', fillOpacity: 0.9 });
+            layer.bringToFront();
+        }
+
+        const p = feature.properties;
+        document.getElementById('inspectorPlaceholder').classList.add('d-none');
+        document.getElementById('inspectorDetails').classList.remove('d-none');
+
+        document.getElementById('dispKhasra').innerText = p.khasra_no;
+        document.getElementById('dispUlpin').innerText = p.parcel_id;
+        document.getElementById('dispVillage').innerText = `${p.village}, ${p.tehsil}`;
+        document.getElementById('dispOwner').innerText = p.owner_name;
+        document.getElementById('dispAadhaar').innerText = `Aadhaar: ${p.aadhaar_masked}`;
+        document.getElementById('dispArea').innerText = `${p.area_ha} Ha (${p.area_acres} Ac)`;
+        document.getElementById('dispLandUse').innerText = p.land_use_type;
+        document.getElementById('dispSoil').innerText = p.soil_type;
+        document.getElementById('dispIrrigation').innerText = p.irrigation_source;
+        document.getElementById('dispCrop').innerText = p.crop;
+        document.getElementById('dispMutation').innerText = p.mutation;
+
+        const pmBadge = document.getElementById('dispPmKisanBadge');
+        if (p.pm_kisan) {
+            pmBadge.innerHTML = '<span class="badge bg-success-subtle text-success"><i class="bi bi-check-circle"></i> PM-KISAN Linked</span>';
+        } else {
+            pmBadge.innerHTML = '<span class="badge bg-secondary-subtle text-secondary">Non-beneficiary</span>';
+        }
+
+        const statusBadge = document.getElementById('inspectorStatusBadge');
+        statusBadge.innerText = p.status;
+        if (p.status === 'Clear') statusBadge.className = 'badge bg-success';
+        else if (p.status === 'Disputed') statusBadge.className = 'badge bg-danger';
+        else statusBadge.className = 'badge bg-warning text-dark';
+
+        document.getElementById('viewFullRecordBtn').href = `/parcel/${p.id}/`;
+        document.getElementById('flagDisputeBtn').href = `/parcel/${p.id}/flag-dispute/`;
+
+        document.querySelectorAll('tbody tr').forEach(r => r.classList.remove('table-primary'));
+        const row = document.getElementById(`row-${p.id}`);
+        if (row) {
+            row.classList.add('table-primary');
+            row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
+
+    window.locateParcelOnMap = function(parcelId, lat, lng) {
+        let foundLayer = null;
+        geojsonLayerGroup.eachLayer(layer => {
+            if (layer.feature && layer.feature.properties.id === parcelId) {
+                foundLayer = layer;
+            }
+        });
+        if (foundLayer) {
+            map.flyTo([lat, lng], 17, { duration: 1.2 });
+            selectParcel(foundLayer.feature, foundLayer);
+        }
+    };
+
+    function fetchAndRenderParcels() {
+        const query = document.getElementById('searchInput').value;
+        const landUse = document.getElementById('filterLandUse').value;
+        const status = document.getElementById('filterStatus').value;
+
+        const url = `/api/parcels/?q=${encodeURIComponent(query)}&land_use=${encodeURIComponent(landUse)}&status=${encodeURIComponent(status)}`;
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                geojsonLayerGroup.clearLayers();
+                geojsonLayerGroup = L.geoJSON(data, {
+                    style: getParcelStyle,
+                    onEachFeature: onEachFeature
+                }).addTo(map);
+
+                if (data.features.length > 0) {
+                    map.fitBounds(geojsonLayerGroup.getBounds(), { padding: [30, 30] });
+                }
+            })
+            .catch(err => console.error("Error loading GeoJSON API:", err));
+    }
+
+    document.getElementById('searchInput').addEventListener('input', () => setTimeout(fetchAndRenderParcels, 300));
+    document.getElementById('filterLandUse').addEventListener('change', fetchAndRenderParcels);
+    document.getElementById('filterStatus').addEventListener('change', fetchAndRenderParcels);
+    document.getElementById('resetBtn').addEventListener('click', () => {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('filterLandUse').value = '';
+        document.getElementById('filterStatus').value = '';
+        fetchAndRenderParcels();
+    });
+
+    fetchAndRenderParcels();
+
+    // Chart.js Visualizations (Phase 6)
+    const landUseData = {{ land_use_stats_json|safe }};
+    const cropData = {{ crop_stats_json|safe }};
+
+    new Chart(document.getElementById('landUseChart'), {
+        type: 'doughnut',
+        data: {
+            labels: landUseData.map(d => d.land_use_type),
+            datasets: [{
+                data: landUseData.map(d => d.area),
+                backgroundColor: ['#28a745', '#17a2b8', '#0d6efd', '#fd7e14', '#6c757d']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'right' } }
+        }
+    });
+
+    new Chart(document.getElementById('cropChart'), {
+        type: 'bar',
+        data: {
+            labels: cropData.map(d => d.crop),
+            datasets: [{
+                label: 'Est. Yield (Quintals)',
+                data: cropData.map(d => d.total_yield),
+                backgroundColor: '#198754'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } }
+        }
+    });
+</script>
+{% endblock %}

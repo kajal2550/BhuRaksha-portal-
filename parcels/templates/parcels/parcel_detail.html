@@ -1,0 +1,256 @@
+{% extends 'parcels/base.html' %}
+
+{% block title %}Record of Rights (RoR / Khatauni) - {{ parcel.parcel_id }} | GeoLand DPI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Top Navigation Actions -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-sm mb-2">
+                <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+            </a>
+            <h3 class="fw-bold text-dark mb-0">Record of Rights (RoR / Khatauni)</h3>
+            <div class="text-muted small">Integrated Digital Public Land Infrastructure • Unique Key: <strong class="text-primary font-monospace">{{ parcel.parcel_id }}</strong></div>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'flag_dispute' parcel.id %}" class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-flag me-1"></i> {% if parcel.status == 'Disputed' %}Resolve Dispute{% else %}Flag Dispute{% endif %}
+            </a>
+            <button onclick="window.print()" class="btn btn-outline-dark btn-sm">
+                <i class="bi bi-printer me-1"></i> Print Certified Copy
+            </button>
+            <a href="{% url 'export_qgis_geojson' %}" class="btn btn-primary btn-sm">
+                <i class="bi bi-download me-1"></i> Export QGIS
+            </a>
+        </div>
+    </div>
+
+    <!-- Official Land Record Certificate Card -->
+    <div class="card border-0 shadow rounded-3 bg-white p-4 p-md-5 mb-5">
+        
+        <!-- Header seal -->
+        <div class="row align-items-center border-bottom pb-4 mb-4">
+            <div class="col-md-2 text-center text-md-start mb-3 mb-md-0">
+                <div class="display-6 fw-bold text-primary"><i class="bi bi-shield-shaded"></i></div>
+            </div>
+            <div class="col-md-8 text-center">
+                <h4 class="fw-bold mb-1 text-uppercase text-dark">Digital Cadastral & Land Records Registry</h4>
+                <div class="fw-semibold text-secondary">Department of Revenue & Agriculture Infrastructure</div>
+                <div class="small text-muted">Issued under Digital Public Infrastructure (DPI) Framework</div>
+            </div>
+            <div class="col-md-2 text-center text-md-end">
+                {% if parcel.status == 'Clear' %}
+                    <span class="badge bg-success p-2 fs-6"><i class="bi bi-shield-check"></i> Verified</span>
+                {% elif parcel.status == 'Disputed' %}
+                    <span class="badge bg-danger p-2 fs-6"><i class="bi bi-flag-fill"></i> Disputed</span>
+                {% else %}
+                    <span class="badge bg-warning text-dark p-2 fs-6">{{ parcel.status }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- 1. Parcel Spatial Identification -->
+        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-geo-alt-fill me-2"></i>1. Spatial & Cadastral Identification</h5>
+        <div class="row g-3 mb-4 bg-light p-3 rounded">
+            <div class="col-md-3">
+                <span class="text-muted small d-block">ULPIN (14-Digit Key)</span>
+                <span class="font-monospace fw-bold text-dark fs-6">{{ parcel.parcel_id }}</span>
+            </div>
+            <div class="col-md-3">
+                <span class="text-muted small d-block">Khasra / Survey Number</span>
+                <span class="fs-5 fw-bold text-primary">{{ parcel.khasra_no }}</span>
+            </div>
+            <div class="col-md-3">
+                <span class="text-muted small d-block">Village & Tehsil</span>
+                <span class="fw-semibold text-dark">{{ parcel.village.name }}, {{ parcel.village.block_tehsil }}</span>
+            </div>
+            <div class="col-md-3">
+                <span class="text-muted small d-block">WGS84 Coordinates</span>
+                <span class="small font-monospace">{{ parcel.centroid_lat }}° N, {{ parcel.centroid_lng }}° E</span>
+            </div>
+        </div>
+
+        <!-- 2. Ownership Records -->
+        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-people-fill me-2"></i>2. Registered Ownership Records</h5>
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered table-sm align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Owner Name</th>
+                        <th>Masked Aadhaar ID</th>
+                        <th>Contact</th>
+                        <th>Share %</th>
+                        <th>PM-KISAN Status</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for own in ownerships %}
+                    <tr>
+                        <td class="fw-bold text-dark">{{ own.owner.name }}</td>
+                        <td class="font-monospace small">{{ own.owner.aadhaar_masked }}</td>
+                        <td>{{ own.owner.contact }}</td>
+                        <td><span class="badge bg-primary">{{ own.share_percentage }}%</span></td>
+                        <td>
+                            {% if own.owner.pm_kisan_beneficiary_id %}
+                                <span class="badge bg-success-subtle text-success"><i class="bi bi-check-circle"></i> Linked ({{ own.owner.pm_kisan_beneficiary_id }})</span>
+                            {% else %}
+                                <span class="badge bg-secondary-subtle text-secondary">Non-beneficiary</span>
+                            {% endif %}
+                        </td>
+                        <td><span class="badge bg-success">{{ own.status }}</span></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" class="text-center text-muted">No owners registered.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 3. Agronomic, Land Use & Crop History -->
+        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-flower1 me-2"></i>3. Agronomic, Land Use & Crop Records</h5>
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered table-striped table-sm">
+                <tbody>
+                    <tr>
+                        <th style="width: 25%;">Land Classification</th>
+                        <td><span class="badge bg-info text-dark">{{ parcel.get_land_use_type_display }}</span></td>
+                        <th style="width: 25%;">Total Cadastral Area</th>
+                        <td><strong>{{ parcel.area_hectares }} Ha</strong> ({{ parcel.area_acres }} Acres)</td>
+                    </tr>
+                    <tr>
+                        <th>Soil Type</th>
+                        <td>{{ parcel.soil_type }}</td>
+                        <th>Irrigation Infrastructure</th>
+                        <td>{{ parcel.irrigation_source }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h6 class="fw-semibold text-secondary mt-3 mb-2">Crop Sowing & Yield Log:</h6>
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Crop</th>
+                        <th>Season</th>
+                        <th>Variety</th>
+                        <th>Sowing Date</th>
+                        <th>Estimated Yield</th>
+                        <th>Fertilizer Practice</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in crops %}
+                    <tr>
+                        <td class="fw-bold text-success">{{ c.crop }}</td>
+                        <td><span class="badge bg-secondary">{{ c.season }}</span></td>
+                        <td>{{ c.variety }}</td>
+                        <td>{{ c.sowing_date }}</td>
+                        <td><strong>{{ c.estimated_yield_quintals }} Quintals</strong></td>
+                        <td>{{ c.fertilizer_used }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" class="text-center text-muted">No active crop history logged.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 4. Mutation / Transaction History -->
+        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-clock-history me-2"></i>4. Mutation & Transaction Registry (Dakhil Kharij)</h5>
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Case Number</th>
+                        <th>Transaction Type</th>
+                        <th>Applicant</th>
+                        <th>Transferor</th>
+                        <th>Submission Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in mutations %}
+                    <tr>
+                        <td class="font-monospace fw-bold">{{ m.case_number }}</td>
+                        <td>{{ m.transaction_type }}</td>
+                        <td>{{ m.applicant_name }}</td>
+                        <td>{{ m.transferor_name }}</td>
+                        <td>{{ m.submission_date }}</td>
+                        <td>
+                            {% if 'Approved' in m.status %}
+                                <span class="badge bg-success">{{ m.status }}</span>
+                            {% elif 'Objection' in m.status %}
+                                <span class="badge bg-danger">{{ m.status }}</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">{{ m.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" class="text-center text-muted">No mutation records.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 5. Single Parcel GIS Boundary Map -->
+        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-map-fill me-2"></i>5. Spatial Parcel Boundary</h5>
+        <div id="singleParcelMap" style="height: 320px; border-radius: 8px;" class="border mb-4"></div>
+
+        <!-- 6. Audit Trail for this parcel -->
+        {% if audit_logs %}
+        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-journal-check me-2"></i>6. DPI Audit Trail for this Parcel</h5>
+        <ul class="list-group list-group-flush mb-4 border rounded">
+            {% for log in audit_logs %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ log.action }}</strong>
+                    <div class="text-muted small">Updated by {{ log.user|default:"Revenue Officer" }}</div>
+                </div>
+                <span class="font-monospace small text-muted">{{ log.timestamp|date:"Y-m-d H:i:s" }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <!-- Footer Seal -->
+        <div class="border-top pt-3 text-muted small d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-qr-code text-dark fs-4 align-middle me-2"></i> Certified Digital Public Infrastructure Record • ULPIN: {{ parcel.parcel_id }}</span>
+            <span>Generated on {% now "SHORT_DATE_FORMAT" %}</span>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const parcelMap = L.map('singleParcelMap').setView([{{ parcel.centroid_lat }}, {{ parcel.centroid_lng }}], 17);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    const geojsonData = {{ parcel.geometry_geojson|safe }};
+    const polyLayer = L.geoJSON(geojsonData, {
+        style: {
+            fillColor: '{% if parcel.status == "Disputed" %}#dc3545{% else %}#28a745{% endif %}',
+            weight: 3,
+            color: '#1a252f',
+            fillOpacity: 0.7
+        }
+    }).addTo(parcelMap);
+
+    L.marker([{{ parcel.centroid_lat }}, {{ parcel.centroid_lng }}])
+        .addTo(parcelMap)
+        .bindPopup("<strong>Khasra {{ parcel.khasra_no }}</strong><br>ULPIN: {{ parcel.parcel_id }}")
+        .openPopup();
+
+    parcelMap.fitBounds(polyLayer.getBounds(), { padding: [50, 50] });
+</script>
+{% endblock %}

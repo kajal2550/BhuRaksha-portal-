@@ -1,0 +1,519 @@
+{% extends 'base.html' %}
+
+{% block title %}Main WebGIS Cadastre | BhuRaksha DPI{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-lg-4 py-2">
+
+    <!-- Top Command Ribbon -->
+    <div class="cyber-card p-3 mb-3">
+        <div class="row g-2 align-items-center">
+            
+            <!-- Live Search Autocomplete with Fly-To -->
+            <div class="col-md-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary text-info"><i class="bi bi-search"></i></span>
+                    <input type="text" id="searchInput" class="form-control cyber-input" placeholder="Search Khasra (e.g. 101/1), ULPIN, Owner...">
+                </div>
+            </div>
+
+            <!-- Color by Toggle -->
+            <div class="col-md-2">
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary text-muted small">COLOR</span>
+                    <select id="colorBySelect" class="form-select cyber-select">
+                        <option value="status">Status (Verified/Disputed)</option>
+                        <option value="land_use">Land Use Category</option>
+                        <option value="crop">Crop Cultivated</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Village Filter -->
+            <div class="col-md-2">
+                <select id="filterVillage" class="form-select cyber-select">
+                    <option value="">All States & Villages (India)</option>
+                    {% for v in villages %}
+                    <option value="{{ v.name }}">{{ v.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Status Filter -->
+            <div class="col-md-2">
+                <select id="filterStatus" class="form-select cyber-select">
+                    <option value="">All Statuses</option>
+                    <option value="Verified">Verified (Clear Title)</option>
+                    <option value="Mutation Pending">Mutation Pending</option>
+                    <option value="Disputed">Disputed / Litigated</option>
+                    <option value="Tampered">Tampered / Integrity Failed</option>
+                </select>
+            </div>
+
+            <!-- Interactive Quick Actions -->
+            <div class="col-md-3 text-end d-flex gap-2 justify-content-end">
+                <button class="btn btn-cyber-green btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#drawHelpModal" title="How to draw new parcel">
+                    <i class="bi bi-pencil-square me-1"></i> Draw Plot
+                </button>
+                <a href="{% url 'export_qgis_geojson' %}" class="btn btn-cyber-outline btn-sm">
+                    <i class="bi bi-download me-1"></i> QGIS Export
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Map & Slide-in Inspector Layout -->
+    <div class="row g-3 position-relative">
+        
+        <!-- Left: Full GIS Map -->
+        <div class="col-12 col-lg-8" id="mapCol">
+            <div class="cyber-card p-2 position-relative">
+                <div id="map" style="height: 720px; border-radius: 8px;"></div>
+
+                <!-- Floating Cyber Legend -->
+                <div class="position-absolute bottom-0 start-0 m-4 map-cyber-panel d-none d-md-block" style="z-index: 1000; width: 230px;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold small text-uppercase font-monospace text-info">CADASTRE_STATUS</span>
+                        <span class="badge bg-dark border border-secondary" style="font-size: 0.65rem;">EPSG:4326</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-1">
+                        <span style="display:inline-block;width:14px;height:12px;background:#00ff9c;opacity:0.8;margin-right:8px;border:1px solid #00b86b;border-radius:2px;box-shadow: 0 0 5px #00ff9c;"></span>
+                        <small class="text-light">Verified Title</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-1">
+                        <span style="display:inline-block;width:14px;height:12px;background:#ffb020;opacity:0.8;margin-right:8px;border:1px solid #c9850c;border-radius:2px;"></span>
+                        <small class="text-light">Mutation Pending</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-1">
+                        <span style="display:inline-block;width:14px;height:12px;background:#ff3b5c;opacity:0.85;margin-right:8px;border:1px dashed #b81432;border-radius:2px;box-shadow: 0 0 6px #ff3b5c;"></span>
+                        <small class="text-danger fw-bold">Disputed / Tampered</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span style="display:inline-block;width:14px;height:12px;background:#00e5ff;opacity:0.8;margin-right:8px;border:1px solid #00a4b8;border-radius:2px;"></span>
+                        <small class="text-info">Selected Parcel</small>
+                    </div>
+                </div>
+
+                <!-- Floating Coordinates Hud -->
+                <div class="position-absolute bottom-0 end-0 m-3 map-cyber-panel py-1 px-2 font-monospace small d-none d-sm-block text-muted" style="z-index: 1000; font-size: 0.72rem;">
+                    LAT: <span id="hudLat" class="text-info">31.2245</span> | LNG: <span id="hudLng" class="text-info">75.7721</span> | PLOTS: <span id="hudCount" class="text-success fw-bold">50</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Slide-In Multi-Tab Parcel Dossier Inspector -->
+        <div class="col-12 col-lg-4" id="inspectorCol">
+            <div class="cyber-card h-100 p-0 d-flex flex-column">
+                
+                <!-- Inspector Header -->
+                <div class="cyber-card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-info font-monospace small fw-bold"><i class="bi bi-fingerprint me-1"></i>DOSSIER_INSPECTOR</span>
+                    </div>
+                    <span id="inspectStatusBadge" class="badge-glow-cyan px-2 py-0 small">SELECT_PARCEL</span>
+                </div>
+
+                <!-- Empty State Placeholder -->
+                <div id="inspectorEmptyState" class="p-5 text-center text-muted my-auto">
+                    <i class="bi bi-cursor-fill text-info opacity-50 display-4 mb-3 d-block"></i>
+                    <h6 class="fw-bold text-white font-monospace">CLICK ANY PLOT ON MAP</h6>
+                    <p class="small text-secondary mb-0">
+                        Click on any parcel polygon to view verified ownership, change status live, inspect crop profiles, and download official PDF certificates.
+                    </p>
+                </div>
+
+                <!-- Populated Tabbed Inspector -->
+                <div id="inspectorTabsContainer" class="d-none flex-grow-1 p-3">
+                    
+                    <!-- Parcel Summary Banner -->
+                    <div class="p-3 bg-dark rounded border border-secondary mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-muted small font-monospace">KHASRA:</span>
+                                <span class="fs-4 fw-bold text-white ms-1" id="inspectKhasra">-</span>
+                            </div>
+                            <span class="badge-glow-green px-2 py-1 small" id="integrityBadge"><i class="bi bi-shield-check me-1"></i>VERIFIED</span>
+                        </div>
+                        <div class="text-muted small font-monospace mt-1">
+                            ULPIN: <span class="text-info" id="inspectUlpin">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Inspector Nav Tabs -->
+                    <ul class="nav nav-pills nav-fill mb-3 bg-dark p-1 rounded border border-secondary" id="dossierTabs" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active py-1 small" data-bs-toggle="pill" data-bs-target="#tabOverview">Overview</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link py-1 small" data-bs-toggle="pill" data-bs-target="#tabOwner">Owner</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link py-1 small" data-bs-toggle="pill" data-bs-target="#tabCrops">Crops</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link py-1 small" data-bs-toggle="pill" data-bs-target="#tabActions">Actions</button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Contents -->
+                    <div class="tab-content">
+                        
+                        <!-- 1. Overview Tab -->
+                        <div class="tab-pane fade show active" id="tabOverview">
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <div class="p-2 bg-dark rounded border border-secondary">
+                                        <small class="text-muted d-block font-monospace">AREA</small>
+                                        <strong class="text-white" id="inspectArea">-</strong>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-2 bg-dark rounded border border-secondary">
+                                        <small class="text-muted d-block font-monospace">LAND USE</small>
+                                        <strong class="text-white" id="inspectLandUse">-</strong>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-2 bg-dark rounded border border-secondary">
+                                        <small class="text-muted d-block font-monospace">SOIL TYPE</small>
+                                        <span class="small text-white" id="inspectSoil">-</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-2 bg-dark rounded border border-secondary">
+                                        <small class="text-muted d-block font-monospace">IRRIGATION</small>
+                                        <span class="small text-white" id="inspectIrrigation">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-2 bg-dark rounded border border-secondary font-monospace small mb-3">
+                                <div class="text-muted" style="font-size: 0.72rem;">SHA-256 FINGERPRINT:</div>
+                                <div class="text-info text-truncate" id="inspectFingerprint">-</div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Ownership Tab -->
+                        <div class="tab-pane fade" id="tabOwner">
+                            <div class="p-3 bg-dark rounded border border-secondary mb-3">
+                                <small class="text-muted d-block font-monospace">REGISTERED OWNER</small>
+                                <h6 class="fw-bold text-white mb-1" id="inspectOwnerName">-</h6>
+                                <div class="small text-muted font-monospace" id="inspectAadhaar">Aadhaar: XXXX-XXXX-4589</div>
+                                <div class="mt-2" id="inspectPmKisanBadge">
+                                    <span class="badge bg-success-subtle text-success small"><i class="bi bi-check-circle"></i> PM-KISAN Linked</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Crops Tab -->
+                        <div class="tab-pane fade" id="tabCrops">
+                            <div class="p-3 bg-dark rounded border border-secondary mb-3">
+                                <small class="text-muted d-block font-monospace">CROP CULTIVATION</small>
+                                <h6 class="fw-bold text-success mb-1" id="inspectCrop">-</h6>
+                                <span class="badge bg-success-subtle text-success small">PAU Certified Seed</span>
+                            </div>
+                        </div>
+
+                        <!-- 4. Quick Actions Tab -->
+                        <div class="tab-pane fade" id="tabActions">
+                            <div class="p-3 bg-dark rounded border border-secondary mb-3">
+                                <label class="form-label text-muted small font-monospace">CHANGE STATUS LIVE</label>
+                                <div class="d-flex gap-2 mb-3">
+                                    <button class="btn btn-sm btn-outline-success flex-grow-1" onclick="updateParcelStatusLive('Verified')">Verify</button>
+                                    <button class="btn btn-sm btn-outline-danger flex-grow-1" onclick="updateParcelStatusLive('Disputed')">Flag Dispute</button>
+                                </div>
+                                <div class="small text-muted font-monospace">* Instantly updates map color and logs security event to hash chain.</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Bottom Action Bar -->
+                    <div class="d-grid gap-2 mt-auto">
+                        <a href="#" id="viewFullDossierBtn" class="btn btn-cyber-primary btn-sm">
+                            <i class="bi bi-box-arrow-up-right me-1"></i> Full Parcel Dossier (RoR)
+                        </a>
+                        <a href="#" id="downloadPdfBtn" target="_blank" class="btn btn-cyber-green btn-sm">
+                            <i class="bi bi-printer me-1"></i> Download Printable Certificate (PDF)
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Modal: Draw & Register New Plot -->
+<div class="modal fade" id="drawHelpModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content cyber-card p-0">
+            <div class="cyber-card-header text-white font-monospace">
+                <i class="bi bi-pencil-square text-info me-2"></i> HOW_TO_DRAW_AND_SAVE_PLOT
+            </div>
+            <div class="p-4">
+                <p class="text-secondary small">
+                    1. Use the **Polygon Tool** on the top-left map toolbar to click and draw a boundary around any land plot.<br>
+                    2. Click to complete the polygon.<br>
+                    3. A popup prompt will instantly ask for Khasra Number and Owner Name.<br>
+                    4. The parcel is immediately saved to database with real-time SHA-256 fingerprint!
+                </p>
+                <div class="p-3 bg-dark rounded border border-secondary text-info small font-monospace">
+                    Ready to draw: Select the polygon icon ⬟ on the map toolbar.
+                </div>
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-cyber-primary" data-bs-dismiss="modal">Got it, let's draw!</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let currentSelectedParcelId = null;
+
+    // 1. Initialize Map
+    const map = L.map('map', {
+        center: [31.2245, 75.7725],
+        zoom: 15,
+        zoomControl: true
+    });
+
+    const darkMatter = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+        subdomains: 'abcd',
+        maxZoom: 20
+    }).addTo(map);
+
+    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri'
+    });
+
+    const streetOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    });
+
+    L.control.layers({
+        "CartoDB Dark Matter (Cyber)": darkMatter,
+        "ESRI World Satellite": satellite,
+        "OpenStreetMap Street": streetOSM
+    }, null, { position: 'topright' }).addTo(map);
+
+    map.on('mousemove', function(e) {
+        document.getElementById('hudLat').innerText = e.latlng.lat.toFixed(4);
+        document.getElementById('hudLng').innerText = e.latlng.lng.toFixed(4);
+    });
+
+    // 2. Interactive Leaflet.Draw for Real-Time Parcel Registration
+    const drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+    const drawControl = new L.Control.Draw({
+        edit: { featureGroup: drawnItems },
+        draw: {
+            polygon: {
+                shapeOptions: {
+                    color: '#00e5ff',
+                    fillColor: '#00e5ff',
+                    fillOpacity: 0.5
+                }
+            },
+            polyline: false,
+            rectangle: true,
+            circle: false,
+            marker: true,
+            circlemarker: false
+        }
+    });
+    map.addControl(drawControl);
+
+    // Save Drawn Polygon directly to Django Database!
+    map.on(L.Draw.Event.CREATED, function (event) {
+        const layer = event.layer;
+        drawnItems.addLayer(layer);
+        const geojson = layer.toGeoJSON();
+
+        const khasraNo = prompt("Enter Khasra Number for newly drawn boundary:", `101/${Math.floor(Math.random() * 90) + 10}`);
+        if (!khasraNo) return;
+        const ownerName = prompt("Enter Registered Owner (Khatedar) Name:", "Sardar Amarjit Singh");
+
+        // AJAX POST to create parcel in database
+        fetch('/api/parcels/draw-save/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                geometry: geojson.geometry,
+                khasra_no: khasraNo,
+                owner_name: ownerName || "Self Registered",
+                land_use: "Irrigated Agri",
+                crop: "Wheat (PBW-725)"
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(`🎉 ${data.message}`);
+                drawnItems.clearLayers();
+                loadParcels(); // Refresh map
+            } else {
+                alert(`Error saving parcel: ${data.message}`);
+            }
+        })
+        .catch(err => alert("Error communicating with server."));
+    });
+
+    // 3. Cadastral Layer Rendering
+    let geojsonLayerGroup = L.geoJSON(null).addTo(map);
+    let currentSelectedLayer = null;
+    let allParcelsCache = [];
+
+    function getFeatureStyle(feature) {
+        const colorBy = document.getElementById('colorBySelect').value;
+        const p = feature.properties;
+        let color = '#00ff9c';
+
+        if (colorBy === 'status') {
+            if (p.status === 'Verified') color = '#00ff9c';
+            else if (p.status === 'Mutation Pending') color = '#ffb020';
+            else if (p.status === 'Disputed' || p.status === 'Tampered') color = '#ff3b5c';
+        } else if (colorBy === 'land_use') {
+            if (p.land_use_type === 'Irrigated Agri') color = '#00ff9c';
+            else if (p.land_use_type === 'Residential/Abadi') color = '#00e5ff';
+            else if (p.land_use_type === 'Commercial/FoodTech') color = '#ffb020';
+            else color = '#94a3b8';
+        } else if (colorBy === 'crop') {
+            if (p.crop.includes('Wheat')) color = '#00ff9c';
+            else if (p.crop.includes('Paddy')) color = '#00e5ff';
+            else if (p.crop.includes('Potato')) color = '#ffb020';
+            else color = '#38bdf8';
+        }
+
+        return {
+            fillColor: color,
+            weight: 2,
+            opacity: 0.9,
+            color: '#0a0e14',
+            dashArray: (p.status === 'Disputed' || p.status === 'Tampered') ? '4, 4' : '',
+            fillOpacity: 0.7
+        };
+    }
+
+    function onEachParcel(feature, layer) {
+        const p = feature.properties;
+        layer.bindTooltip(`<strong>Khasra: ${p.khasra_no}</strong><br>${p.owner_name}`, {
+            direction: 'center',
+            className: 'badge bg-dark border border-secondary text-info p-1'
+        });
+
+        layer.on({
+            mouseover: function(e) {
+                e.target.setStyle({ weight: 3.5, color: '#00e5ff', fillOpacity: 0.9 });
+                e.target.bringToFront();
+            },
+            mouseout: function(e) {
+                if (currentSelectedLayer !== e.target) {
+                    geojsonLayerGroup.resetStyle(e.target);
+                }
+            },
+            click: function(e) {
+                selectParcelOnMap(feature, e.target);
+            }
+        });
+    }
+
+    function selectParcelOnMap(feature, layer) {
+        if (currentSelectedLayer) {
+            geojsonLayerGroup.resetStyle(currentSelectedLayer);
+        }
+        currentSelectedLayer = layer;
+        if (layer) {
+            layer.setStyle({ weight: 4, color: '#00e5ff', fillOpacity: 0.95 });
+            layer.bringToFront();
+        }
+
+        const p = feature.properties;
+        currentSelectedParcelId = p.id;
+
+        document.getElementById('inspectorEmptyState').classList.add('d-none');
+        document.getElementById('inspectorTabsContainer').classList.remove('d-none');
+
+        document.getElementById('inspectKhasra').innerText = p.khasra_no;
+        document.getElementById('inspectUlpin').innerText = p.parcel_id;
+        document.getElementById('inspectArea').innerText = `${p.area_ha} Ha (${p.area_acres} Ac)`;
+        document.getElementById('inspectLandUse').innerText = p.land_use_type;
+        document.getElementById('inspectSoil').innerText = p.soil_type;
+        document.getElementById('inspectIrrigation').innerText = p.irrigation_source;
+        document.getElementById('inspectFingerprint').innerText = p.fingerprint;
+        document.getElementById('inspectOwnerName').innerText = p.owner_name;
+        document.getElementById('inspectAadhaar').innerText = `Aadhaar: ${p.masked_aadhaar}`;
+        document.getElementById('inspectCrop').innerText = p.crop;
+
+        const badge = document.getElementById('inspectStatusBadge');
+        badge.innerText = p.status;
+        if (p.status === 'Verified') badge.className = 'badge-glow-green px-2 py-0 small';
+        else if (p.status === 'Mutation Pending') badge.className = 'badge-glow-amber px-2 py-0 small';
+        else badge.className = 'badge-glow-red px-2 py-0 small';
+
+        document.getElementById('viewFullDossierBtn').href = `/parcel/${p.id}/`;
+        document.getElementById('downloadPdfBtn').href = `/parcel/${p.id}/download-pdf/`;
+    }
+
+    // Live Status Updater from Action Tab
+    window.updateParcelStatusLive = function(newStatus) {
+        if (!currentSelectedParcelId) return;
+        fetch(`/api/parcels/${currentSelectedParcelId}/update-status/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(`Status of Khasra ${data.khasra} changed to ${data.new_status}!`);
+                loadParcels();
+            }
+        });
+    };
+
+    function loadParcels() {
+        const query = document.getElementById('searchInput').value;
+        const village = document.getElementById('filterVillage').value;
+        const status = document.getElementById('filterStatus').value;
+
+        const url = `/api/v1/parcels/?q=${encodeURIComponent(query)}&village=${encodeURIComponent(village)}&status=${encodeURIComponent(status)}`;
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                geojsonLayerGroup.clearLayers();
+                allParcelsCache = data.features;
+                document.getElementById('hudCount').innerText = data.features.length;
+
+                geojsonLayerGroup = L.geoJSON(data, {
+                    style: getFeatureStyle,
+                    onEachFeature: onEachParcel
+                }).addTo(map);
+
+                if (data.features.length > 0 && query.trim() !== '') {
+                    // Zoom into searched parcel
+                    map.fitBounds(geojsonLayerGroup.getBounds(), { padding: [40, 40] });
+                }
+            })
+            .catch(err => console.error("Error loading GeoJSON API:", err));
+    }
+
+    // Filter Listeners
+    document.getElementById('searchInput').addEventListener('input', () => setTimeout(loadParcels, 250));
+    document.getElementById('colorBySelect').addEventListener('change', () => geojsonLayerGroup.setStyle(getFeatureStyle));
+    document.getElementById('filterVillage').addEventListener('change', loadParcels);
+    document.getElementById('filterStatus').addEventListener('change', loadParcels);
+
+    // Initial Load
+    loadParcels();
+</script>
+{% endblock %}

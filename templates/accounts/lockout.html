@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Account Locked Out | BhuRaksha Guard{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="cyber-card p-5 border-danger">
+                <i class="bi bi-shield-x text-danger display-1 mb-3" style="filter: drop-shadow(0 0 15px rgba(255,59,92,0.7));"></i>
+                <h3 class="fw-bold text-danger font-monospace">ACCESS_RESTRICTED // BRUTE_FORCE_LOCKOUT</h3>
+                <p class="text-secondary mt-3">
+                    Too many consecutive failed login attempts were detected from your network address. In accordance with BhuRaksha Cyber Defensive Policy, authentication has been temporarily suspended for 15 minutes.
+                </p>
+                <div class="p-3 bg-dark rounded border border-danger text-start font-monospace small mb-4">
+                    <div class="text-danger">[SECURITY_EVENT_ID] AXES-GUARD-LOCKOUT</div>
+                    <div class="text-muted">[ACTION] Client IP flagged; SOC alert dispatched to auditor queue.</div>
+                </div>
+                <a href="{% url 'login' %}" class="btn btn-cyber-outline">Return to Sign In Portal</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

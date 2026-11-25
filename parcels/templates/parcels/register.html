@@ -1,0 +1,143 @@
+{% extends 'parcels/base.html' %}
+
+{% block title %}Cadastral Parcel Register (RoR Records) | GeoLand DPI{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-2">
+
+    <!-- Header & Search Box -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-0"><i class="bi bi-table text-primary me-2"></i>Cadastral Parcel Register</h3>
+            <div class="text-muted small">Record of Rights (RoR / Khatauni) Directory • Filtered: <strong>{{ count }}</strong> Records</div>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'map_view' %}" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-map me-1"></i> View on GIS Map
+            </a>
+            <a href="{% url 'export_qgis_geojson' %}" class="btn btn-success btn-sm">
+                <i class="bi bi-download me-1"></i> Export QGIS GeoJSON
+            </a>
+        </div>
+    </div>
+
+    <!-- Filter Toolbar -->
+    <div class="card border-0 shadow-sm p-3 bg-white rounded-3 mb-4">
+        <form method="GET" action="{% url 'register' %}" class="row g-2 align-items-center">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-light"><i class="bi bi-search"></i></span>
+                    <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Search Khasra / Owner / ULPIN...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select name="village" class="form-select">
+                    <option value="">All Villages</option>
+                    {% for v in villages %}
+                    <option value="{{ v.id }}" {% if selected_village == v.id|stringformat:"s" %}selected{% endif %}>{{ v.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="land_use" class="form-select">
+                    <option value="">All Land Uses</option>
+                    <option value="Irrigated Agri" {% if selected_land_use == 'Irrigated Agri' %}selected{% endif %}>Irrigated Agri</option>
+                    <option value="Rain-fed Agri" {% if selected_land_use == 'Rain-fed Agri' %}selected{% endif %}>Rain-fed Agri</option>
+                    <option value="Residential/Abadi" {% if selected_land_use == 'Residential/Abadi' %}selected{% endif %}>Residential / Abadi</option>
+                    <option value="Commercial/Agri-Hub" {% if selected_land_use == 'Commercial/Agri-Hub' %}selected{% endif %}>Commercial / Agri-Hub</option>
+                    <option value="Fallow/Barren" {% if selected_land_use == 'Fallow/Barren' %}selected{% endif %}>Fallow / Barren</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="Clear" {% if selected_status == 'Clear' %}selected{% endif %}>Clear / Verified</option>
+                    <option value="Disputed" {% if selected_status == 'Disputed' %}selected{% endif %}>Disputed / Flagged</option>
+                    <option value="Under Mutation" {% if selected_status == 'Under Mutation' %}selected{% endif %}>Under Mutation</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-primary w-100">Filter</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Register Table -->
+    <div class="card border-0 shadow-sm rounded-3 bg-white">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Khasra No.</th>
+                        <th>ULPIN (Unique ID)</th>
+                        <th>Village / Block</th>
+                        <th>Registered Khatedar (Owner)</th>
+                        <th>Masked Aadhaar</th>
+                        <th>Land Classification</th>
+                        <th>Area (Ha)</th>
+                        <th>Crop Cultivated</th>
+                        <th>Status</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in parcels %}
+                    <tr>
+                        <td class="fw-bold text-primary">{{ p.khasra_no }}</td>
+                        <td class="font-monospace small text-secondary">{{ p.parcel_id }}</td>
+                        <td>{{ p.village.name }}<br><small class="text-muted">{{ p.village.block_tehsil }}</small></td>
+                        <td>
+                            {% with own=p.ownership_records.first %}
+                            <div class="fw-semibold text-dark">{{ own.owner.name|default:"Gram Sabha" }}</div>
+                            {% if own.owner.pm_kisan_beneficiary_id %}
+                                <span class="badge bg-success-subtle text-success small"><i class="bi bi-check-circle"></i> PM-KISAN</span>
+                            {% endif %}
+                            {% endwith %}
+                        </td>
+                        <td class="font-monospace small text-muted">
+                            {% with own=p.ownership_records.first %}
+                            {{ own.owner.aadhaar_masked|default:"-" }}
+                            {% endwith %}
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">{{ p.land_use_type }}</span>
+                        </td>
+                        <td>
+                            <strong>{{ p.area_hectares }} ha</strong><br>
+                            <small class="text-muted">({{ p.area_acres }} ac)</small>
+                        </td>
+                        <td>
+                            {% with c=p.crop_records.first %}
+                            <span class="small fw-semibold text-success">{{ c.crop|default:"Fallow" }}</span>
+                            {% endwith %}
+                        </td>
+                        <td>
+                            {% if p.status == 'Clear' %}
+                                <span class="badge bg-success"><i class="bi bi-shield-check"></i> Clear</span>
+                            {% elif p.status == 'Disputed' %}
+                                <span class="badge bg-danger"><i class="bi bi-flag-fill"></i> Disputed</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">{{ p.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <a href="{% url 'parcel_detail' p.id %}" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-file-earmark-text"></i> RoR
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary"></i>
+                            No cadastral parcels match the selected filters.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

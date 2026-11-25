@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Anomaly & Fraud Detection | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-lg-4 py-3">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-shield-exclamation text-warning me-2"></i>FRAUD_&_ANOMALY_DETECTION_RADAR</h4>
+            <div class="text-muted small">Geometric Overlap Collisions (Shapely), Rapid Mutation Flips, Off-Hours Access & Litigated Land Transactions</div>
+        </div>
+        <form method="POST" action="{% url 'anomalies_list' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-cyber-primary btn-sm">
+                <i class="bi bi-radar me-1"></i> Trigger Rule Detectors Scan
+            </button>
+        </form>
+    </div>
+
+    <!-- Active Threat Alerts Table -->
+    <div class="cyber-card p-0">
+        <div class="table-responsive">
+            <table class="table table-cyber align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Anomaly Type</th>
+                        <th>Severity</th>
+                        <th>Target Parcel Ref</th>
+                        <th>User Involved</th>
+                        <th>Threat Particulars</th>
+                        <th>Status</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in alerts %}
+                    <tr>
+                        <td class="font-monospace fw-bold text-info">{{ a.alert_type }}</td>
+                        <td>
+                            {% if a.severity == 'CRITICAL' %}
+                                <span class="badge-glow-red px-2 py-0 small fw-bold">CRITICAL</span>
+                            {% elif a.severity == 'HIGH' %}
+                                <span class="badge-glow-amber px-2 py-0 small fw-bold">HIGH</span>
+                            {% elif a.severity == 'MEDIUM' %}
+                                <span class="badge bg-warning text-dark px-2 py-0 small">MEDIUM</span>
+                            {% else %}
+                                <span class="badge bg-secondary px-2 py-0 small">LOW</span>
+                            {% endif %}
+                        </td>
+                        <td class="font-monospace small text-white">{{ a.parcel_ref|default:"GLOBAL" }}</td>
+                        <td class="font-monospace small text-muted">{{ a.user_involved|default:"N/A" }}</td>
+                        <td class="small text-secondary">{{ a.description }}</td>
+                        <td>
+                            {% if a.status == 'open' %}
+                                <span class="badge bg-danger">Open</span>
+                            {% elif a.status == 'investigating' %}
+                                <span class="badge bg-warning text-dark">Investigating</span>
+                            {% else %}
+                                <span class="badge bg-success">Resolved</span>
+                            {% endif %}
+                        </td>
+                        <td class="font-monospace small text-muted">{{ a.created_at|date:"Y-m-d H:i" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">No anomaly alerts active. Systems clear.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

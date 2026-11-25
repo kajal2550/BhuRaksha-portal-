@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Public Parcel Verification | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            
+            <div class="cyber-card p-4 p-md-5 mb-4">
+                <div class="text-center mb-4">
+                    <i class="bi bi-patch-check-fill text-success display-4 mb-2"></i>
+                    <h3 class="fw-bold text-white font-monospace">PUBLIC_PARCEL_VERIFICATION</h3>
+                    <p class="text-secondary small">
+                        Scan the QR code on any printed Record of Rights (RoR) certificate or enter the 14-character ULPIN to verify if the record is genuine or tampered.
+                    </p>
+                </div>
+
+                <form method="GET" action="{% url 'verify_public' %}" class="mb-4">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-dark border-secondary text-info"><i class="bi bi-qr-code-scan"></i></span>
+                        <input type="text" name="parcel_id" value="{{ query }}" class="form-control cyber-input" placeholder="e.g. PB-KPT-2024-1000 or Khasra 101/1" required>
+                        <button type="submit" class="btn btn-cyber-primary px-4 fw-bold">Verify Authenticity</button>
+                    </div>
+                </form>
+
+                {% if parcel %}
+                <div class="p-4 bg-dark rounded border {% if integrity.valid %}border-success{% else %}border-danger{% endif %} mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold text-white mb-0 font-monospace">VERIFICATION RESULT: {{ parcel.parcel_id }}</h5>
+                        {% if integrity.valid %}
+                            <span class="badge-glow-green px-3 py-1 fw-bold"><i class="bi bi-check-circle-fill me-1"></i>GENUINE RECORD</span>
+                        {% else %}
+                            <span class="badge-glow-red px-3 py-1 fw-bold"><i class="bi bi-x-circle-fill me-1"></i>TAMPER ALERT</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="row g-2 mb-3 small font-monospace">
+                        <div class="col-sm-4 text-muted">KHASRA NUMBER:</div>
+                        <div class="col-sm-8 text-white fw-bold">{{ parcel.khasra_no }}</div>
+
+                        <div class="col-sm-4 text-muted">JURISDICTION:</div>
+                        <div class="col-sm-8 text-white">{{ parcel.village.name }}, {{ parcel.village.tehsil }} ({{ parcel.village.district }})</div>
+
+                        <div class="col-sm-4 text-muted">TOTAL AREA:</div>
+                        <div class="col-sm-8 text-white">{{ parcel.area_hectares }} Hectares ({{ parcel.area_acres }} Acres)</div>
+
+                        <div class="col-sm-4 text-muted">RECORD STATUS:</div>
+                        <div class="col-sm-8">
+                            <span class="badge {% if parcel.status == 'Verified' %}bg-success{% elif parcel.status == 'Disputed' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                                {{ parcel.status }}
+                            </span>
+                        </div>
+
+                        <div class="col-sm-4 text-muted">STORED FINGERPRINT:</div>
+                        <div class="col-sm-8 text-info text-break">{{ integrity.fingerprint }}</div>
+
+                        <div class="col-sm-4 text-muted">REAL-TIME HASH:</div>
+                        <div class="col-sm-8 text-break {% if integrity.valid %}text-success{% else %}text-danger fw-bold{% endif %}">{{ integrity.recalc }}</div>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <a href="{% url 'parcel_detail' parcel.id %}" class="btn btn-cyber-outline btn-sm">
+                            <i class="bi bi-eye me-1"></i> View Public Record Dossier
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

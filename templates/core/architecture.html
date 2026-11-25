@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}System Architecture | BhuRaksha{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="cyber-card p-5">
+        <h3 class="fw-bold text-white font-monospace mb-3"><i class="bi bi-diagram-3-fill text-info me-2"></i>LAYERED_SYSTEM_ARCHITECTURE</h3>
+        
+        <div class="row g-4 mt-2">
+            <div class="col-md-3">
+                <div class="p-3 bg-dark rounded border border-secondary text-center h-100">
+                    <span class="badge-glow-cyan mb-2 d-inline-block">LAYER 1</span>
+                    <h6 class="fw-bold text-white">Spatial Cadastre</h6>
+                    <small class="text-secondary">QGIS Digitization, CartoDB Dark Matter, Leaflet Draw & MarkerCluster.</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 bg-dark rounded border border-secondary text-center h-100">
+                    <span class="badge-glow-green mb-2 d-inline-block">LAYER 2</span>
+                    <h6 class="fw-bold text-white">Relational DPI Core</h6>
+                    <small class="text-secondary">Django 6.1, ULPIN Foreign Keying, Crop Cycles, Mutation State Machine.</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 bg-dark rounded border border-secondary text-center h-100">
+                    <span class="badge-glow-amber mb-2 d-inline-block">LAYER 3</span>
+                    <h6 class="fw-bold text-white">Cryptographic Guard</h6>
+                    <small class="text-secondary">Fernet AES PII Encryption, SHA-256 Fingerprint Recalculation, Hash Chain.</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 bg-dark rounded border border-secondary text-center h-100">
+                    <span class="badge-glow-red mb-2 d-inline-block">LAYER 4</span>
+                    <h6 class="fw-bold text-white">SOC Telemetry & Anomaly</h6>
+                    <small class="text-secondary">Shapely Collision Detection, Axes Lockout, Anomaly Engine, drf-spectacular.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

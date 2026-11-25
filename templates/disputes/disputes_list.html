@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}Dispute Docket Management | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-lg-4 py-3">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-exclamation-diamond text-danger me-2"></i>DISPUTE_RESOLUTION_DOCKET</h4>
+            <div class="text-muted small">Boundary Encroachment, Forged Title Claims, Area Mismatch & Revenue Arbitration</div>
+        </div>
+        <button class="btn btn-cyber-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newDisputeModal">
+            <i class="bi bi-flag-fill me-1"></i> Raise Formal Land Dispute
+        </button>
+    </div>
+
+    <!-- Status Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="cyber-card p-3 border-start border-3 border-danger">
+                <div class="text-muted small font-monospace">OPEN DISPUTES</div>
+                <div class="fs-3 fw-bold text-danger mt-1">{{ open_count }}</div>
+                <small class="text-muted">Parcels flagged in red on GIS map</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="cyber-card p-3 border-start border-3 border-warning">
+                <div class="text-muted small font-monospace">IN REVENUE COURT REVIEW</div>
+                <div class="fs-3 fw-bold text-warning mt-1">{{ review_count }}</div>
+                <small class="text-muted">Hearings scheduled in Tehsil</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="cyber-card p-3 border-start border-3 border-success">
+                <div class="text-muted small font-monospace">RESOLVED / DISMISSED</div>
+                <div class="fs-3 fw-bold text-success mt-1">{{ resolved_count }}</div>
+                <small class="text-muted">Parcels restored to Verified</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disputes Table -->
+    <div class="cyber-card p-0">
+        <div class="table-responsive">
+            <table class="table table-cyber align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Case Number</th>
+                        <th>Target Parcel</th>
+                        <th>Dispute Type</th>
+                        <th>Complainant Name</th>
+                        <th>Contact</th>
+                        <th>Date Filed</th>
+                        <th>Status</th>
+                        <th class="text-end">Arbitration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for d in disputes %}
+                    <tr>
+                        <td class="font-monospace fw-bold text-danger">{{ d.case_number }}</td>
+                        <td>
+                            <strong class="text-white">Khasra {{ d.parcel.khasra_no }}</strong><br>
+                            <span class="font-monospace small text-muted">{{ d.parcel.parcel_id }}</span>
+                        </td>
+                        <td><span class="badge bg-dark border border-danger text-light">{{ d.get_dispute_type_display }}</span></td>
+                        <td class="fw-semibold text-white">{{ d.complainant_name }}</td>
+                        <td class="small text-muted font-monospace">{{ d.complainant_contact|default:"-" }}</td>
+                        <td>{{ d.created_at|date:"Y-m-d" }}</td>
+                        <td>
+                            {% if d.status == 'Open' %}
+                                <span class="badge-glow-red px-2 py-0 small"><i class="bi bi-flag-fill"></i> Open</span>
+                            {% elif d.status == 'In Review' %}
+                                <span class="badge-glow-amber px-2 py-0 small">Court Hearing</span>
+                            {% else %}
+                                <span class="badge-glow-green px-2 py-0 small">{{ d.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <a href="{% url 'dispute_detail' d.id %}" class="btn btn-cyber-outline btn-sm">
+                                Inspect <i class="bi bi-chevron-right ms-1"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-4 text-muted">No active dispute dockets.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal: Raise Dispute -->
+<div class="modal fade" id="newDisputeModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content cyber-card p-0">
+            <form method="POST" action="{% url 'disputes_list' %}">
+                {% csrf_token %}
+                <div class="cyber-card-header text-white font-monospace">
+                    <i class="bi bi-flag-fill text-danger me-1"></i> LODGE_CADASTRAL_DISPUTE
+                </div>
+                <div class="p-4">
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">SELECT TARGET PARCEL</label>
+                        <select name="parcel_id" class="form-select cyber-select" required>
+                            <option value="">-- Choose Parcel --</option>
+                            {% for p in parcels %}
+                            <option value="{{ p.id }}">Khasra {{ p.khasra_no }} [{{ p.parcel_id }}] - {{ p.village.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">DISPUTE CLASSIFICATION</label>
+                        <select name="dispute_type" class="form-select cyber-select" required>
+                            <option value="boundary_overlap">Boundary Encroachment / Overlap</option>
+                            <option value="title_forgery">Fraudulent Sale Deed / Forged Mutation</option>
+                            <option value="inheritance_claim">Unrecorded Legal Heir Claim</option>
+                            <option value="area_mismatch">Physical Area Mismatch</option>
+                            <option value="bank_lien">Undisclosed Bank Lien / Mortgage</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">COMPLAINANT NAME</label>
+                        <input type="text" name="complainant_name" class="form-control cyber-input" placeholder="Your full name..." required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">CONTACT PHONE</label>
+                        <input type="text" name="complainant_contact" class="form-control cyber-input" placeholder="+91 98144 XXXXX" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">DISPUTE PARTICULARS & GRIEVANCE</label>
+                        <textarea name="description" class="form-control cyber-input" rows="3" placeholder="Provide factual details of the dispute..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-cyber-outline" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">File Dispute Docket</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

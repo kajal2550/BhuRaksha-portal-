@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Dispute Docket {{ dispute.case_number }} | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a href="{% url 'disputes_list' %}" class="btn btn-cyber-outline btn-sm mb-2">
+                <i class="bi bi-arrow-left me-1"></i> Back to Dispute Dockets
+            </a>
+            <h3 class="fw-bold text-white mb-0 font-monospace">CASE: {{ dispute.case_number }}</h3>
+            <div class="text-muted small">Target: Khasra {{ dispute.parcel.khasra_no }} ({{ dispute.parcel.parcel_id }})</div>
+        </div>
+        <span class="badge-glow-red px-3 py-1 font-monospace fs-6">{{ dispute.status|upper }}</span>
+    </div>
+
+    <div class="row g-4">
+        
+        <!-- Left: Dispute Details -->
+        <div class="col-lg-7">
+            <div class="cyber-card p-4 mb-4">
+                <h5 class="fw-bold text-white mb-3 font-monospace"><i class="bi bi-exclamation-triangle text-danger me-2"></i>GRIEVANCE_PARTICULARS</h5>
+                
+                <div class="row g-2 font-monospace small mb-3">
+                    <div class="col-sm-4 text-muted">DISPUTE TYPE:</div>
+                    <div class="col-sm-8 text-danger fw-bold">{{ dispute.get_dispute_type_display }}</div>
+
+                    <div class="col-sm-4 text-muted">COMPLAINANT:</div>
+                    <div class="col-sm-8 text-white">{{ dispute.complainant_name }}</div>
+
+                    <div class="col-sm-4 text-muted">CONTACT:</div>
+                    <div class="col-sm-8 text-secondary">{{ dispute.complainant_contact|default:"-" }}</div>
+
+                    <div class="col-sm-4 text-muted">DATE LODGED:</div>
+                    <div class="col-sm-8 text-white">{{ dispute.created_at|date:"Y-m-d H:i" }}</div>
+                </div>
+
+                <div class="p-3 bg-dark rounded border border-secondary text-secondary small">
+                    <span class="text-muted font-monospace d-block mb-1">COMPLAINT DESCRIPTION:</span>
+                    {{ dispute.description }}
+                </div>
+            </div>
+
+            {% if dispute.resolution_notes %}
+            <div class="cyber-card p-4 border-success">
+                <h6 class="fw-bold text-success font-monospace mb-2"><i class="bi bi-check-circle me-1"></i>REVENUE_ARBITRATION_ORDER</h6>
+                <p class="text-secondary small mb-0">{{ dispute.resolution_notes }}</p>
+                <div class="small text-muted font-monospace mt-2">Resolved at: {{ dispute.resolved_at|date:"Y-m-d H:i" }}</div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right: Officer Resolution Action -->
+        <div class="col-lg-5">
+            <div class="cyber-card p-4">
+                <h5 class="fw-bold text-white mb-3 font-monospace"><i class="bi bi-gavel text-warning me-2"></i>ARBITRATION_ORDER</h5>
+                
+                {% if is_officer %}
+                <form method="POST" action="{% url 'dispute_detail' dispute.id %}">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">UPDATE DISPUTE STATUS</label>
+                        <select name="status" class="form-select cyber-select" required>
+                            <option value="Open" {% if dispute.status == 'Open' %}selected{% endif %}>Open</option>
+                            <option value="In Review" {% if dispute.status == 'In Review' %}selected{% endif %}>In Review (Court Hearing)</option>
+                            <option value="Resolved" {% if dispute.status == 'Resolved' %}selected{% endif %}>Resolved (Order Issued, Clear Parcel)</option>
+                            <option value="Closed" {% if dispute.status == 'Closed' %}selected{% endif %}>Closed / Dismissed</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">RESOLUTION ORDER NOTES</label>
+                        <textarea name="resolution_notes" class="form-control cyber-input" rows="4" placeholder="Enter findings from hearing, demarcation survey..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-cyber-primary w-100 py-2 fw-bold">
+                        <i class="bi bi-check2-circle me-1"></i> Commit Arbitration Order
+                    </button>
+                </form>
+                {% else %}
+                <div class="p-3 bg-dark rounded border border-secondary text-muted small">
+                    <i class="bi bi-lock-fill text-warning me-1"></i>
+                    Dispute status modification requires Revenue Officer or Administrator role.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

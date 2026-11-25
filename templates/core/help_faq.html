@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Help & FAQ | BhuRaksha{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="cyber-card p-5">
+        <h3 class="fw-bold text-white font-monospace mb-3"><i class="bi bi-question-circle text-info me-2"></i>HELP_&_FREQUENTLY_ASKED_QUESTIONS</h3>
+        <div class="accordion accordion-flush" id="faqAccordion">
+            <div class="accordion-item bg-dark border-secondary">
+                <h2 class="accordion-header">
+                    <button class="accordion-button bg-dark text-white collapsed font-monospace" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                        How does a farmer verify if their landholding is authentic?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body text-secondary small">
+                        Go to the "Verify Record" tab, type in your Khasra number or 14-digit ULPIN from your certificate. The system checks the real-time SHA-256 fingerprint against the database and tells you if your land record is genuine or tampered.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item bg-dark border-secondary mt-2">
+                <h2 class="accordion-header">
+                    <button class="accordion-button bg-dark text-white collapsed font-monospace" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                        How can QGIS desktop software connect to this system?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body text-secondary small">
+                        Click on "QGIS Export" on any page or connect directly to <code>/api/v1/parcels/</code> via QGIS "Add Vector Layer". The GeoJSON polygons will render in full GIS cartography.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block title %}Farmer Aadhaar e-KYC Verification | BhuRaksha DPI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header Banner -->
+    <div class="cyber-card p-4 mb-4 border-start border-4 border-success">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <span class="badge-glow-green px-3 py-1 rounded small mb-2 d-inline-block">
+                    <i class="bi bi-shield-check me-1"></i> DPI IDENTITY INFRASTRUCTURE
+                </span>
+                <h2 class="text-white fw-bold mb-1">
+                    Farmer Aadhaar <span style="color: var(--neon-cyan);">e-KYC & Biometric Verification</span>
+                </h2>
+                <p class="text-secondary mb-0">
+                    Live Aadhaar OTP & Biometric consent verification pipeline. Links land titleholder identity securely with Fernet AES-128 encryption.
+                </p>
+            </div>
+            <div class="text-end">
+                <span class="badge bg-success fs-6 px-3 py-2 font-monospace">
+                    <i class="bi bi-fingerprint me-1"></i> UIDAI SIMULATOR ONLINE
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        
+        <!-- Left: KYC Form & OTP Verification -->
+        <div class="col-lg-6">
+            <div class="cyber-card p-4">
+                <h5 class="text-white fw-bold mb-3">
+                    <i class="bi bi-person-bounding-box me-2 text-info"></i> Titleholder Authentication
+                </h5>
+
+                <div class="mb-3">
+                    <label class="form-label text-light small font-monospace">SELECT REGISTERED FARMER / OWNER</label>
+                    <select id="kycOwnerSelect" class="form-select bg-dark text-white border-secondary">
+                        {% for o in owners %}
+                        <option value="{{ o.id }}">{{ o.name }} (Plots Registered: {{ o.ownershiprecord_set.count }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-light small font-monospace">AADHAAR NUMBER (UID)</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-black border-secondary text-info"><i class="bi bi-credit-card-2-front"></i></span>
+                        <input type="text" id="aadhaarInput" class="form-control bg-dark text-white border-secondary font-monospace" value="5482-9104-3829" placeholder="XXXX-XXXX-XXXX">
+                        <button class="btn btn-cyber-primary" id="btnSendOtp" type="button">
+                            <i class="bi bi-broadcast me-1"></i> Send OTP
+                        </button>
+                    </div>
+                    <small class="text-muted">UIDAI simulated gateway sends 6-digit OTP to linked mobile.</small>
+                </div>
+
+                <!-- OTP Input Area -->
+                <div id="otpSection" class="p-3 rounded mb-4 bg-black border border-secondary">
+                    <label class="form-label text-warning small font-monospace fw-bold">
+                        <i class="bi bi-shield-lock-fill me-1"></i> ENTER 6-DIGIT OTP (Demo OTP: <span class="badge bg-warning text-dark">123456</span>)
+                    </label>
+                    <div class="d-flex gap-2 mb-2">
+                        <input type="text" id="otpCode" class="form-control form-control-lg bg-dark text-center text-success border-secondary fw-bold font-monospace" placeholder="1 2 3 4 5 6" maxlength="6">
+                    </div>
+                    <small class="text-secondary">Simulated SMS sent to: +91 98*** **421</small>
+                </div>
+
+                <button id="btnVerifyKyc" class="btn btn-success btn-lg w-100 fw-bold py-3 shadow">
+                    <i class="bi bi-patch-check-fill me-2"></i> VERIFY IDENTITY & LINK TO PARCEL
+                </button>
+            </div>
+        </div>
+
+        <!-- Right: Real-time Live Verified DPI Identity Card -->
+        <div class="col-lg-6">
+            <div class="cyber-card p-4 h-100">
+                <h5 class="text-white fw-bold mb-3">
+                    <i class="bi bi-award me-2 text-warning"></i> Digital Public Infrastructure (DPI) Identity Pass
+                </h5>
+
+                <div id="kycCard" class="p-4 rounded-3 text-start border border-secondary" style="background: linear-gradient(135deg, rgba(0,255,156,0.05) 0%, rgba(10,14,20,0.95) 100%);">
+                    
+                    <div class="d-flex justify-content-between align-items-start mb-3 border-bottom border-secondary pb-3">
+                        <div>
+                            <span class="badge bg-secondary font-monospace" id="passStatus">STATUS: PENDING VERIFICATION</span>
+                            <h4 class="text-white fw-bold mt-2 mb-0" id="cardFarmerName">Sardar Gurpreet Singh</h4>
+                            <small class="text-info font-monospace" id="cardUidaiRef">UIDAI REFERENCE: NOT GENERATED</small>
+                        </div>
+                        <i class="bi bi-shield-fill-check fs-1 text-secondary" id="passIcon"></i>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <span class="text-muted small d-block font-monospace">MASKED AADHAAR</span>
+                            <strong class="text-white font-monospace" id="cardAadhaar">XXXXXXXX3829</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted small d-block font-monospace">CONSENT TIMESTAMP</span>
+                            <strong class="text-white font-monospace" id="cardTimestamp">Awaiting OTP</strong>
+                        </div>
+                        <div class="col-12">
+                            <span class="text-muted small d-block font-monospace">CIPHERTEXT TOKEN (DB STORED)</span>
+                            <div class="p-2 bg-black rounded font-monospace small text-truncate text-secondary border border-secondary" id="cardToken">
+                                No cryptographic Fernet token generated yet.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="kycAlert" class="alert alert-dark border-secondary small mb-0 text-secondary">
+                        <i class="bi bi-info-circle me-1"></i> Once verified, this farmer's digital signature is authorized to sign sale deeds, apply for PM-KISAN, and accept land mutation.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+document.getElementById('btnSendOtp').addEventListener('click', function() {
+    alert("Simulated Aadhaar OTP: 123456 sent to farmer's mobile number.");
+    document.getElementById('otpCode').value = "123456";
+});
+
+document.getElementById('btnVerifyKyc').addEventListener('click', async function() {
+    const btn = this;
+    const ownerId = document.getElementById('kycOwnerSelect').value;
+    const aadhaar = document.getElementById('aadhaarInput').value;
+    const otp = document.getElementById('otpCode').value;
+
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> COMMUNICATING WITH UIDAI NODE...`;
+
+    try {
+        const resp = await fetch('/api/lab/verify-kyc/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                owner_id: ownerId,
+                aadhaar: aadhaar,
+                otp: otp
+            })
+        });
+
+        const data = await resp.json();
+
+        if (data.status === 'success') {
+            document.getElementById('passStatus').className = 'badge bg-success font-monospace';
+            document.getElementById('passStatus').innerText = 'STATUS: AADHAAR VERIFIED (L-3)';
+            document.getElementById('cardFarmerName').innerText = data.farmer_name;
+            document.getElementById('cardUidaiRef').innerText = data.uidai_ref;
+            document.getElementById('cardAadhaar').innerText = data.aadhaar_masked;
+            document.getElementById('cardTimestamp').innerText = data.consent_timestamp;
+            document.getElementById('cardToken').innerText = data.fernet_encrypted_token;
+            document.getElementById('cardToken').className = 'p-2 bg-black rounded font-monospace small text-truncate text-success border border-success';
+            document.getElementById('passIcon').className = 'bi bi-shield-fill-check fs-1 text-success';
+
+            const alertBox = document.getElementById('kycAlert');
+            alertBox.className = 'alert alert-success border-success small mb-0 text-white';
+            alertBox.innerHTML = `<i class="bi bi-check-circle-fill me-2"></i> ${data.message}`;
+        } else {
+            alert(data.message || 'Verification Failed');
+        }
+    } catch(err) {
+        alert("Error during verification: " + err.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="bi bi-patch-check-fill me-2"></i> VERIFY IDENTITY & LINK TO PARCEL`;
+    }
+});
+</script>
+{% endblock %}

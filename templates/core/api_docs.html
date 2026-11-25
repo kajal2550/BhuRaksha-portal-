@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}DPI Open API & Developer Hub | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-code-slash text-info me-2"></i>DPI_OPEN_REST_API // DEVELOPER_HUB</h3>
+            <div class="text-muted small">Interoperable endpoints for Banks (Collateral Verification), Crop Insurers, PM-KISAN & QGIS</div>
+        </div>
+        <a href="{% url 'swagger-ui' %}" target="_blank" class="btn btn-cyber-primary btn-sm">
+            <i class="bi bi-box-arrow-up-right me-1"></i> Interactive Swagger UI
+        </a>
+    </div>
+
+    <!-- Active Endpoints -->
+    <div class="row g-4">
+        
+        <!-- Endpoint 1 -->
+        <div class="col-12">
+            <div class="cyber-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge bg-success font-monospace px-3 py-2">GET /api/v1/parcels/</span>
+                    <a href="/api/v1/parcels/" target="_blank" class="btn btn-cyber-outline btn-sm">
+                        <i class="bi bi-play-circle me-1"></i> Test Endpoint
+                    </a>
+                </div>
+                <h5 class="fw-bold text-white mt-2">Cadastral Parcels GeoJSON FeatureCollection</h5>
+                <p class="text-secondary small">Returns standard EPSG:4326 GeoJSON polygons. Supports query parameters <code>q</code>, <code>village</code>, <code>status</code>, and <code>land_use</code>.</p>
+                <div class="terminal-window p-3" style="max-height: 140px;">
+                    <span class="terminal-tag">{</span><br>
+                    &nbsp;&nbsp;<span class="text-warning">"type"</span>: <span class="text-success">"FeatureCollection"</span>,<br>
+                    &nbsp;&nbsp;<span class="text-warning">"features"</span>: [ { <span class="text-warning">"properties"</span>: { <span class="text-warning">"parcel_id"</span>: <span class="text-info">"PB-KPT-2024-1000"</span>, <span class="text-warning">"fingerprint"</span>: <span class="text-success">"a8f7c9..."</span> } } ]<br>
+                    <span class="terminal-tag">}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Endpoint 2 -->
+        <div class="col-12">
+            <div class="cyber-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge bg-primary font-monospace px-3 py-2">GET /api/v1/parcels/{parcel_id}/</span>
+                    <a href="/api/v1/parcels/PB-KPT-2024-1000/" target="_blank" class="btn btn-cyber-outline btn-sm">
+                        <i class="bi bi-play-circle me-1"></i> Test Endpoint
+                    </a>
+                </div>
+                <h5 class="fw-bold text-white mt-2">Single Parcel Complete RoR Payload</h5>
+                <p class="text-secondary small">Returns nested active ownership, crop yield history, mutation trail, and SHA-256 fingerprint for institutional collateral verification.</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

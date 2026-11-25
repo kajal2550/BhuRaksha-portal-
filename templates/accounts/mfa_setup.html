@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}MFA Setup | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="cyber-card p-4 p-md-5">
+                <i class="bi bi-qr-code-scan text-info display-4 mb-2"></i>
+                <h4 class="fw-bold text-white font-monospace">SETUP_TOTP_MFA</h4>
+                <p class="text-secondary small">Scan this QR code in Google Authenticator, Duo, or Microsoft Authenticator, then enter the 6-digit code.</p>
+
+                <div class="my-4 p-3 bg-dark d-inline-block rounded border border-secondary">
+                    <img src="data:image/png;base64,{{ qr_code }}" alt="TOTP QR Code" style="width: 200px; height: 200px;">
+                </div>
+
+                <form method="POST" action="{% url 'mfa_setup' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label text-muted small font-monospace">6-DIGIT VERIFICATION CODE</label>
+                        <input type="text" name="token" class="form-control cyber-input text-center fs-4 font-monospace text-info" placeholder="000000" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-cyber-green w-100 py-2 fw-bold">
+                        Confirm & Activate MFA
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}500 Internal Error | BhuRaksha{% endblock %}
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="cyber-card p-5 border-danger my-5">
+        <i class="bi bi-exclamation-octagon text-danger display-1 mb-3"></i>
+        <h2 class="fw-bold text-danger font-monospace">500_SYSTEM_FAULT</h2>
+        <p class="text-secondary">An unexpected exception occurred. The incident signature has been captured in the SOC audit log.</p>
+        <a href="{% url 'home' %}" class="btn btn-cyber-outline mt-3">Return to Safe Perimeter</a>
+    </div>
+</div>
+{% endblock %}

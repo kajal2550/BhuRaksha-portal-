@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Schemes & Subsidies | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-lg-4 py-3">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-award text-warning me-2"></i>SCHEMES_&_SUBSIDIES_REGISTRY</h4>
+            <div class="text-muted small">Rule-based eligibility verification for PM-KISAN, PMFBY Insurance, and Micro-Irrigation</div>
+        </div>
+        <a href="{% url 'agriculture_hub' %}" class="btn btn-cyber-outline btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Back to Crops
+        </a>
+    </div>
+
+    <!-- Active Schemes Cards -->
+    <div class="row g-4 mb-5">
+        {% for s in schemes %}
+        <div class="col-md-4">
+            <div class="cyber-card p-4 h-100">
+                <span class="badge-glow-amber px-2 py-1 small font-monospace mb-2 d-inline-block">{{ s.code }}</span>
+                <h5 class="fw-bold text-white mb-2">{{ s.name }}</h5>
+                <p class="text-secondary small mb-3">{{ s.description }}</p>
+                <div class="p-2 bg-dark rounded border border-secondary font-monospace small mb-3">
+                    <span class="text-muted">SUBSIDY BENEFIT:</span>
+                    <span class="text-success fw-bold">₹{{ s.subsidy_amount_per_ha }}/Ha</span>
+                </div>
+                <div class="small text-muted font-monospace">Eligible Threshold: &le; {{ s.max_area_hectares }} Hectares</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Eligibility Table -->
+    <div class="cyber-card p-0">
+        <div class="cyber-card-header text-white font-monospace">
+            <i class="bi bi-check-all text-success me-1"></i> PARCEL_SCHEME_VERIFICATION_LEDGER
+        </div>
+        <div class="table-responsive">
+            <table class="table table-cyber align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Target Parcel</th>
+                        <th>Village</th>
+                        <th>Area (Ha)</th>
+                        <th>Target Scheme</th>
+                        <th>Status</th>
+                        <th>Rule Verification Notes</th>
+                        <th class="text-end">RoR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for el in eligibilities %}
+                    <tr>
+                        <td>
+                            <strong class="text-white">Khasra {{ el.parcel.khasra_no }}</strong><br>
+                            <span class="font-monospace small text-muted">{{ el.parcel.parcel_id }}</span>
+                        </td>
+                        <td>{{ el.parcel.village.name }}</td>
+                        <td>{{ el.parcel.area_hectares }} Ha</td>
+                        <td class="font-monospace text-info fw-bold">{{ el.scheme.name }}</td>
+                        <td>
+                            {% if el.is_eligible %}
+                                <span class="badge-glow-green px-2 py-0 small"><i class="bi bi-check-circle"></i> Eligible</span>
+                            {% else %}
+                                <span class="badge-glow-red px-2 py-0 small">Ineligible</span>
+                            {% endif %}
+                        </td>
+                        <td class="small text-secondary">{{ el.reason }}</td>
+                        <td class="text-end">
+                            <a href="{% url 'parcel_detail' el.parcel.id %}" class="btn btn-cyber-outline btn-sm">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">No scheme verification logs found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

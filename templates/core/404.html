@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}404 Not Found | BhuRaksha{% endblock %}
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="cyber-card p-5 border-secondary my-5">
+        <i class="bi bi-geo-alt-fill text-info display-1 mb-3"></i>
+        <h2 class="fw-bold text-white font-monospace">404_PARCEL_NOT_FOUND</h2>
+        <p class="text-secondary">The requested cadastral boundary, mutation docket, or resource does not exist in BhuRaksha DPI.</p>
+        <a href="{% url 'home' %}" class="btn btn-cyber-outline mt-3">Return to Home Portal</a>
+    </div>
+</div>
+{% endblock %}

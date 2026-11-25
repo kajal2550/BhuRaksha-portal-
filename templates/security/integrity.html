@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Integrity Verification Module | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-lg-4 py-3">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-shield-check text-success me-2"></i>INTEGRITY_VERIFICATION_MODULE</h4>
+            <div class="text-muted small">Real-time SHA-256 Fingerprint Recalculation across all 50 Cadastral Parcels</div>
+        </div>
+        <form method="POST" action="{% url 'integrity_verify' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-cyber-green fw-bold">
+                <i class="bi bi-play-circle me-1"></i> Execute Full Integrity Check Now
+            </button>
+        </form>
+    </div>
+
+    <!-- Demonstration Banner -->
+    <div class="cyber-card p-4 mb-4 border-info">
+        <h6 class="fw-bold text-info font-monospace mb-2"><i class="bi bi-terminal me-2"></i>DEMO LAB: SILENT TAMPER DETECTION</h6>
+        <p class="text-secondary small mb-2">
+            In traditional systems, an unauthorized insider altering land area directly in the database goes unnoticed. In BhuRaksha, every parcel has a pre-computed SHA-256 cryptographic fingerprint over its boundary, area, and ownership.
+        </p>
+        <div class="p-2 bg-dark rounded border border-secondary font-monospace small text-muted">
+            <span class="text-warning">Try it in terminal:</span> <code>python manage.py simulate_tamper</code>
+            <span class="text-muted ms-2">→ Then click "Execute Full Integrity Check Now" to watch detection in action!</span>
+        </div>
+    </div>
+
+    <!-- Past Reports History -->
+    <div class="cyber-card p-0">
+        <div class="cyber-card-header text-white font-monospace">
+            <i class="bi bi-clock-history text-info me-1"></i> HISTORICAL_INTEGRITY_SCAN_REPORTS
+        </div>
+        <div class="table-responsive">
+            <table class="table table-cyber align-middle font-monospace small mb-0">
+                <thead>
+                    <tr>
+                        <th>Report ID</th>
+                        <th>Scan Timestamp</th>
+                        <th>Operator</th>
+                        <th>Total Parcels Scanned</th>
+                        <th>Passed Fingerprints</th>
+                        <th>Failed / Tampered</th>
+                        <th>Hash Chain Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in reports %}
+                    <tr>
+                        <td class="text-info fw-bold">#{{ r.id }}</td>
+                        <td>{{ r.timestamp|date:"Y-m-d H:i:s" }}</td>
+                        <td class="text-warning">{{ r.run_by.username|default:"Scheduled Cron / CLI" }}</td>
+                        <td>{{ r.total_parcels_checked }}</td>
+                        <td class="text-success fw-bold">{{ r.passed_count }} (100%)</td>
+                        <td>
+                            {% if r.failed_count > 0 %}
+                                <span class="badge-glow-red px-2 py-0 fw-bold">{{ r.failed_count }} TAMPERED</span>
+                            {% else %}
+                                <span class="badge-glow-green px-2 py-0">0 Failures</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if r.hash_chain_valid %}
+                                <span class="text-success"><i class="bi bi-link me-1"></i>CHAIN OK</span>
+                            {% else %}
+                                <span class="text-danger fw-bold"><i class="bi bi-x-circle me-1"></i>BROKEN</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">No historical integrity scans executed yet. Click button above to run scan.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

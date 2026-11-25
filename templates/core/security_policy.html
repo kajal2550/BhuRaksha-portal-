@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Security Policy | BhuRaksha{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="cyber-card p-5">
+        <h3 class="fw-bold text-white font-monospace mb-3"><i class="bi bi-file-earmark-lock text-info me-2"></i>SECURITY_DEFENSIVE_POLICY</h3>
+        <p class="text-secondary small">
+            This system adheres to the Open Digital Public Infrastructure (DPI) security standards:
+        </p>
+        <ul class="text-secondary small font-monospace">
+            <li>Session timeout fixed to 30 minutes with forced re-authentication.</li>
+            <li>Zero hardcoded keys: Fernet keys and secret salts pulled from environment variables.</li>
+            <li>All spatial uploads reprojected to EPSG:4326 and validated for polygon topological closure.</li>
+            <li>Cross-Origin Resource Sharing (CORS) restricted to authenticated institutional clients.</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics & Decision Support | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-lg-4 py-3">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-pie-chart-fill text-info me-2"></i>DECISION_SUPPORT_SYSTEM // ANALYTICS</h4>
+            <div class="text-muted small">Macro Land Governance, Crop Harvest Forecasts & Mutation Velocity</div>
+        </div>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn btn-cyber-outline btn-sm">
+                <i class="bi bi-printer me-1"></i> Print Intelligence Dossier
+            </button>
+            <a href="?export=csv" class="btn btn-cyber-primary btn-sm">
+                <i class="bi bi-download me-1"></i> Export Analytics CSV
+            </a>
+        </div>
+    </div>
+
+    <!-- Summary KPI Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="cyber-card p-3 border-start border-3 border-primary">
+                <div class="text-muted small font-monospace">TOTAL CADASTRAL AREA</div>
+                <div class="fs-2 fw-bold text-white mt-1">{{ total_ha }} <span class="fs-6 text-muted">ha</span></div>
+                <small class="text-muted">{{ total_parcels }} Cadastral plots</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="cyber-card p-3 border-start border-3 border-success">
+                <div class="text-muted small font-monospace">EST. CROP PRODUCTION</div>
+                <div class="fs-2 fw-bold text-success mt-1">{{ total_yield }} <span class="fs-6 text-muted">Qt</span></div>
+                <small class="text-muted">PAU Certified Seeds</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="cyber-card p-3 border-start border-3 border-warning">
+                <div class="text-muted small font-monospace">MUTATION TRANSACTIONS</div>
+                <div class="fs-2 fw-bold text-warning mt-1">{{ total_mutations }}</div>
+                <small class="text-muted">Dakhil Kharij cases</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="cyber-card p-3 border-start border-3 border-danger">
+                <div class="text-muted small font-monospace">ACTIVE LEGAL DISPUTES</div>
+                <div class="fs-2 fw-bold text-danger mt-1">{{ total_disputes }}</div>
+                <small class="text-danger">Flagged parcels</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4 Charts Grid -->
+    <div class="row g-4 mb-4">
+        
+        <!-- Chart 1: Land Use -->
+        <div class="col-lg-6">
+            <div class="cyber-card p-4 h-100">
+                <h6 class="fw-bold text-white font-monospace mb-3"><i class="bi bi-pie-chart text-primary me-2"></i>LAND_USE_DISTRIBUTION (HECTARES)</h6>
+                <div style="height: 260px;">
+                    <canvas id="landUseChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 2: Crop Yields -->
+        <div class="col-lg-6">
+            <div class="cyber-card p-4 h-100">
+                <h6 class="fw-bold text-white font-monospace mb-3"><i class="bi bi-bar-chart-steps text-success me-2"></i>CROP_YIELD_PRODUCTION (QUINTALS)</h6>
+                <div style="height: 260px;">
+                    <canvas id="cropChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 3: Mutations by Type -->
+        <div class="col-lg-6">
+            <div class="cyber-card p-4 h-100">
+                <h6 class="fw-bold text-white font-monospace mb-3"><i class="bi bi-arrow-left-right text-warning me-2"></i>MUTATIONS_BY_TRANSACTION_TYPE</h6>
+                <div style="height: 260px;">
+                    <canvas id="mutationChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 4: Dispute Status Ratio -->
+        <div class="col-lg-6">
+            <div class="cyber-card p-4 h-100">
+                <h6 class="fw-bold text-white font-monospace mb-3"><i class="bi bi-shield-exclamation text-danger me-2"></i>DISPUTES_BY_STATUS</h6>
+                <div style="height: 260px;">
+                    <canvas id="disputeChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const landUseData = {{ landuse_chart_data|safe }};
+    const cropData = {{ crop_chart_data|safe }};
+    const mutationData = {{ mutation_chart_data|safe }};
+    const disputeData = {{ dispute_chart_data|safe }};
+
+    // 1. Land Use Chart
+    new Chart(document.getElementById('landUseChart'), {
+        type: 'doughnut',
+        data: {
+            labels: landUseData.map(d => d.land_use_type),
+            datasets: [{
+                data: landUseData.map(d => d.total_area),
+                backgroundColor: ['#00ff9c', '#00e5ff', '#ffb020', '#ff3b5c', '#64748b']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'right', labels: { color: '#cbd5e1' } } }
+        }
+    });
+
+    // 2. Crop Chart
+    new Chart(document.getElementById('cropChart'), {
+        type: 'bar',
+        data: {
+            labels: cropData.slice(0, 6).map(d => d.crop),
+            datasets: [{
+                label: 'Yield (Qt)',
+                data: cropData.slice(0, 6).map(d => d.total_yield),
+                backgroundColor: '#00ff9c',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { ticks: { color: '#94a3b8' } },
+                y: { ticks: { color: '#94a3b8' }, grid: { color: '#1f293d' } }
+            }
+        }
+    });
+
+    // 3. Mutation Chart
+    new Chart(document.getElementById('mutationChart'), {
+        type: 'polarArea',
+        data: {
+            labels: mutationData.map(d => d.mutation_type),
+            datasets: [{
+                data: mutationData.map(d => d.count),
+                backgroundColor: ['#00e5ff', '#00ff9c', '#ffb020', '#ff3b5c', '#818cf8']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'right', labels: { color: '#cbd5e1' } } }
+        }
+    });
+
+    // 4. Dispute Chart
+    new Chart(document.getElementById('disputeChart'), {
+        type: 'pie',
+        data: {
+            labels: disputeData.map(d => d.status),
+            datasets: [{
+                data: disputeData.map(d => d.count),
+                backgroundColor: ['#ff3b5c', '#ffb020', '#00ff9c', '#64748b']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'right', labels: { color: '#cbd5e1' } } }
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastral Parcel Register | BhuRaksha{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-lg-4 py-3">
+
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-table text-info me-2"></i>CADASTRAL_PARCEL_REGISTER</h4>
+            <div class="text-muted small">Record of Rights (RoR) Ledger • Filtered: <strong>{{ count }}</strong> Records</div>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'map_view' %}" class="btn btn-cyber-primary btn-sm">
+                <i class="bi bi-map me-1"></i> Interactive GIS Map
+            </a>
+            <a href="{% url 'export_qgis_geojson' %}" class="btn btn-cyber-outline btn-sm">
+                <i class="bi bi-download me-1"></i> QGIS Export
+            </a>
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="cyber-card p-3 mb-3">
+        <form method="GET" action="{% url 'register' %}" class="row g-2 align-items-center">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary text-info"><i class="bi bi-search"></i></span>
+                    <input type="text" name="q" value="{{ q }}" class="form-control cyber-input" placeholder="Search Khasra / Owner / ULPIN...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select name="village" class="form-select cyber-select">
+                    <option value="">All Villages</option>
+                    {% for v in villages %}
+                    <option value="{{ v.id }}" {% if selected_village == v.id|stringformat:"s" %}selected{% endif %}>{{ v.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="land_use" class="form-select cyber-select">
+                    <option value="">All Land Uses</option>
+                    <option value="Irrigated Agri" {% if selected_land_use == 'Irrigated Agri' %}selected{% endif %}>Irrigated Agri</option>
+                    <option value="Residential/Abadi" {% if selected_land_use == 'Residential/Abadi' %}selected{% endif %}>Residential / Abadi</option>
+                    <option value="Commercial/FoodTech" {% if selected_land_use == 'Commercial/FoodTech' %}selected{% endif %}>Commercial / FoodTech</option>
+                    <option value="Forest/Pasture" {% if selected_land_use == 'Forest/Pasture' %}selected{% endif %}>Forest / Pasture</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="status" class="form-select cyber-select">
+                    <option value="">All Statuses</option>
+                    <option value="Verified" {% if selected_status == 'Verified' %}selected{% endif %}>Verified</option>
+                    <option value="Mutation Pending" {% if selected_status == 'Mutation Pending' %}selected{% endif %}>Mutation Pending</option>
+                    <option value="Disputed" {% if selected_status == 'Disputed' %}selected{% endif %}>Disputed</option>
+                    <option value="Tampered" {% if selected_status == 'Tampered' %}selected{% endif %}>Tampered</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-cyber-primary w-100">Filter</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Table -->
+    <div class="cyber-card p-0">
+        <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+            <table class="table table-cyber align-middle mb-0">
+                <thead class="sticky-top">
+                    <tr>
+                        <th>Khasra No.</th>
+                        <th>ULPIN (Unique ID)</th>
+                        <th>Village</th>
+                        <th>Registered Owner</th>
+                        <th>Area (Ha)</th>
+                        <th>Land Use</th>
+                        <th>Latest Crop</th>
+                        <th>Integrity Hash</th>
+                        <th>Status</th>
+                        <th class="text-end">Dossier</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in parcels %}
+                    <tr>
+                        <td class="fw-bold text-white">{{ p.khasra_no }}</td>
+                        <td class="font-monospace small text-info">{{ p.parcel_id }}</td>
+                        <td>{{ p.village.name }}</td>
+                        <td>
+                            {% with own=p.ownership_records.first %}
+                            <div class="fw-semibold text-white">{{ own.owner.name|default:"Gram Panchayat" }}</div>
+                            <small class="text-muted font-monospace">{{ own.owner.masked_aadhaar }}</small>
+                            {% endwith %}
+                        </td>
+                        <td><strong>{{ p.area_hectares }} ha</strong> <small class="text-muted">({{ p.area_acres }} ac)</small></td>
+                        <td><span class="badge bg-dark border border-secondary">{{ p.land_use_type }}</span></td>
+                        <td>
+                            {% with c=p.crop_records.first %}
+                            <span class="text-success small fw-semibold">{{ c.crop|default:"Fallow" }}</span>
+                            {% endwith %}
+                        </td>
+                        <td class="font-monospace small text-muted text-truncate" style="max-width: 120px;" title="{{ p.fingerprint }}">
+                            {{ p.fingerprint|slice:":12" }}...
+                        </td>
+                        <td>
+                            {% if p.status == 'Verified' %}
+                                <span class="badge-glow-green px-2 py-0 small">Verified</span>
+                            {% elif p.status == 'Mutation Pending' %}
+                                <span class="badge-glow-amber px-2 py-0 small">Pending</span>
+                            {% else %}
+                                <span class="badge-glow-red px-2 py-0 small">{{ p.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <a href="{% url 'parcel_detail' p.id %}" class="btn btn-cyber-outline btn-sm">
+                                <i class="bi bi-file-earmark-text"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="text-center py-5 text-muted">No cadastral parcels match the selected filters.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

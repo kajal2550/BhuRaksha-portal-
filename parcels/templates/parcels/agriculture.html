@@ -1,0 +1,127 @@
+{% extends 'parcels/base.html' %}
+
+{% block title %}Agriculture & Agronomy Hub | GeoLand DPI{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-2">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-dark mb-0"><i class="bi bi-flower1 text-success me-2"></i>Agriculture & Crop Cultivation Hub</h3>
+            <div class="text-muted small">Precision Agri Data • Soil Profiles, Irrigation Sources & Crop Yield Forecasts</div>
+        </div>
+        <a href="{% url 'map_view' %}" class="btn btn-outline-success btn-sm">
+            <i class="bi bi-map me-1"></i> View Spatial Crop Layer
+        </a>
+    </div>
+
+    <!-- Season Counts Banner -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-success">
+                <div class="text-muted small fw-semibold text-uppercase">Rabi Season Crops</div>
+                <div class="fs-2 fw-bold text-success mt-1">{{ rabi_count }}</div>
+                <small class="text-muted">Wheat, Mustard, Potato, Pulses</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-primary">
+                <div class="text-muted small fw-semibold text-uppercase">Kharif Season Crops</div>
+                <div class="fs-2 fw-bold text-primary mt-1">{{ kharif_count }}</div>
+                <small class="text-muted">Paddy, Maize, Bajra, Arhar</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-warning">
+                <div class="text-muted small fw-semibold text-uppercase">Zaid (Summer) Crops</div>
+                <div class="fs-2 fw-bold text-warning mt-1">{{ zaid_count }}</div>
+                <small class="text-muted">Vegetables, Mentha, Moong</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-stat bg-white p-3 border-start border-4 border-info">
+                <div class="text-muted small fw-semibold text-uppercase">Commercial & FoodTech</div>
+                <div class="fs-2 fw-bold text-info mt-1">4</div>
+                <small class="text-muted">Sugarcane, Banana, Agro-Silos</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Crop Summaries -->
+    <div class="card border-0 shadow-sm p-4 bg-white rounded-3 mb-4">
+        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-graph-up-arrow text-success me-2"></i>Crop Production & Yield Aggregates</h5>
+        <div class="row g-3">
+            {% for tc in top_crops|slice:":6" %}
+            <div class="col-md-4 col-lg-2">
+                <div class="p-3 bg-light rounded-3 text-center border">
+                    <strong class="d-block text-truncate text-dark" title="{{ tc.crop }}">{{ tc.crop }}</strong>
+                    <div class="fs-4 fw-bold text-success mt-1">{{ tc.total_yield|floatformat:0 }} <small class="fs-6">Qt</small></div>
+                    <small class="text-muted">{{ tc.count }} Cadastral Plots</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Comprehensive Crop Table -->
+    <div class="card border-0 shadow-sm rounded-3 bg-white">
+        <div class="card-header bg-white border-bottom py-3">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-list-check me-2 text-primary"></i>Parcel-Level Agri & Soil Register</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Parcel (Khasra)</th>
+                        <th>Village</th>
+                        <th>Crop & Variety</th>
+                        <th>Season</th>
+                        <th>Sowing Date</th>
+                        <th>Est. Yield (Quintals)</th>
+                        <th>Soil Type</th>
+                        <th>Irrigation Type</th>
+                        <th>Fertilizer Practice</th>
+                        <th class="text-end">RoR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in crops %}
+                    <tr>
+                        <td>
+                            <strong class="text-primary">{{ c.parcel.khasra_no }}</strong><br>
+                            <span class="font-monospace small text-muted">{{ c.parcel.parcel_id }}</span>
+                        </td>
+                        <td>{{ c.parcel.village.name }}</td>
+                        <td>
+                            <div class="fw-semibold text-dark">{{ c.crop }}</div>
+                            <small class="text-muted">{{ c.variety }}</small>
+                        </td>
+                        <td>
+                            {% if c.season == 'Rabi' %}
+                                <span class="badge bg-success-subtle text-success border border-success-subtle">Rabi</span>
+                            {% elif c.season == 'Kharif' %}
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Kharif</span>
+                            {% else %}
+                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">{{ c.season }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ c.sowing_date }}</td>
+                        <td><strong>{{ c.estimated_yield_quintals }} Qt</strong></td>
+                        <td>{{ c.parcel.soil_type }}</td>
+                        <td>{{ c.parcel.irrigation_source }}</td>
+                        <td class="small text-muted">{{ c.fertilizer_used }}</td>
+                        <td class="text-end">
+                            <a href="{% url 'parcel_detail' c.parcel.id %}" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

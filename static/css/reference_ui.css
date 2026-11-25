@@ -1,0 +1,572 @@
+/* ==========================================================================
+   BHURAKSHA - EXACT REPLICA OF REFERENCE ENTERPRISE PORTAL
+   - Clean White Nav with blue accents & rounded pill buttons
+   - Royal Blue Hero Section (#1d4ed8 / #2563eb / #1e40af)
+   - Pill badge with green pulse indicator
+   - Large bold white heading & concise subtext
+   - Rounded pill search bar with inside blue button
+   - "Start Your Journey" floating white pill card with icon & arrow button
+   - Enterprise Capabilities Grid with image cards, rounded corners, clean shadows
+   - Universal white cards, clean text, and full responsive support
+   - Dark Slate Multi-column Footer with subtle borders and badges
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --brand-blue: #1d4ed8;
+    --brand-blue-hover: #1e40af;
+    --hero-blue-start: #1e40af;
+    --hero-blue-mid: #2563eb;
+    --hero-blue-end: #1d4ed8;
+    
+    --bg-page: #f8fafc;
+    --text-heading: #0f172a;
+    --text-body: #334155;
+    --text-muted: #64748b;
+    --border-subtle: #e2e8f0;
+    
+    --font-heading: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+    --font-body: 'Inter', -apple-system, sans-serif;
+}
+
+body {
+    background-color: var(--bg-page);
+    color: var(--text-body);
+    font-family: var(--font-body);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Compatibility classes so all internal pages render cleanly on white theme */
+.cyber-card, .gov-card, .card {
+    background-color: #ffffff !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+    color: var(--text-body) !important;
+}
+
+.text-white {
+    color: #0f172a !important;
+}
+.hero-blue-section .text-white, 
+.enterprise-footer .text-white, 
+.badge .text-white, 
+.btn-primary .text-white,
+.brand-icon-box .text-white,
+.user-avatar-circle .text-white,
+.cta-icon-box .text-white,
+.cta-arrow-btn .text-white {
+    color: #ffffff !important;
+}
+
+.text-secondary, .text-muted {
+    color: #64748b !important;
+}
+.hero-blue-section .text-secondary,
+.hero-blue-section .text-muted,
+.enterprise-footer .text-secondary,
+.enterprise-footer .text-muted {
+    color: #94a3b8 !important;
+}
+
+/* ==========================================================================
+   1. Clean White Navbar (Exact Match to Image 1)
+   ========================================================================== */
+.navbar-clean {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.brand-icon-box {
+    width: 44px;
+    height: 44px;
+    background-color: #2563eb;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff !important;
+    font-size: 1.4rem;
+}
+
+.brand-title {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: #0f172a;
+    letter-spacing: -0.3px;
+    line-height: 1.1;
+}
+.brand-subtitle {
+    font-size: 0.75rem;
+    color: #64748b;
+    letter-spacing: 0.2px;
+}
+
+.navbar-clean .nav-link {
+    color: #475569 !important;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+}
+.navbar-clean .nav-link:hover {
+    color: #2563eb !important;
+}
+.navbar-clean .nav-link.active {
+    color: #2563eb !important;
+    font-weight: 600;
+    position: relative;
+}
+.navbar-clean .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 1rem;
+    right: 1rem;
+    height: 2px;
+    background-color: #2563eb;
+    border-radius: 2px;
+}
+
+/* Navbar Action Buttons */
+.btn-nav-outline {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    font-size: 0.88rem;
+    font-weight: 600;
+    border-radius: 20px;
+    padding: 0.45rem 1rem;
+    transition: all 0.15s ease;
+}
+.btn-nav-outline:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
+.user-pill {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    padding: 0.35rem 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #1e293b;
+    cursor: pointer;
+}
+.user-avatar-circle {
+    width: 28px;
+    height: 28px;
+    background-color: #2563eb;
+    color: #ffffff !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.theme-toggle-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   2. Vibrant Royal Blue Hero Section
+   ========================================================================== */
+.hero-blue-section {
+    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #1e40af 100%);
+    color: #ffffff;
+    padding: 4.5rem 1.5rem 5.5rem;
+    text-align: center;
+    position: relative;
+}
+
+.hero-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    padding: 0.4rem 1.25rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #ffffff;
+    margin-bottom: 2rem;
+}
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #4ade80;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 0.6rem;
+    box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.4);
+}
+
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: 3.25rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    max-width: 850px;
+    margin: 0 auto 1.5rem;
+    color: #ffffff !important;
+}
+
+.hero-subtitle {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 720px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+/* Hero Search Bar Pill */
+.hero-search-box {
+    background: #ffffff;
+    border-radius: 35px;
+    padding: 0.45rem 0.55rem 0.45rem 1.5rem;
+    max-width: 580px;
+    margin: 0 auto 2.5rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+}
+.hero-search-input {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 0.95rem;
+    color: #1e293b;
+}
+.hero-search-input::placeholder {
+    color: #94a3b8;
+}
+.hero-search-btn {
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 25px;
+    padding: 0.65rem 1.75rem;
+    font-weight: 600;
+    font-size: 0.92rem;
+    transition: background-color 0.15s ease;
+}
+.hero-search-btn:hover {
+    background-color: #1d4ed8;
+}
+
+/* "Start Your Journey" Floating Card */
+.cta-floating-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 1rem 1.5rem;
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    text-align: left;
+}
+.cta-icon-box {
+    width: 48px;
+    height: 48px;
+    background: #2563eb;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+}
+.cta-text-content {
+    flex-grow: 1;
+    padding: 0 1.25rem;
+}
+.cta-main-title {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.2rem;
+}
+.cta-badge-tag {
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+.cta-sub-title {
+    font-size: 0.82rem;
+    color: #64748b;
+    margin: 0;
+}
+.cta-arrow-btn {
+    width: 40px;
+    height: 40px;
+    background: #2563eb;
+    color: #ffffff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: background 0.15s ease;
+}
+.cta-arrow-btn:hover {
+    background: #1d4ed8;
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   3. Capabilities Grid Cards (Exact Match to Image 2 & 3)
+   ========================================================================== */
+.section-capabilities {
+    padding: 5rem 1.5rem;
+    background-color: #ffffff;
+}
+.section-heading-title {
+    font-family: var(--font-heading);
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: #0f172a;
+    text-align: center;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.5px;
+}
+.section-heading-subtitle {
+    font-size: 1rem;
+    color: #64748b;
+    text-align: center;
+    max-width: 650px;
+    margin: 0 auto 3.5rem;
+}
+
+.capability-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none !important;
+    color: inherit !important;
+    cursor: pointer;
+}
+.capability-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 32px rgba(37, 99, 235, 0.12);
+    border-color: #93c5fd;
+}
+.capability-card:hover .capability-title {
+    color: #2563eb;
+}
+.capability-card:hover .capability-icon {
+    transform: scale(1.15);
+    transition: transform 0.2s ease;
+}
+.capability-img {
+    height: 190px;
+    width: 100%;
+    object-fit: cover;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    transition: transform 0.3s ease;
+}
+.capability-card:hover .capability-img {
+    transform: scale(1.03);
+}
+.capability-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+.capability-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+}
+.capability-icon {
+    font-size: 1.25rem;
+    color: #2563eb;
+}
+.capability-title {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+.capability-desc {
+    font-size: 0.88rem;
+    color: #64748b;
+    line-height: 1.55;
+    margin-bottom: 1.25rem;
+}
+
+/* ==========================================================================
+   4. Form controls, buttons, inputs for all pages
+   ========================================================================== */
+.form-control, .form-select {
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    padding: 0.55rem 0.85rem !important;
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+.form-control:focus, .form-select:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+.btn-primary {
+    background-color: #2563eb !important;
+    border-color: #2563eb !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+}
+.btn-primary:hover {
+    background-color: #1d4ed8 !important;
+    border-color: #1d4ed8 !important;
+}
+
+.btn-outline-primary {
+    color: #2563eb !important;
+    border-color: #2563eb !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+}
+.btn-outline-primary:hover {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   5. Dark Slate Multi-column Footer (Exact Match to Image 3)
+   ========================================================================== */
+.enterprise-footer {
+    background-color: #0b1120;
+    color: #94a3b8;
+    padding: 4.5rem 1.5rem 2rem;
+    margin-top: auto;
+}
+.footer-brand-title {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    color: #ffffff !important;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+}
+.footer-badge-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #38bdf8;
+    display: block;
+    margin-bottom: 1.25rem;
+}
+.footer-desc {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: #94a3b8;
+    max-width: 420px;
+    margin-bottom: 1.5rem;
+}
+.footer-status-pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.82rem;
+    color: #e2e8f0;
+}
+.status-green-dot {
+    width: 7px;
+    height: 7px;
+    background-color: #10b981;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+.footer-col-title {
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.75px;
+    color: #ffffff !important;
+    margin-bottom: 1.25rem;
+}
+.footer-link-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.footer-link-list li {
+    margin-bottom: 0.75rem;
+}
+.footer-link-list a {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.15s ease;
+}
+.footer-link-list a:hover {
+    color: #ffffff;
+}
+
+.footer-bottom-bar {
+    border-top: 1px solid #1e293b;
+    padding-top: 2rem;
+    margin-top: 3.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+    color: #64748b;
+}

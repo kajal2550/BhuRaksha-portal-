@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Threat Model (STRIDE) | BhuRaksha{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="cyber-card p-5">
+        <h3 class="fw-bold text-white font-monospace mb-3"><i class="bi bi-shield-shaded text-danger me-2"></i>STRIDE_THREAT_MODEL_&_COUNTERMEASURES</h3>
+        <div class="table-responsive">
+            <table class="table table-cyber font-monospace small align-middle">
+                <thead>
+                    <tr>
+                        <th>Threat Category</th>
+                        <th>Vulnerability Scenario</th>
+                        <th>BhuRaksha Architectural Countermeasure</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-danger fw-bold">Spoofing</td>
+                        <td>Attacker claims to be Revenue Patwari to approve fake mutation.</td>
+                        <td>Enforced TOTP MFA on officer/admin roles, Django-Axes brute force lockout.</td>
+                    </tr>
+                    <tr>
+                        <td class="text-danger fw-bold">Tampering</td>
+                        <td>Rogue insider modifies parcel area directly in the SQL database.</td>
+                        <td>Real-time SHA-256 fingerprint verification; mismatch flags parcel red and alerts SOC.</td>
+                    </tr>
+                    <tr>
+                        <td class="text-danger fw-bold">Repudiation</td>
+                        <td>Officer denies approving a disputed land transfer.</td>
+                        <td>Immutable append-only SHA-256 hash chained AuditLog recording IP, timestamp, role.</td>
+                    </tr>
+                    <tr>
+                        <td class="text-danger fw-bold">Information Disclosure</td>
+                        <td>Leaking farmer Aadhaar and phone numbers to fraudsters.</td>
+                        <td>Fernet encryption at rest; strict role-based masking (`XXXX-XXXX-4589`) on public APIs.</td>
+                    </tr>
+                    <tr>
+                        <td class="text-danger fw-bold">Denial of Service</td>
+                        <td>Brute-forcing API with flood queries.</td>
+                        <td>DRF Anon & User Rate Throttling, Django-Axes IP lockout.</td>
+                    </tr>
+                    <tr>
+                        <td class="text-danger fw-bold">Elevation of Privilege</td>
+                        <td>Farmer forging request headers to approve their own mutation.</td>
+                        <td>Strict server-side RBAC permission guards on all mutation endpoints and views.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

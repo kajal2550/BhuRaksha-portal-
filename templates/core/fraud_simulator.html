@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block title %}Land Fraud Attack Simulator | BhuRaksha DPI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header Banner -->
+    <div class="cyber-card p-4 mb-4 border-start border-4 border-danger">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <span class="badge-glow-cyan px-3 py-1 rounded small mb-2 d-inline-block">
+                    <i class="bi bi-shield-slash me-1"></i> LIVE INTERACTIVE CYBER LAB
+                </span>
+                <h2 class="text-white fw-bold mb-1">
+                    Land Record <span style="color: var(--danger-red);">Fraud & Tamper Simulator</span>
+                </h2>
+                <p class="text-secondary mb-0">
+                    Test and demonstrate BhuRaksha’s cryptographic defense against real-world land grab attacks, illegal area alterations, and forged mutation attempts in real time.
+                </p>
+            </div>
+            <div class="text-end">
+                <span class="badge bg-danger fs-6 px-3 py-2 font-monospace">
+                    <i class="bi bi-radioactive me-1"></i> ATTACK LAB ONLINE
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simulator Control Grid -->
+    <div class="row g-4 mb-4">
+        
+        <!-- Left: Attack Control Panel -->
+        <div class="col-lg-5">
+            <div class="cyber-card p-4 h-100">
+                <h5 class="text-info fw-bold mb-3">
+                    <i class="bi bi-crosshair me-2"></i> Launch Cyber / Land Grab Attack
+                </h5>
+                
+                <div class="mb-3">
+                    <label class="form-label text-light small font-monospace">1. SELECT TARGET CADASTRAL PARCEL</label>
+                    <select id="targetParcel" class="form-select bg-dark text-white border-secondary">
+                        {% for p in parcels %}
+                        <option value="{{ p.parcel_id }}">
+                            {{ p.parcel_id }} (Khasra: {{ p.khasra_no }} - {{ p.area_acres }} Ac)
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-light small font-monospace">2. CHOOSE ATTACK VECTOR</label>
+                    
+                    <div class="form-check p-3 rounded mb-2 bg-black border border-secondary">
+                        <input class="form-check-input" type="radio" name="attackType" id="attack1" value="boundary_tamper" checked>
+                        <label class="form-check-label text-white" for="attack1">
+                            <strong class="text-danger"><i class="bi bi-rulers me-1"></i> Boundary & Area Encroachment</strong>
+                            <div class="small text-secondary">Attacker accesses DB to artificially expand parcel boundary (+3.75 Acres land grab).</div>
+                        </label>
+                    </div>
+
+                    <div class="form-check p-3 rounded mb-2 bg-black border border-secondary">
+                        <input class="form-check-input" type="radio" name="attackType" id="attack2" value="ownership_spoof">
+                        <label class="form-check-label text-white" for="attack2">
+                            <strong class="text-warning"><i class="bi bi-person-x me-1"></i> Benami Ownership Forgery</strong>
+                            <div class="small text-secondary">Attacker submits forged ownership deed without Sub-Registrar digital signing key.</div>
+                        </label>
+                    </div>
+
+                    <div class="form-check p-3 rounded bg-black border border-secondary">
+                        <input class="form-check-input" type="radio" name="attackType" id="attack3" value="audit_chain_alteration">
+                        <label class="form-check-label text-white" for="attack3">
+                            <strong class="text-info"><i class="bi bi-rewind me-1"></i> Hash Chain Historical Tampering</strong>
+                            <div class="small text-secondary">Malicious insider alters a past transaction block (blockchain rewrite attack).</div>
+                        </label>
+                    </div>
+                </div>
+
+                <button id="btnExecuteAttack" class="btn btn-danger btn-lg w-100 fw-bold shadow-lg py-3">
+                    <i class="bi bi-lightning-charge-fill me-2"></i> EXECUTE ATTACK SIMULATION
+                </button>
+            </div>
+        </div>
+
+        <!-- Right: Real-time Terminal & Defense Telemetry -->
+        <div class="col-lg-7">
+            <div class="cyber-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="text-white fw-bold mb-0">
+                        <i class="bi bi-terminal-split me-2 text-success"></i> DPI Cryptographic Response Telemetry
+                    </h5>
+                    <span id="defenseBadge" class="badge-glow-green px-3 py-1 rounded small">
+                        WAITING FOR ATTACK INPUT
+                    </span>
+                </div>
+
+                <!-- Interactive Visual Comparison Box -->
+                <div id="comparisonBox" class="p-3 rounded mb-3 bg-black border border-secondary d-none">
+                    <div class="row g-2 text-center">
+                        <div class="col-6 border-end border-secondary">
+                            <span class="badge bg-secondary mb-1">LEGITIMATE BLOCKCHAIN STATE</span>
+                            <div id="legitVal" class="text-success fw-bold font-monospace">--</div>
+                            <small class="text-muted d-block font-monospace" style="font-size: 0.7rem;" id="legitHash">--</small>
+                        </div>
+                        <div class="col-6">
+                            <span class="badge bg-danger mb-1">MALICIOUS TAMPERED VALUE</span>
+                            <div id="tamperedVal" class="text-danger fw-bold font-monospace">--</div>
+                            <small class="text-muted d-block font-monospace" style="font-size: 0.7rem;" id="tamperedHash">--</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terminal Output Window -->
+                <div id="terminalWindow" class="p-3 rounded terminal-window bg-black font-monospace text-light" style="height: 310px; overflow-y: auto; font-size: 0.85rem; border: 1px solid #1f2937;">
+                    <div class="text-secondary">[0.000s] Simulator engine ready. Target database: SQLite Cadastre cluster.</div>
+                    <div class="text-secondary">[0.005s] Cryptographic engine loaded: SHA-256 Merkle Fingerprints + Fernet AES-128.</div>
+                    <div class="text-warning">[IDLE] Select an attack scenario on the left and click 'Execute Attack Simulation'...</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Explanatory Defense Pillars -->
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="cyber-card p-3 border-start border-3 border-info">
+                <h6 class="text-white fw-bold mb-1"><i class="bi bi-bounding-box-circles text-info me-2"></i>Merkle Hash Verification</h6>
+                <p class="text-secondary small mb-0">Every parcel’s boundary points (geometry) are hashed into a single SHA-256 fingerprint. Even 1 inch of land shift changes the hash completely.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="cyber-card p-3 border-start border-3 border-success">
+                <h6 class="text-white fw-bold mb-1"><i class="bi bi-shield-check text-success me-2"></i>Append-Only Immutability</h6>
+                <p class="text-secondary small mb-0">Audit logs store the hash of previous transactions (`prev_hash`). Tampering with any historical record invalidates all subsequent blocks immediately.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="cyber-card p-3 border-start border-3 border-warning">
+                <h6 class="text-white fw-bold mb-1"><i class="bi bi-fingerprint text-warning me-2"></i>Multi-Sign Digital Consent</h6>
+                <p class="text-secondary small mb-0">Mutation and partition requests require simultaneous digital authentication from the Patwari and Aadhaar OTP e-KYC from the registered owner.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.getElementById('btnExecuteAttack').addEventListener('click', async function() {
+    const btn = this;
+    const parcelId = document.getElementById('targetParcel').value;
+    const attackType = document.querySelector('input[name="attackType"]:checked').value;
+    const term = document.getElementById('terminalWindow');
+    const badge = document.getElementById('defenseBadge');
+    const compBox = document.getElementById('comparisonBox');
+
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> INJECTING ATTACK PAYLOAD...`;
+
+    badge.className = 'badge bg-danger px-3 py-1 rounded small animate-pulse';
+    badge.innerText = 'ATTACK IN PROGRESS';
+
+    term.innerHTML += `<div class="text-danger mt-2">&gt;&gt;&gt; INITIATING EXPLOIT: [${attackType.toUpperCase()}] on Target Parcel ${parcelId}...</div>`;
+    term.scrollTop = term.scrollHeight;
+
+    try {
+        const resp = await fetch('/api/lab/simulate-attack/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                attack_type: attackType,
+                parcel_id: parcelId
+            })
+        });
+
+        const data = await resp.json();
+
+        if (data.status === 'success') {
+            const res = data.result;
+
+            // Fill comparison box
+            compBox.classList.remove('d-none');
+            document.getElementById('legitVal').innerText = res.original_value;
+            document.getElementById('legitHash').innerText = res.original_fingerprint.substring(0, 24) + '...';
+            document.getElementById('tamperedVal').innerText = res.tampered_value;
+            document.getElementById('tamperedHash').innerText = res.tampered_hash.substring(0, 24) + '...';
+
+            term.innerHTML += `<div class="text-info">[TELEMETRY] Original Fingerprint: ${res.original_fingerprint.substring(0, 32)}...</div>`;
+            term.innerHTML += `<div class="text-danger">[COMPUTED] Tampered Fingerprint: ${res.tampered_hash.substring(0, 32)}...</div>`;
+            term.innerHTML += `<div class="text-warning">[MATCH EVAL] SHA256(Record_Old) == SHA256(Record_New) ? FALSE [MISMATCH]</div>`;
+            term.innerHTML += `<div class="text-success fw-bold">[DEFENSE ACTIVATED] ${res.defense_mechanism}</div>`;
+            term.innerHTML += `<div class="text-white bg-danger p-2 mt-1 rounded">&gt; ${res.action_taken}</div>`;
+
+            badge.className = 'badge-glow-green px-3 py-1 rounded small';
+            badge.innerText = 'ATTACK BLOCKED & MITIGATED';
+        } else {
+            term.innerHTML += `<div class="text-danger">Error: ${data.message}</div>`;
+        }
+    } catch(err) {
+        term.innerHTML += `<div class="text-danger">Network Error: ${err.message}</div>`;
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="bi bi-lightning-charge-fill me-2"></i> EXECUTE ATTACK SIMULATION`;
+        term.scrollTop = term.scrollHeight;
+    }
+});
+</script>
+{% endblock %}
