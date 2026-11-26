@@ -197,42 +197,42 @@
             <div class="flex-grow-1">
                 {% if user.is_authenticated %}
                     {% if user.is_superuser %}
-                    <a href="{% url 'admin_dashboard' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none fw-semibold text-primary bg-white mb-2 shadow-sm" style="font-size:0.86rem;">
+                    <a href="{% url 'admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none mb-2" style="font-size:0.86rem;">
                         <i class="bi bi-speedometer2"></i>Admin Dashboard
                     </a>
                     {% else %}
-                    <a href="{% url 'user_dashboard' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none fw-semibold text-primary bg-white mb-2 shadow-sm" style="font-size:0.86rem;">
+                    <a href="{% url 'user_dashboard' %}" class="{% if request.resolver_match.url_name == 'user_dashboard' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none mb-2" style="font-size:0.86rem;">
                         <i class="bi bi-house-door"></i>Dashboard
                     </a>
                     {% endif %}
                 {% else %}
-                    <a href="{% url 'login' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none fw-semibold text-primary bg-white mb-2 shadow-sm" style="font-size:0.86rem;">
+                    <a href="{% url 'login' %}" class="{% if request.resolver_match.url_name == 'login' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none mb-2" style="font-size:0.86rem;">
                         <i class="bi bi-box-arrow-in-right"></i>Sign In
                     </a>
                 {% endif %}
 
                 <div class="text-uppercase fw-bold px-3 pt-2 pb-1" style="font-size:0.68rem;letter-spacing:0.06em;color:rgba(255,255,255,0.6);">Land &amp; GIS</div>
-                <a href="{% url 'map_view' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none text-white" style="font-size:0.85rem;"><i class="bi bi-map opacity-75"></i>GIS Map</a>
-                <a href="{% url 'verify_public' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none text-white" style="font-size:0.85rem;"><i class="bi bi-patch-check opacity-75"></i>Verify Records</a>
-                <a href="{% url 'owners_list' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none text-white" style="font-size:0.85rem;"><i class="bi bi-people opacity-75"></i>Ownership Records</a>
-                <a href="{% url 'mutations' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none text-white" style="font-size:0.85rem;"><i class="bi bi-arrow-left-right opacity-75"></i>Mutations</a>
-                <a href="{% url 'disputes_list' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none text-white" style="font-size:0.85rem;"><i class="bi bi-exclamation-triangle opacity-75"></i>Disputes</a>
+                <a href="{% url 'map_view' %}" class="{% if request.resolver_match.url_name == 'map_view' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none" style="font-size:0.85rem;"><i class="bi bi-map"></i>GIS Map</a>
+                <a href="{% url 'verify_public' %}" class="{% if request.resolver_match.url_name == 'verify_public' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none" style="font-size:0.85rem;"><i class="bi bi-patch-check"></i>Verify Records</a>
+                <a href="{% url 'owners_list' %}" class="{% if request.resolver_match.url_name == 'owners_list' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none" style="font-size:0.85rem;"><i class="bi bi-people"></i>Ownership Records</a>
+                <a href="{% url 'mutations' %}" class="{% if request.resolver_match.url_name == 'mutations' or request.resolver_match.url_name == 'mutation_detail' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none" style="font-size:0.85rem;"><i class="bi bi-arrow-left-right"></i>Mutations</a>
+                <a href="{% url 'disputes_list' %}" class="{% if request.resolver_match.url_name == 'disputes_list' or request.resolver_match.url_name == 'dispute_detail' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none" style="font-size:0.85rem;"><i class="bi bi-exclamation-triangle"></i>Disputes</a>
 
                 <div class="text-uppercase fw-bold px-3 pt-2 pb-1" style="font-size:0.68rem;letter-spacing:0.06em;color:rgba(255,255,255,0.6);">Tools &amp; Simulators</div>
-                <a href="{% url 'parcel_split' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none text-white" style="font-size:0.85rem;"><i class="bi bi-scissors opacity-75"></i>Parcel Split</a>
-                <a href="{% url 'land_valuation' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none text-white" style="font-size:0.85rem;"><i class="bi bi-calculator opacity-75"></i>Land Valuation</a>
-                <a href="{% url 'farmer_kyc' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none text-white" style="font-size:0.85rem;"><i class="bi bi-person-vcard opacity-75"></i>Farmer KYC</a>
-                <a href="{% url 'fraud_simulator' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none text-white" style="font-size:0.85rem;"><i class="bi bi-shield-exclamation opacity-75"></i>Fraud Simulator</a>
+                <a href="{% url 'parcel_split' %}" class="{% if request.resolver_match.url_name == 'parcel_split' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none" style="font-size:0.85rem;"><i class="bi bi-scissors"></i>Parcel Split</a>
+                <a href="{% url 'land_valuation' %}" class="{% if request.resolver_match.url_name == 'land_valuation' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none" style="font-size:0.85rem;"><i class="bi bi-calculator"></i>Land Valuation</a>
+                <a href="{% url 'farmer_kyc' %}" class="{% if request.resolver_match.url_name == 'farmer_kyc' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none" style="font-size:0.85rem;"><i class="bi bi-person-vcard"></i>Farmer KYC</a>
+                <a href="{% url 'fraud_simulator' %}" class="{% if request.resolver_match.url_name == 'fraud_simulator' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none" style="font-size:0.85rem;"><i class="bi bi-shield-exclamation"></i>Fraud Simulator</a>
 
                 <div class="text-uppercase fw-bold px-3 pt-2 pb-1" style="font-size:0.68rem;letter-spacing:0.06em;color:rgba(255,255,255,0.6);">Agriculture</div>
-                <a href="{% url 'agriculture_hub' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none text-white" style="font-size:0.85rem;"><i class="bi bi-flower1 opacity-75"></i>Crop &amp; Land Use</a>
-                <a href="{% url 'schemes_view' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none text-white" style="font-size:0.85rem;"><i class="bi bi-award opacity-75"></i>Govt Schemes</a>
-                <a href="{% url 'weather_advisory' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none text-white" style="font-size:0.85rem;"><i class="bi bi-cloud-sun opacity-75"></i>Weather Advisory</a>
+                <a href="{% url 'agriculture_hub' %}" class="{% if request.resolver_match.url_name == 'agriculture_hub' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none" style="font-size:0.85rem;"><i class="bi bi-flower1"></i>Crop &amp; Land Use</a>
+                <a href="{% url 'schemes_view' %}" class="{% if request.resolver_match.url_name == 'schemes_view' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none" style="font-size:0.85rem;"><i class="bi bi-award"></i>Govt Schemes</a>
+                <a href="{% url 'weather_advisory' %}" class="{% if request.resolver_match.url_name == 'weather_advisory' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none" style="font-size:0.85rem;"><i class="bi bi-cloud-sun"></i>Weather Advisory</a>
 
                 {% if user.is_authenticated %}
                 <div class="text-uppercase fw-bold px-3 pt-2 pb-1" style="font-size:0.68rem;letter-spacing:0.06em;color:rgba(255,255,255,0.6);">Account</div>
-                <a href="{% url 'notifications_view' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none text-white" style="font-size:0.85rem;"><i class="bi bi-bell opacity-75"></i>Notifications</a>
-                <a href="{% url 'profile_view' %}" class="d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none text-white" style="font-size:0.85rem;"><i class="bi bi-person-gear opacity-75"></i>Profile &amp; Settings</a>
+                <a href="{% url 'notifications_view' %}" class="{% if request.resolver_match.url_name == 'notifications_view' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none" style="font-size:0.85rem;"><i class="bi bi-bell"></i>Notifications</a>
+                <a href="{% url 'profile_view' %}" class="{% if request.resolver_match.url_name == 'profile_view' %}bg-white fw-semibold shadow-sm{% endif %} d-flex align-items-center gap-2 px-3 py-2 rounded-3 text-decoration-none" style="font-size:0.85rem;"><i class="bi bi-person-gear"></i>Profile &amp; Settings</a>
                 {% endif %}
             </div>
             {% if user.is_authenticated %}
