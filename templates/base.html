@@ -139,7 +139,7 @@
                                     {% if user.is_superuser %}
                                     <a class="dropdown-item" href="{% url 'admin_dashboard' %}"><i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard</a>
                                     {% else %}
-                                    <a class="dropdown-item" href="{% url 'profile_view' %}"><i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard</a>
+                                    <a class="dropdown-item" href="{% url 'user_dashboard' %}"><i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard</a>
                                     {% endif %}
                                 </li>
                                 <li><a class="dropdown-item" href="{% url 'mutations' %}"><i class="bi bi-arrow-left-right me-2"></i>Mutations</a></li>

@@ -17,6 +17,7 @@ urlpatterns = [
     # Core Admin
     path('admin/', admin.site.urls),
     path('admin-dashboard/', account_views.admin_dashboard_view, name='admin_dashboard'),
+    path('dashboard/', account_views.user_dashboard_view, name='user_dashboard'),
 
     # 1. Landing / Home
     path('', core_views.home_view, name='home'),

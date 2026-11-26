@@ -276,3 +276,38 @@ def admin_dashboard_view(request):
         'recent_logins': LoginHistory.objects.order_by('-timestamp')[:15],
     }
     return render(request, 'accounts/admin_dashboard.html', context)
+
+
+def user_dashboard_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    # Admin ko admin dashboard pe bhejo, yahan mat aane do
+    if request.user.is_superuser:
+        return redirect('admin_dashboard')
+
+    from parcels.models import Parcel
+    from mutations.models import Mutation
+    from disputes.models import Dispute
+
+    # User ke parcels (owner_name se match karte hain)
+    username = request.user.username
+    my_parcels = Parcel.objects.filter(owner_name__icontains=username).order_by('-id')[:10]
+    my_parcels_count = my_parcels.count()
+    my_verified_count = my_parcels.filter(status='Verified').count()
+
+    # Mutations & Disputes — sab dikhao (user-specific filter baad mein)
+    my_mutations = Mutation.objects.order_by('-id')[:8]
+    my_mutations_count = Mutation.objects.count()
+    my_disputes = Dispute.objects.order_by('-id')[:8]
+    my_disputes_count = Dispute.objects.count()
+
+    context = {
+        'my_parcels': my_parcels,
+        'my_parcels_count': my_parcels_count,
+        'my_verified_count': my_verified_count,
+        'my_mutations': my_mutations,
+        'my_mutations_count': my_mutations_count,
+        'my_disputes': my_disputes,
+        'my_disputes_count': my_disputes_count,
+    }
+    return render(request, 'accounts/user_dashboard.html', context)
