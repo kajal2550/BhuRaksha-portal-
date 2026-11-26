@@ -33,9 +33,6 @@
                     <option value="land_use">Land Use</option>
                     <option value="crop">Crop</option>
                 </select>
-                <select id="filterCity" class="form-select form-select-sm d-none" style="border:1px solid #0f766e; border-radius:7px; font-size:0.82rem; background:#f0fdfa; color:#0f766e; min-width:140px; font-weight:600;">
-                    <option value="">All Districts / Cities</option>
-                </select>
             </div>
 
             <!-- Region Filter -->
@@ -43,57 +40,9 @@
                 <span style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:.06em; white-space:nowrap;"><i class="bi bi-geo-alt me-1"></i>Region</span>
                 <select id="filterVillage" class="form-select form-select-sm" style="border:1px solid #cbd5e1; border-radius:7px; font-size:0.82rem; background:#f8fafc; color:#1e293b; min-width:160px;">
                     <option value="">All States &amp; Villages</option>
-                    {% if villages %}
-                    <optgroup label="Registered Villages">
-                        {% for v in villages %}
-                        <option value="{{ v.name }}">{{ v.name }}</option>
-                        {% endfor %}
-                    </optgroup>
-                    {% endif %}
-                    <optgroup label="Indian States &amp; UTs">
-                        <option value="Andhra Pradesh">Andhra Pradesh</option>
-                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                        <option value="Assam">Assam</option>
-                        <option value="Bihar">Bihar</option>
-                        <option value="Chhattisgarh">Chhattisgarh</option>
-                        <option value="Goa">Goa</option>
-                        <option value="Gujarat">Gujarat</option>
-                        <option value="Haryana">Haryana</option>
-                        <option value="Himachal Pradesh">Himachal Pradesh</option>
-                        <option value="Jharkhand">Jharkhand</option>
-                        <option value="Karnataka">Karnataka</option>
-                        <option value="Kerala">Kerala</option>
-                        <option value="Madhya Pradesh">Madhya Pradesh</option>
-                        <option value="Maharashtra">Maharashtra</option>
-                        <option value="Manipur">Manipur</option>
-                        <option value="Meghalaya">Meghalaya</option>
-                        <option value="Mizoram">Mizoram</option>
-                        <option value="Nagaland">Nagaland</option>
-                        <option value="Odisha">Odisha</option>
-                        <option value="Punjab">Punjab</option>
-                        <option value="Rajasthan">Rajasthan</option>
-                        <option value="Sikkim">Sikkim</option>
-                        <option value="Tamil Nadu">Tamil Nadu</option>
-                        <option value="Telangana">Telangana</option>
-                        <option value="Tripura">Tripura</option>
-                        <option value="Uttar Pradesh">Uttar Pradesh</option>
-                        <option value="Uttarakhand">Uttarakhand</option>
-                        <option value="West Bengal">West Bengal</option>
-                        <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
-                        <option value="Chandigarh">Chandigarh</option>
-                        <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
-                        <option value="Delhi">Delhi (NCT)</option>
-                        <option value="Jammu and Kashmir">Jammu and Kashmir</option>
-                        <option value="Ladakh">Ladakh</option>
-                        <option value="Lakshadweep">Lakshadweep</option>
-                        <option value="Puducherry">Puducherry</option>
-                    </optgroup>
-                </select>
-                <select id="filterCity" class="form-select form-select-sm d-none" style="border:1px solid #0f766e; border-radius:7px; font-size:0.82rem; background:#f0fdfa; color:#0f766e; min-width:140px; font-weight:600;">
-                    <option value="">All Districts / Cities</option>
-                </select>
-                <select id="filterSubCity" class="form-select form-select-sm d-none" style="border:1px solid #7c3aed; border-radius:7px; font-size:0.82rem; background:#faf5ff; color:#7c3aed; min-width:150px; font-weight:600;">
-                    <option value="">All Villages / Areas</option>
+                    {% for v in villages %}
+                    <option value="{{ v.name }}">{{ v.name }}</option>
+                    {% endfor %}
                 </select>
             </div>
 
@@ -106,9 +55,6 @@
                     <option value="Mutation Pending">&#128336; Mutation Pending</option>
                     <option value="Disputed">&#9888; Disputed</option>
                     <option value="Tampered">&#128680; Tampered</option>
-                </select>
-                <select id="filterCity" class="form-select form-select-sm d-none" style="border:1px solid #0f766e; border-radius:7px; font-size:0.82rem; background:#f0fdfa; color:#0f766e; min-width:140px; font-weight:600;">
-                    <option value="">All Districts / Cities</option>
                 </select>
             </div>
 
@@ -831,250 +777,9 @@
     }
 
     // Filter Listeners
-    const INDIA_STATES_DATA = {
-        "Andhra Pradesh": { center: [15.9129, 79.7400], zoom: 7, cities: { "Visakhapatnam": [17.6868, 83.2185], "Vijayawada": [16.5062, 80.6480], "Guntur": [16.3067, 80.4365], "Tirupati": [13.6288, 79.4192], "Kurnool": [15.8281, 78.0373] } },
-        "Arunachal Pradesh": { center: [28.2180, 94.7278], zoom: 7, cities: { "Itanagar": [27.0844, 93.6053], "Tawang": [27.5861, 91.8594], "Pasighat": [28.0660, 95.3260] } },
-        "Assam": { center: [26.2006, 92.9376], zoom: 7, cities: { "Guwahati": [26.1445, 91.7362], "Silchar": [24.8333, 92.7789], "Dibrugarh": [27.4728, 94.9120], "Jorhat": [26.7509, 94.2037] } },
-        "Bihar": { center: [25.0961, 85.3131], zoom: 7, cities: { "Patna": [25.5941, 85.1376], "Gaya": [24.7914, 85.0002], "Bhagalpur": [25.2425, 86.9842], "Muzaffarpur": [26.1209, 85.3647] } },
-        "Chhattisgarh": { center: [21.2787, 81.8661], zoom: 7, cities: { "Raipur": [21.2514, 81.6296], "Bilaspur": [22.0797, 82.1409], "Durg": [21.1904, 81.2849], "Jagdalpur": [19.0748, 82.0087] } },
-        "Goa": { center: [15.2993, 74.1240], zoom: 9, cities: { "Panaji": [15.4909, 73.8278], "Margao": [15.2832, 73.9862], "Vasco da Gama": [15.3982, 73.8113] } },
-        "Gujarat": { center: [22.2587, 71.1924], zoom: 7, cities: { "Ahmedabad": [23.0225, 72.5714], "Surat": [21.1702, 72.8311], "Vadodara": [22.3072, 73.1812], "Rajkot": [22.3039, 70.8022], "Bhavnagar": [21.7645, 72.1519] } },
-        "Haryana": { center: [29.0588, 76.0856], zoom: 7, cities: { "Ambala": [30.3782, 76.7767], "Bhiwani": [28.7975, 76.1322], "Charkhi Dadri": [28.5921, 76.2653], "Faridabad": [28.4089, 77.3178], "Fatehabad": [29.5152, 75.4555], "Gurugram": [28.4595, 77.0266], "Hisar": [29.1492, 75.7217], "Jhajjar": [28.6063, 76.6565], "Jind": [29.3158, 76.3149], "Kaithal": [29.8015, 76.3998], "Karnal": [29.6857, 76.9905], "Kurukshetra": [29.9695, 76.8783], "Mahendragarh": [28.2683, 76.1520], "Nuh": [28.1008, 77.0017], "Palwal": [28.1487, 77.3320], "Panchkula": [30.6942, 76.8606], "Panipat": [29.3909, 76.9635], "Rewari": [28.1920, 76.6191], "Rohtak": [28.8955, 76.6066], "Sirsa": [29.5349, 75.0289], "Sonipat": [28.9931, 77.0151], "Yamunanagar": [30.1290, 77.2674] } },
-        "Himachal Pradesh": { center: [31.1048, 77.1734], zoom: 8, cities: { "Shimla": [31.1048, 77.1734], "Manali": [32.2432, 77.1892], "Dharamshala": [32.2190, 76.3234], "Mandi": [31.7087, 76.9320] } },
-        "Jharkhand": { center: [23.6102, 85.2799], zoom: 7, cities: { "Ranchi": [23.3441, 85.3096], "Jamshedpur": [22.8046, 86.2029], "Dhanbad": [23.7957, 86.4304], "Bokaro": [23.6693, 86.1511] } },
-        "Karnataka": { center: [15.3173, 75.7139], zoom: 7, cities: { "Bengaluru": [12.9716, 77.5946], "Mysuru": [12.2958, 76.6394], "Mangaluru": [12.9141, 74.8560], "Hubballi": [15.3647, 75.1240], "Belagavi": [15.8497, 74.4977] } },
-        "Kerala": { center: [10.8505, 76.2711], zoom: 7, cities: { "Thiruvananthapuram": [8.5241, 76.9366], "Kochi": [9.9312, 76.2673], "Kozhikode": [11.2588, 75.7804], "Thrissur": [10.5276, 76.2144] } },
-        "Madhya Pradesh": { center: [22.9734, 78.6569], zoom: 7, cities: { "Bhopal": [23.2599, 77.4126], "Indore": [22.7196, 75.8577], "Jabalpur": [23.1815, 79.9864], "Gwalior": [26.2183, 78.1828], "Ujjain": [23.1765, 75.7885] } },
-        "Maharashtra": { center: [19.7515, 75.7139], zoom: 7, cities: { "Mumbai": [19.0760, 72.8777], "Pune": [18.5204, 73.8567], "Nagpur": [21.1458, 79.0882], "Nashik": [19.9975, 73.7898], "Aurangabad": [19.8762, 75.3433] } },
-        "Manipur": { center: [24.6637, 93.9063], zoom: 8, cities: { "Imphal": [24.8170, 93.9368], "Thoubal": [24.6340, 94.0000] } },
-        "Meghalaya": { center: [25.4670, 91.3662], zoom: 8, cities: { "Shillong": [25.5788, 91.8933], "Tura": [25.5142, 90.2030] } },
-        "Mizoram": { center: [23.1645, 92.9376], zoom: 8, cities: { "Aizawl": [23.7271, 92.7176], "Lunglei": [22.8850, 92.7350] } },
-        "Nagaland": { center: [26.1584, 94.5624], zoom: 8, cities: { "Kohima": [25.6751, 94.1086], "Dimapur": [25.9091, 93.7266] } },
-        "Odisha": { center: [20.9517, 85.0985], zoom: 7, cities: { "Bhubaneswar": [20.2961, 85.8245], "Cuttack": [20.4625, 85.8830], "Rourkela": [22.2604, 84.8536], "Puri": [19.8135, 85.8312] } },
-        "Punjab": { center: [31.1471, 75.3412], zoom: 8, cities: { "Amritsar": [31.6340, 74.8723], "Barnala": [30.3745, 75.5487], "Bathinda": [30.2110, 74.9455], "Faridkot": [30.6769, 74.7583], "Fatehgarh Sahib": [30.6435, 76.3970], "Fazilka": [30.4021, 74.0282], "Ferozepur": [30.9331, 74.6225], "Gurdaspur": [32.0419, 75.4053], "Hoshiarpur": [31.5143, 75.9115], "Jalandhar": [31.3260, 75.5762], "Kapurthala": [31.3801, 75.3811], "Ludhiana": [30.9010, 75.8573], "Malerkotla": [30.5250, 75.8783], "Mansa": [29.9995, 75.4017], "Moga": [30.8230, 75.1744], "Mohali": [30.7046, 76.7179], "Muktsar": [30.4762, 74.5122], "Pathankot": [32.2643, 75.6421], "Patiala": [30.3398, 76.3869], "Phagwara": [31.2240, 75.7708], "Rupnagar": [30.9661, 76.5231], "Sangrur": [30.2458, 75.8421], "SBS Nagar (Nawanshahr)": [31.1256, 76.1186], "Tarn Taran": [31.4519, 74.9277] } },
-        "Rajasthan": { center: [27.0238, 74.2179], zoom: 7, cities: { "Jaipur": [26.9124, 75.7873], "Jodhpur": [26.2389, 73.0243], "Udaipur": [24.5854, 73.7125], "Kota": [25.2138, 75.8648], "Bikaner": [28.0229, 73.3119], "Ajmer": [26.4499, 74.6399] } },
-        "Sikkim": { center: [27.5330, 88.5122], zoom: 9, cities: { "Gangtok": [27.3389, 88.6065], "Namchi": [27.1669, 88.3639] } },
-        "Tamil Nadu": { center: [11.1271, 78.6569], zoom: 7, cities: { "Chennai": [13.0827, 80.2707], "Coimbatore": [11.0168, 76.9558], "Madurai": [9.9252, 78.1198], "Tiruchirappalli": [10.7905, 78.7047], "Salem": [11.6643, 78.1460] } },
-        "Telangana": { center: [18.1124, 79.0193], zoom: 7, cities: { "Hyderabad": [17.3850, 78.4867], "Warangal": [17.9689, 79.5941], "Nizamabad": [18.6725, 78.0941], "Karimnagar": [18.4386, 79.1288] } },
-        "Tripura": { center: [23.9408, 91.9882], zoom: 8, cities: { "Agartala": [23.8315, 91.2868], "Udaipur": [23.5333, 91.4833] } },
-        "Uttar Pradesh": { center: [26.8467, 80.9462], zoom: 7, cities: { "Agra": [27.1767, 78.0081], "Aligarh": [27.8974, 78.0880], "Ayodhya": [26.7922, 82.1998], "Bareilly": [28.3670, 79.4304], "Ghaziabad": [28.6692, 77.4538], "Gorakhpur": [26.7606, 83.3732], "Jhansi": [25.4484, 78.5685], "Kanpur": [26.4499, 80.3319], "Lucknow": [26.8467, 80.9462], "Mathura": [27.4924, 77.6737], "Meerut": [28.9845, 77.7064], "Moradabad": [28.8386, 78.7733], "Noida": [28.5355, 77.3910], "Prayagraj": [25.4358, 81.8463], "Saharanpur": [29.9680, 77.5552], "Varanasi": [25.3176, 82.9739] } },
-        "Uttarakhand": { center: [30.0668, 79.0193], zoom: 8, cities: { "Dehradun": [30.3165, 78.0322], "Haridwar": [29.9457, 78.1642], "Nainital": [29.3919, 79.4542], "Haldwani": [29.2183, 79.5130] } },
-        "West Bengal": { center: [22.9868, 87.8550], zoom: 7, cities: { "Kolkata": [22.5726, 88.3639], "Siliguri": [26.7271, 88.3953], "Durgapur": [23.5204, 87.3119], "Asansol": [23.6739, 86.9524] } },
-        "Andaman and Nicobar Islands": { center: [11.7401, 92.6586], zoom: 8, cities: { "Port Blair": [11.6234, 92.7265] } },
-        "Chandigarh": { center: [30.7333, 76.7794], zoom: 12, cities: { "Chandigarh": [30.7333, 76.7794] } },
-        "Dadra and Nagar Haveli and Daman and Diu": { center: [20.1809, 73.0169], zoom: 10, cities: { "Silvassa": [20.2737, 73.0192], "Daman": [20.3974, 72.8328] } },
-        "Delhi": { center: [28.6139, 77.2090], zoom: 11, cities: { "New Delhi": [28.6139, 77.2090], "Dwarka": [28.5921, 77.0460], "Rohini": [28.7041, 77.1025] } },
-        "Jammu and Kashmir": { center: [33.7782, 76.5762], zoom: 8, cities: { "Srinagar": [34.0837, 74.7973], "Jammu": [32.7266, 74.8570], "Anantnag": [33.7311, 75.1487] } },
-        "Ladakh": { center: [34.1526, 77.5771], zoom: 8, cities: { "Leh": [34.1526, 77.5771], "Kargil": [34.5539, 76.1349] } },
-        "Lakshadweep": { center: [10.5667, 72.6417], zoom: 9, cities: { "Kavaratti": [10.5667, 72.6417] } },
-        "Puducherry": { center: [11.9416, 79.8083], zoom: 11, cities: { "Puducherry": [11.9416, 79.8083], "Karaikal": [10.9254, 79.8380] } }
-    };
-
-    const regionHighlightLayer = L.layerGroup().addTo(map);
-
-    // Village-level drill-down data: "State|City" → { "Village": [lat, lng] }
-    const VILLAGES_DATA = {
-        // Punjab → Phagwara villages
-        "Punjab|Phagwara": {
-            "Satnampura": [31.2340, 75.7820], "Hargobind Singh Nagar": [31.2180, 75.7650],
-            "Joginder Singh Nagar": [31.2280, 75.7900], "Nangal": [31.2050, 75.7500],
-            "Chachoki": [31.2100, 75.7600], "Adampur": [31.4310, 75.7318],
-            "Goraya": [31.1760, 75.7320], "Rahon (Phagwara)": [31.0530, 76.1200],
-            "Sultanpur Lodhi": [31.2060, 75.1890], "Nawanshahr": [31.1256, 76.1186],
-            "Bholath": [31.3380, 75.4330], "Khambra": [31.2970, 75.6360],
-            "Mehatpur": [31.1890, 75.8570], "Nakodar": [31.1270, 75.4710],
-            "Shahkot": [31.0750, 75.3140]
-        },
-        // Punjab → Amritsar villages
-        "Punjab|Amritsar": {
-            "Ajnala": [31.8390, 74.7640], "Rayya": [31.4860, 74.7120],
-            "Beas": [31.6230, 74.9960], "Majitha": [31.7420, 74.9490],
-            "Jandiala Guru": [31.5090, 74.9330], "Lopoke": [31.6530, 74.6400],
-            "Ramdas": [31.7840, 74.8060], "Verka": [31.6440, 74.9150],
-            "Atari": [31.6530, 74.4950], "Fatehgarh Churian": [32.0990, 74.9560],
-            "Khasa": [31.5880, 74.8440], "Tarsikka": [31.5700, 74.8500],
-            "Chheharta": [31.6200, 74.8200]
-        },
-        // Punjab → Ludhiana villages
-        "Punjab|Ludhiana": {
-            "Raikot": [30.6480, 75.6020], "Jagraon": [30.7940, 75.4760],
-            "Khanna": [30.7060, 76.2200], "Samrala": [30.8360, 76.1920],
-            "Machhiwara": [30.9270, 76.0860], "Payal": [30.7360, 76.0320],
-            "Doraha": [30.8120, 76.0260], "Sirhind": [30.6350, 76.3860],
-            "Sahnewal": [30.8840, 75.9120], "Dhandari": [30.8780, 75.8760],
-            "Giaspura": [30.8870, 75.8580], "Sherpur": [30.9230, 75.8430],
-            "Dhandra": [30.8920, 76.0980]
-        },
-        // Punjab → Jalandhar villages
-        "Punjab|Jalandhar": {
-            "Phillaur": [31.0220, 75.7870], "Nurmahal": [31.0940, 75.5890],
-            "Kartarpur": [31.4440, 75.4890], "Lohian": [31.1990, 75.6420],
-            "Bhogpur": [31.5510, 75.6360], "Shahkot": [31.0750, 75.3140],
-            "Rurka Kalan": [31.3060, 75.4090], "Adampur": [31.4310, 75.7318],
-            "Maqsudan": [31.3070, 75.5490], "Nakodar": [31.1270, 75.4710],
-            "Mukerian": [31.9560, 75.6180], "Mehatpur": [31.1890, 75.8570]
-        },
-        // Punjab → Patiala villages
-        "Punjab|Patiala": {
-            "Rajpura": [30.4820, 76.5890], "Nabha": [30.3730, 76.1540],
-            "Samana": [30.1630, 76.1900], "Fatehgarh Sahib": [30.6440, 76.3980],
-            "Morinda": [30.7920, 76.5000], "Ghanaur": [30.3410, 76.5260],
-            "Tripuri": [30.3220, 76.4000], "Ghanour": [30.3410, 76.5260],
-            "Pehowa": [29.9820, 76.5790], "Banur": [30.5400, 76.5680],
-            "Dera Bassi": [30.5820, 76.8220], "Zirakpur": [30.6420, 76.8160]
-        },
-        // Punjab → Bathinda villages
-        "Punjab|Bathinda": {
-            "Rampura Phul": [30.2740, 75.2390], "Talwandi Sabo": [29.9820, 75.0710],
-            "Goniana": [30.0980, 75.0120], "Maur": [29.8130, 75.2440],
-            "Nathana": [30.1840, 75.1250], "Sangat": [30.0870, 74.9360],
-            "Bhagsar": [30.0120, 75.1890], "Joga": [30.1240, 75.3680],
-            "Phul": [30.2740, 75.2390], "Lehra Gaga": [29.9880, 75.6180]
-        },
-        // Haryana → Gurugram villages
-        "Haryana|Gurugram": {
-            "Sohna": [28.2460, 77.0700], "Farrukhnagar": [28.4540, 76.8370],
-            "Pataudi": [28.3210, 76.6880], "Manesar": [28.3580, 76.9380],
-            "Badshahpur": [28.3870, 77.0100], "Wazirabad": [28.3990, 77.0580],
-            "Dhankot": [28.5230, 77.0160], "Sector 14": [28.4765, 77.0344],
-            "DLF City": [28.4735, 77.0995], "Cyber City": [28.4969, 77.0890]
-        },
-        // Haryana → Faridabad villages
-        "Haryana|Faridabad": {
-            "Ballabhgarh": [28.3380, 77.3150], "Palwal": [28.1487, 77.3320],
-            "Hodal": [27.8900, 77.3680], "Tigaon": [28.3660, 77.3870],
-            "Sector 15": [28.4150, 77.3200], "NIT": [28.3990, 77.3300],
-            "Badhkal": [28.3870, 77.3100], "Mewla Maharajpur": [28.4390, 77.3240]
-        },
-        // UP → Lucknow villages
-        "Uttar Pradesh|Lucknow": {
-            "Malihabad": [26.9220, 80.7220], "Bakshi Ka Talab": [26.9380, 80.9290],
-            "Mohanlalganj": [26.6760, 80.9590], "Chinhat": [26.8580, 81.0580],
-            "Kakori": [26.8880, 80.8030], "Itaunja": [26.8650, 80.6350],
-            "Gosainganj": [26.7690, 81.0710], "Mall": [26.9680, 80.9100],
-            "Sarojini Nagar": [26.8130, 80.9260], "Aliganj": [26.8820, 80.9490]
-        },
-        // Delhi → New Delhi localities
-        "Delhi|New Delhi": {
-            "Connaught Place": [28.6315, 77.2167], "Karol Bagh": [28.6508, 77.1902],
-            "Lajpat Nagar": [28.5677, 77.2432], "Saket": [28.5244, 77.2066],
-            "Vasant Kunj": [28.5213, 77.1577], "Nehru Place": [28.5491, 77.2521],
-            "Dwarka Sector 1": [28.5990, 77.0330], "Paschim Vihar": [28.6660, 77.1050],
-            "Pitampura": [28.7050, 77.1300], "Rohini Sector 1": [28.7290, 77.0820],
-            "Janakpuri": [28.6219, 77.0836], "Uttam Nagar": [28.6213, 77.0530]
-        },
-        // Maharashtra → Mumbai localities
-        "Maharashtra|Mumbai": {
-            "Bandra": [19.0596, 72.8295], "Andheri": [19.1136, 72.8697],
-            "Borivali": [19.2282, 72.8564], "Chembur": [19.0624, 72.9004],
-            "Dadar": [19.0186, 72.8427], "Kurla": [19.0659, 72.8787],
-            "Malad": [19.1874, 72.8484], "Mulund": [19.1766, 72.9589],
-            "Thane West": [19.1994, 72.9607], "Powai": [19.1177, 72.9075],
-            "Goregaon": [19.1663, 72.8526], "Kandivali": [19.2094, 72.8491]
-        },
-        // Gujarat → Ahmedabad localities
-        "Gujarat|Ahmedabad": {
-            "Naroda": [23.0837, 72.6410], "Vatva": [22.9750, 72.6360],
-            "Odhav": [23.0320, 72.6820], "Nikol": [23.0570, 72.6630],
-            "Gota": [23.0940, 72.5560], "Bopal": [23.0390, 72.4680],
-            "Sarkhej": [22.9880, 72.5080], "Chandkheda": [23.1000, 72.5880],
-            "Maninagar": [22.9980, 72.6020], "Vastral": [23.0220, 72.6980],
-            "Thaltej": [23.0540, 72.5120], "Satellite": [23.0144, 72.5244]
-        },
-        // Rajasthan → Jaipur localities
-        "Rajasthan|Jaipur": {
-            "Sanganer": [26.8198, 75.8020], "Muhana": [26.8420, 75.8560],
-            "Mansarovar": [26.8666, 75.7542], "Vaishali Nagar": [26.9188, 75.7416],
-            "Malviya Nagar": [26.8597, 75.8028], "C-Scheme": [26.9094, 75.7976],
-            "Jagatpura": [26.8130, 75.8600], "Sitapura": [26.7827, 75.8637],
-            "Durgapura": [26.8520, 75.8060], "Vidhyadhar Nagar": [26.9500, 75.7820],
-            "Shastri Nagar": [26.9230, 75.8020], "Raja Park": [26.9077, 75.8260]
-        }
-    };
-
     document.getElementById('searchInput').addEventListener('input', () => setTimeout(loadParcels, 250));
     document.getElementById('colorBySelect').addEventListener('change', () => geojsonLayerGroup.setStyle(getFeatureStyle));
-    document.getElementById('filterVillage').addEventListener('change', function() {
-        const val = this.value;
-        const citySelect = document.getElementById('filterCity');
-        regionHighlightLayer.clearLayers();
-
-        if (INDIA_STATES_DATA[val]) {
-            const st = INDIA_STATES_DATA[val];
-            citySelect.innerHTML = '<option value="">All Districts / Cities</option>';
-            Object.keys(st.cities).forEach(city => {
-                const opt = document.createElement('option');
-                opt.value = city;
-                opt.textContent = city;
-                citySelect.appendChild(opt);
-            });
-            citySelect.classList.remove('d-none');
-
-            map.flyTo(st.center, st.zoom, { duration: 1.2 });
-            L.circle(st.center, { radius: 85000, color: '#00e5ff', weight: 2, dashArray: '6, 6', fillColor: '#00e5ff', fillOpacity: 0.08 }).addTo(regionHighlightLayer);
-            Object.entries(st.cities).forEach(([cityName, coords]) => {
-                L.circleMarker(coords, { radius: 6, color: '#fff', weight: 2, fillColor: '#0f766e', fillOpacity: 0.95 })
-                    .bindTooltip(cityName, { permanent: true, direction: 'top', offset: [0, -6] })
-                    .addTo(regionHighlightLayer);
-            });
-        } else {
-            citySelect.classList.add('d-none');
-            citySelect.innerHTML = '<option value="">All Districts / Cities</option>';
-            const sc = document.getElementById('filterSubCity');
-            sc.classList.add('d-none');
-            sc.innerHTML = '<option value="">All Villages / Areas</option>';
-        }
-        loadParcels();
-    });
-
-    document.getElementById('filterCity').addEventListener('change', function() {
-        const stateVal = document.getElementById('filterVillage').value;
-        const cityVal = this.value;
-        const subCitySelect = document.getElementById('filterSubCity');
-        subCitySelect.innerHTML = '<option value="">All Villages / Areas</option>';
-        subCitySelect.classList.add('d-none');
-        if (!stateVal || !INDIA_STATES_DATA[stateVal]) return;
-        const st = INDIA_STATES_DATA[stateVal];
-        if (cityVal && st.cities[cityVal]) {
-            const coords = st.cities[cityVal];
-            map.flyTo(coords, 13, { duration: 1.0 });
-            regionHighlightLayer.clearLayers();
-            L.circle(coords, { radius: 4000, color: '#00ff9c', weight: 2.5, fillColor: '#00ff9c', fillOpacity: 0.12 }).addTo(regionHighlightLayer);
-            L.circleMarker(coords, { radius: 7, color: '#fff', weight: 2, fillColor: '#0f766e', fillOpacity: 1 })
-                .bindTooltip(cityVal, { permanent: true, direction: 'top', offset: [0, -8] })
-                .addTo(regionHighlightLayer);
-            // Load village sub-dropdown
-            const key = stateVal + '|' + cityVal;
-            if (VILLAGES_DATA[key]) {
-                const villages = VILLAGES_DATA[key];
-                Object.keys(villages).forEach(v => {
-                    const opt = document.createElement('option');
-                    opt.value = v; opt.textContent = v;
-                    subCitySelect.appendChild(opt);
-                });
-                subCitySelect.classList.remove('d-none');
-            }
-        } else {
-            map.flyTo(st.center, st.zoom, { duration: 1.0 });
-        }
-    });
-
-    document.getElementById('filterSubCity').addEventListener('change', function() {
-        const stateVal = document.getElementById('filterVillage').value;
-        const cityVal = document.getElementById('filterCity').value;
-        const villageVal = this.value;
-        if (!villageVal) return;
-        const key = stateVal + '|' + cityVal;
-        if (VILLAGES_DATA[key] && VILLAGES_DATA[key][villageVal]) {
-            const coords = VILLAGES_DATA[key][villageVal];
-            map.flyTo(coords, 15, { duration: 1.0 });
-            regionHighlightLayer.clearLayers();
-            L.circle(coords, { radius: 800, color: '#7c3aed', weight: 2.5, fillColor: '#7c3aed', fillOpacity: 0.15 }).addTo(regionHighlightLayer);
-            L.circleMarker(coords, { radius: 8, color: '#fff', weight: 2, fillColor: '#7c3aed', fillOpacity: 1 })
-                .bindTooltip(villageVal, { permanent: true, direction: 'top', offset: [0, -10] })
-                .addTo(regionHighlightLayer);
-        }
-    });
+    document.getElementById('filterVillage').addEventListener('change', loadParcels);
     document.getElementById('filterStatus').addEventListener('change', loadParcels);
 
     // Initial Load
