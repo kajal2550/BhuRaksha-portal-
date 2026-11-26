@@ -670,6 +670,7 @@
 
     // 3. Cadastral Layer Rendering
     let geojsonLayerGroup = L.geoJSON(null).addTo(map);
+    const registeredPinLayerGroup = L.layerGroup().addTo(map);
     let currentSelectedLayer = null;
     let allParcelsCache = [];
 
@@ -798,6 +799,7 @@
             .then(res => res.json())
             .then(data => {
                 geojsonLayerGroup.clearLayers();
+                registeredPinLayerGroup.clearLayers();
                 allParcelsCache = data.features;
                 document.getElementById('hudCount').innerText = data.features.length;
 
@@ -811,6 +813,16 @@
                 geojsonLayerGroup = L.geoJSON(data, {
                     style: getFeatureStyle,
                     onEachFeature: onEachParcel
+                }).addTo(map);
+
+                // Place a blue pin marker on each registered plot
+                feats.forEach(f => {
+                    const p = f.properties;
+                    const center = L.geoJSON(f).getBounds().getCenter();
+                    const pin = L.marker([center.lat, center.lng]);
+                    pin.bindTooltip(`<strong>Registered: Khasra ${p.khasra_no}</strong><br>${p.owner_name}`, { direction: 'top' });
+                    pin.on('click', () => selectParcelOnMap(f, null));
+                    pin.addTo(registeredPinLayerGroup);
                 });
 
                 if (data.features.length > 0 && query.trim() !== '') {
