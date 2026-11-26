@@ -135,7 +135,13 @@
                                 <li class="dropdown-header text-muted small">ROLE: {{ CURRENT_ROLE|upper }}</li>
                                 <li class="dropdown-header text-secondary small py-0">ID: {{ user.username }}</li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'profile_view' %}"><i class="bi bi-person me-2"></i>Profile</a></li>
+                                <li>
+                                    {% if user.is_superuser %}
+                                    <a class="dropdown-item" href="{% url 'admin_dashboard' %}"><i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard</a>
+                                    {% else %}
+                                    <a class="dropdown-item" href="{% url 'profile_view' %}"><i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard</a>
+                                    {% endif %}
+                                </li>
                                 <li><a class="dropdown-item" href="{% url 'mutations' %}"><i class="bi bi-arrow-left-right me-2"></i>Mutations</a></li>
                                 <li><a class="dropdown-item" href="{% url 'disputes_list' %}"><i class="bi bi-exclamation-triangle me-2"></i>Disputes</a></li>
                                 <li><hr class="dropdown-divider"></li>
