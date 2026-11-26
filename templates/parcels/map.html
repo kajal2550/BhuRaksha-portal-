@@ -310,42 +310,42 @@
                         <div class="tab-pane fade show active" id="tabOverview">
                             <div class="row g-2 mb-3">
                                 <div class="col-6">
-                                    <div class="p-2 bg-dark rounded border border-secondary">
+                                    <div class="p-2 bg-light rounded border">
                                         <small class="text-muted d-block font-monospace">AREA</small>
-                                        <strong class="text-white" id="inspectArea">-</strong>
+                                        <strong class="text-dark" id="inspectArea">-</strong>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="p-2 bg-dark rounded border border-secondary">
+                                    <div class="p-2 bg-light rounded border">
                                         <small class="text-muted d-block font-monospace">LAND USE</small>
-                                        <strong class="text-white" id="inspectLandUse">-</strong>
+                                        <strong class="text-dark" id="inspectLandUse">-</strong>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="p-2 bg-dark rounded border border-secondary">
+                                    <div class="p-2 bg-light rounded border">
                                         <small class="text-muted d-block font-monospace">SOIL TYPE</small>
-                                        <span class="small text-white" id="inspectSoil">-</span>
+                                        <span class="small text-dark fw-semibold" id="inspectSoil">-</span>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="p-2 bg-dark rounded border border-secondary">
+                                    <div class="p-2 bg-light rounded border">
                                         <small class="text-muted d-block font-monospace">IRRIGATION</small>
-                                        <span class="small text-white" id="inspectIrrigation">-</span>
+                                        <span class="small text-dark fw-semibold" id="inspectIrrigation">-</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="p-2 bg-dark rounded border border-secondary font-monospace small mb-3">
+                            <div class="p-2 bg-light rounded border font-monospace small mb-3">
                                 <div class="text-muted" style="font-size: 0.72rem;">SHA-256 FINGERPRINT:</div>
-                                <div class="text-info text-truncate" id="inspectFingerprint">-</div>
+                                <div class="text-primary text-truncate" id="inspectFingerprint">-</div>
                             </div>
                         </div>
 
                         <!-- 2. Ownership Tab -->
                         <div class="tab-pane fade" id="tabOwner">
-                            <div class="p-3 bg-dark rounded border border-secondary mb-3">
+                            <div class="p-3 bg-light rounded border mb-3">
                                 <small class="text-muted d-block font-monospace">REGISTERED OWNER</small>
-                                <h6 class="fw-bold text-white mb-1" id="inspectOwnerName">-</h6>
+                                <h6 class="fw-bold text-dark mb-1" id="inspectOwnerName">-</h6>
                                 <div class="small text-muted font-monospace" id="inspectAadhaar">Aadhaar: XXXX-XXXX-4589</div>
                                 <div class="mt-2" id="inspectPmKisanBadge">
                                     <span class="badge bg-success-subtle text-success small"><i class="bi bi-check-circle"></i> PM-KISAN Linked</span>
@@ -355,7 +355,7 @@
 
                         <!-- 3. Crops Tab -->
                         <div class="tab-pane fade" id="tabCrops">
-                            <div class="p-3 bg-dark rounded border border-secondary mb-3">
+                            <div class="p-3 bg-light rounded border mb-3">
                                 <small class="text-muted d-block font-monospace">CROP CULTIVATION</small>
                                 <h6 class="fw-bold text-success mb-1" id="inspectCrop">-</h6>
                                 <span class="badge bg-success-subtle text-success small">PAU Certified Seed</span>
@@ -364,7 +364,7 @@
 
                         <!-- 4. Quick Actions Tab -->
                         <div class="tab-pane fade" id="tabActions">
-                            <div class="p-3 bg-dark rounded border border-secondary mb-3">
+                            <div class="p-3 bg-light rounded border mb-3">
                                 <label class="form-label text-muted small font-monospace">CHANGE STATUS LIVE</label>
                                 <div class="d-flex gap-2 mb-3">
                                     <button class="btn btn-sm btn-outline-success flex-grow-1" onclick="updateParcelStatusLive('Verified')">Verify</button>
@@ -378,10 +378,10 @@
 
                     <!-- Bottom Action Bar -->
                     <div class="d-grid gap-2 mt-auto">
-                        <a href="#" id="viewFullDossierBtn" class="btn btn-cyber-primary btn-sm">
+                        <a href="#" id="viewFullDossierBtn" class="btn btn-primary btn-sm">
                             <i class="bi bi-box-arrow-up-right me-1"></i> Full Parcel Dossier (RoR)
                         </a>
-                        <a href="#" id="downloadPdfBtn" target="_blank" class="btn btn-cyber-green btn-sm">
+                        <a href="#" id="downloadPdfBtn" target="_blank" class="btn btn-success btn-sm" onclick="if(this.href && !this.href.endsWith('#')){ const w = window.open(this.href, '_blank'); if(w) w.onload = () => w.print(); return false; }">
                             <i class="bi bi-printer me-1"></i> Download Printable Certificate (PDF)
                         </a>
                     </div>
@@ -765,7 +765,7 @@
         else badge.className = 'badge-glow-red px-2 py-0 small';
 
         document.getElementById('viewFullDossierBtn').href = `/parcel/${p.id}/`;
-        document.getElementById('downloadPdfBtn').href = `/parcel/${p.id}/download-pdf/`;
+        document.getElementById('downloadPdfBtn').href = `/parcel/${p.id}/`;
     }
 
     // Live Status Updater from Action Tab
