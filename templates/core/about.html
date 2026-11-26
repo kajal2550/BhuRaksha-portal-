@@ -3,114 +3,211 @@
 {% block title %}About BhuRaksha | Integrated GIS DPI{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    
-    <!-- Top Header -->
-    <div class="text-center mb-5">
-        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill small mb-2 fw-semibold">
-            ABOUT THE PLATFORM
+
+<!-- Hero Section -->
+<div style="background: linear-gradient(135deg, #0f766e 0%, #1d4ed8 100%); padding: 72px 0 60px;">
+    <div class="container text-center">
+        <span class="badge rounded-pill px-3 py-2 mb-3 fw-semibold"
+              style="background:rgba(255,255,255,0.18); color:#fff; border:1px solid rgba(255,255,255,0.3); font-size:0.75rem; letter-spacing:.08em;">
+            🌐 ABOUT THE PLATFORM
         </span>
-        <h1 class="display-6 fw-bold text-dark">
-            Integrated GIS Digital Public Infrastructure
-        </h1>
-        <p class="text-muted mx-auto" style="max-width: 700px;">
+        <h1 class="display-5 fw-bold text-white mb-3">Integrated GIS Digital<br>Public Infrastructure</h1>
+        <p class="text-white opacity-75 mx-auto mb-4" style="max-width:640px; font-size:1.05rem; line-height:1.7;">
             A unified digital governance framework designed to eliminate land record tampering, double-selling fraud, and boundary disputes in rural India.
         </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'map_view' %}" class="btn fw-semibold px-4 py-2"
+               style="background:#fff; color:#0f766e; border-radius:10px; border:none; box-shadow:0 2px 12px rgba(0,0,0,0.15);">
+                <i class="bi bi-map-fill me-2"></i>Launch GIS Map
+            </a>
+            <a href="{% url 'verify_public' %}" class="btn fw-semibold px-4 py-2"
+               style="background:rgba(255,255,255,0.15); color:#fff; border:1.5px solid rgba(255,255,255,0.4); border-radius:10px;">
+                <i class="bi bi-shield-check me-2"></i>Verify a Record
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+
+    <!-- Stats Row -->
+    <div class="row g-3 mb-5">
+        {% for stat in stats_row %}{% endfor %}
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100" style="background:#fff;">
+                <div class="fw-bold text-primary mb-1" style="font-size:2rem;">36+</div>
+                <div class="text-muted small fw-semibold text-uppercase">States & UTs</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100" style="background:#fff;">
+                <div class="fw-bold text-success mb-1" style="font-size:2rem;">SHA-256</div>
+                <div class="text-muted small fw-semibold text-uppercase">Hash Security</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100" style="background:#fff;">
+                <div class="fw-bold mb-1" style="font-size:2rem; color:#f59e0b;">EPSG:4326</div>
+                <div class="text-muted small fw-semibold text-uppercase">GIS Standard</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100" style="background:#fff;">
+                <div class="fw-bold mb-1" style="font-size:2rem; color:#8b5cf6;">100%</div>
+                <div class="text-muted small fw-semibold text-uppercase">Open Source</div>
+            </div>
+        </div>
     </div>
 
-    <!-- 3 Core Architectural Pillars -->
+    <!-- 3 Core Pillars -->
+    <div class="text-center mb-4">
+        <h2 class="fw-bold text-dark mb-1">Core Architectural Pillars</h2>
+        <p class="text-muted">Three integrated layers that make BhuRaksha tamper-proof and verifiable</p>
+    </div>
     <div class="row g-4 mb-5">
-        
         <div class="col-md-4">
-            <div class="card p-4 h-100">
-                <div class="brand-icon-box mb-3">
-                    <i class="bi bi-bounding-box"></i>
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="border-top:4px solid #2563eb !important;">
+                <div class="d-flex align-items-center justify-content-center rounded-3 mb-3"
+                     style="width:52px;height:52px;background:#eff6ff;">
+                    <i class="bi bi-bounding-box text-primary fs-4"></i>
                 </div>
                 <h5 class="fw-bold text-dark mb-2">1. Cadastral Spatial GIS</h5>
-                <p class="small text-muted mb-0">
-                    BhuRaksha digitizes physical village maps (Aks Shajra) into clean EPSG:4326 GeoJSON polygons. Each plot is indexed by a 14-digit Unique Land Parcel Identification Number (ULPIN).
-                </p>
+                <p class="small text-muted mb-3">BhuRaksha digitizes physical village maps (Aks Shajra) into clean EPSG:4326 GeoJSON polygons. Each plot is indexed by a 14-digit Unique Land Parcel Identification Number (ULPIN).</p>
+                <span class="badge rounded-pill px-3 py-1" style="background:#eff6ff; color:#2563eb; font-size:0.72rem;">Leaflet.js · GeoJSON · EPSG:4326</span>
             </div>
         </div>
-
         <div class="col-md-4">
-            <div class="card p-4 h-100">
-                <div class="brand-icon-box mb-3" style="background-color: #059669;">
-                    <i class="bi bi-shield-check"></i>
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="border-top:4px solid #059669 !important;">
+                <div class="d-flex align-items-center justify-content-center rounded-3 mb-3"
+                     style="width:52px;height:52px;background:#f0fdf4;">
+                    <i class="bi bi-shield-check text-success fs-4"></i>
                 </div>
                 <h5 class="fw-bold text-dark mb-2">2. Cryptographic Integrity</h5>
-                <p class="small text-muted mb-0">
-                    Every cadastral parcel stores a SHA-256 fingerprint of its boundary coordinates and ownership shares. Any unauthorized backend modification breaks the hash chain immediately.
-                </p>
+                <p class="small text-muted mb-3">Every cadastral parcel stores a SHA-256 fingerprint of its boundary coordinates and ownership shares. Any unauthorized backend modification breaks the hash chain immediately.</p>
+                <span class="badge rounded-pill px-3 py-1" style="background:#f0fdf4; color:#059669; font-size:0.72rem;">SHA-256 · Fernet AES-128 · Append-Only Audit</span>
             </div>
         </div>
-
         <div class="col-md-4">
-            <div class="card p-4 h-100">
-                <div class="brand-icon-box mb-3" style="background-color: #d97706;">
-                    <i class="bi bi-arrow-repeat"></i>
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="border-top:4px solid #d97706 !important;">
+                <div class="d-flex align-items-center justify-content-center rounded-3 mb-3"
+                     style="width:52px;height:52px;background:#fffbeb;">
+                    <i class="bi bi-arrow-repeat fs-4" style="color:#d97706;"></i>
                 </div>
-                <h5 class="fw-bold text-dark mb-2">3. Mutation & Verification</h5>
-                <p class="small text-muted mb-0">
-                    Transparent end-to-end digital mutations (Dakhil-Kharij) for sale, inheritance, and partition. Provides publicly verifiable Record of Rights (Fard) certificates with QR codes.
-                </p>
+                <h5 class="fw-bold text-dark mb-2">3. Mutation &amp; Verification</h5>
+                <p class="small text-muted mb-3">Transparent end-to-end digital mutations (Dakhil-Kharij) for sale, inheritance, and partition. Provides publicly verifiable Record of Rights (Fard) certificates with QR codes.</p>
+                <span class="badge rounded-pill px-3 py-1" style="background:#fffbeb; color:#d97706; font-size:0.72rem;">QR Verification · RoR Certificates · ULPIN</span>
             </div>
         </div>
-
     </div>
 
-    <!-- Technical Project Overview -->
-    <div class="card p-4 p-lg-5 mb-5">
-        <h4 class="fw-bold text-dark mb-3">Technical Architecture & Stack</h4>
-        <div class="row g-4">
-            <div class="col-md-6">
-                <ul class="list-group list-group-flush small">
-                    <li class="list-group-item d-flex justify-content-between px-0">
-                        <span class="text-muted">Backend Framework:</span>
-                        <strong class="text-dark">Python 3.13, Django 6.1</strong>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between px-0">
-                        <span class="text-muted">Web GIS Engine:</span>
-                        <strong class="text-dark">Leaflet.js, CartoDB Light/Dark Tiles</strong>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between px-0">
-                        <span class="text-muted">Spatial Computations:</span>
-                        <strong class="text-dark">Shapely Geometry Engine (No GDAL req)</strong>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between px-0">
-                        <span class="text-muted">Database:</span>
-                        <strong class="text-dark">SQLite (Dev) / PostgreSQL PostGIS Ready</strong>
-                    </li>
-                </ul>
+    <!-- Tech Stack -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
+        <div class="px-4 py-3 d-flex align-items-center gap-2"
+             style="background:linear-gradient(90deg,#f8fafc,#eff6ff); border-bottom:1px solid #e2e8f0;">
+            <i class="bi bi-cpu-fill text-primary"></i>
+            <h5 class="fw-bold text-dark mb-0">Technical Architecture &amp; Stack</h5>
+        </div>
+        <div class="p-4" style="background:#fff;">
+            <div class="row g-3">
+                {% for item in tech_stack %}{% endfor %}
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <span class="text-muted small fw-semibold">Backend Framework</span>
+                            <span class="fw-bold text-dark small">Python 3.13, Django 6.1</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <span class="text-muted small fw-semibold">Security Standard</span>
+                            <span class="fw-bold text-dark small">Fernet AES-128 PII Encryption</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <span class="text-muted small fw-semibold">Web GIS Engine</span>
+                            <span class="fw-bold text-dark small">Leaflet.js, ESRI Satellite Tiles</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <span class="text-muted small fw-semibold">Audit Trail</span>
+                            <span class="fw-bold text-dark small">Append-Only SHA-256 Hash Chain</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <span class="text-muted small fw-semibold">Spatial Computations</span>
+                            <span class="fw-bold text-dark small">Shapely Geometry (No GDAL req)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <span class="text-muted small fw-semibold">Database</span>
+                            <span class="fw-bold text-dark small">SQLite (Dev) / PostgreSQL PostGIS</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <span class="text-muted small fw-semibold">Pilot Cluster</span>
+                            <span class="fw-bold text-dark small">Phagwara, Kapurthala, Punjab</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 h-100" style="background:#eff6ff; border:1px solid #bfdbfe;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <span class="text-muted small fw-semibold">Coverage</span>
+                            <span class="fw-bold text-primary small">36 States &amp; UTs — Multi-State Cadastre</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <ul class="list-group list-group-flush small">
-                    <li class="list-group-item d-flex justify-content-between px-0">
-                        <span class="text-muted">Security Standard:</span>
-                        <strong class="text-dark">Fernet AES-128 PII Encryption</strong>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between px-0">
-                        <span class="text-muted">Audit Trail:</span>
-                        <strong class="text-dark">Append-Only SHA-256 Hash Chain</strong>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between px-0">
-                        <span class="text-muted">Pilot Cluster:</span>
-                        <strong class="text-dark">Phagwara (Kot Rani & Khera Dehat), Punjab</strong>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between px-0">
-                        <span class="text-muted">Total Digitized Parcels:</span>
-                        <strong class="text-primary fw-bold">50 Cadastral Plots</strong>
-                    </li>
-                </ul>
+
+            <div class="d-flex gap-3 mt-4 flex-wrap">
+                <a href="{% url 'map_view' %}" class="btn fw-semibold px-4 py-2"
+                   style="background:#2563eb; color:#fff; border:none; border-radius:10px;">
+                    <i class="bi bi-map-fill me-2"></i>Launch GIS Map
+                </a>
+                <a href="{% url 'export_qgis_geojson' %}" class="btn fw-semibold px-4 py-2"
+                   style="background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; border-radius:10px;">
+                    <i class="bi bi-download me-2"></i>Download QGIS GeoJSON
+                </a>
             </div>
         </div>
+    </div>
 
-        <div class="mt-4 pt-3 border-top d-flex gap-3">
-            <a href="{% url 'map_view' %}" class="btn btn-primary px-4">
-                <i class="bi bi-map me-1"></i> Launch GIS Map
+    <!-- Team / CA-3 Project Banner -->
+    <div class="card border-0 rounded-4 text-center p-5"
+         style="background:linear-gradient(135deg,#0f766e,#1d4ed8); color:#fff;">
+        <div class="mb-2">
+            <span class="badge rounded-pill px-3 py-1 fw-semibold"
+                  style="background:rgba(255,255,255,0.2); color:#fff; border:1px solid rgba(255,255,255,0.3);">
+                🎓 ACADEMIC PROJECT
+            </span>
+        </div>
+        <h4 class="fw-bold mb-2">CA-3 Project — Integrated GIS Land Governance</h4>
+        <p class="mb-4 opacity-75">Developed for the CA-3 academic submission as a full-stack Django DPI demonstrating spatial data, cryptographic audit trails, and multi-state land records management across India.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'verify_public' %}" class="btn fw-semibold px-4"
+               style="background:#fff; color:#0f766e; border-radius:10px; border:none;">
+                <i class="bi bi-patch-check me-1"></i> Verify a Record
             </a>
-            <a href="{% url 'export_qgis_geojson' %}" class="btn btn-outline-primary px-4">
-                <i class="bi bi-download me-1"></i> Download QGIS GeoJSON
+            <a href="{% url 'map_view' %}" class="btn fw-semibold px-4"
+               style="background:rgba(255,255,255,0.15); color:#fff; border:1.5px solid rgba(255,255,255,0.4); border-radius:10px;">
+                <i class="bi bi-geo-alt me-1"></i> Explore the Map
             </a>
         </div>
     </div>
