@@ -36,7 +36,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label text-secondary small fw-semibold text-uppercase">Partition Ratios</label>
-                    <input type="text" name="split_ratios" class="form-control" value="50,50" placeholder="e.g. 50,50 or 60,40" required>
+                    <input type="text" id="splitRatiosInput" name="split_ratios" class="form-control" value="50,50" placeholder="e.g. 50,50 or 60,40" required>
                 </div>
                 <div class="col-md-2">
                     <button type="submit" class="btn w-100 fw-semibold" style="background:#2563eb; color:#ffffff; border:none; padding:9px 14px; border-radius:8px;">
@@ -271,10 +271,20 @@
             });
         }
 
-        // Ratio card click → fill visualiser
+        // Sync top Partition Ratios input -> Live Visualiser
+        const topRatioInput = document.getElementById('splitRatiosInput');
+        if (topRatioInput) {
+            topRatioInput.addEventListener('input', () => {
+                document.getElementById('visRatios').value = topRatioInput.value;
+                updateVisualiser();
+            });
+        }
+
+        // Ratio card click → fill visualiser & top input
         document.querySelectorAll('.ratio-card').forEach(card => {
             card.addEventListener('click', () => {
                 document.getElementById('visRatios').value = card.dataset.ratio;
+                if (topRatioInput) topRatioInput.value = card.dataset.ratio;
                 updateVisualiser();
                 card.style.background = '#eff6ff';
                 card.style.borderColor = '#93c5fd';
