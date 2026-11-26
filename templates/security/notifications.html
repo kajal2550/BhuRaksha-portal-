@@ -4,21 +4,31 @@
 
 {% block content %}
 <div class="container py-4">
-    <div class="cyber-card p-4">
-        <h4 class="fw-bold text-white mb-3 font-monospace"><i class="bi bi-bell-fill text-warning me-2"></i>SECURITY_NOTIFICATIONS_CENTER</h4>
-        <div class="list-group list-group-flush">
+    <!-- Blue Hero Header -->
+    <div class="p-4 mb-4 rounded-4 text-white shadow-sm" style="background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);">
+        <div class="d-flex align-items-center justify-content-between">
+            <div>
+                <h4 class="fw-bold mb-1"><i class="bi bi-bell-fill me-2"></i>Notifications Center</h4>
+                <p class="mb-0 small opacity-75">Recent parcel registrations, status updates, and system alerts</p>
+            </div>
+            <span class="badge bg-white text-primary rounded-pill px-3 py-2 fw-semibold">{{ notifications|length }} Total</span>
+        </div>
+    </div>
+
+    <div class="bg-white border rounded-4 p-4 shadow-sm" style="border-color:#e2e8f0 !important;">
+        <div class="d-flex flex-column gap-2">
             {% for n in notifications %}
-            <div class="list-group-item bg-dark border-secondary p-3 mb-2 rounded">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold text-info mb-1 font-monospace">{{ n.title }}</h6>
-                    <small class="text-muted font-monospace">{{ n.created_at|date:"Y-m-d H:i" }}</small>
+            <div class="p-3 rounded-3" style="background:#f8fafc; border:1px solid #dbeafe;">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <h6 class="fw-bold mb-0" style="color:#1d4ed8;">{{ n.title }}</h6>
+                    <small style="color:#64748b; font-size:0.78rem;">{{ n.created_at|date:"Y-m-d H:i" }}</small>
                 </div>
-                <p class="text-secondary small mb-0">{{ n.message }}</p>
+                <p class="small mb-0" style="color:#334155;">{{ n.message }}</p>
             </div>
             {% empty %}
             <div class="text-center py-5 text-muted">
-                <i class="bi bi-bell-slash display-4 mb-2 d-block"></i>
-                <h6 class="fw-bold">No active unread alerts or notifications.</h6>
+                <i class="bi bi-bell-slash display-4 mb-2 d-block text-primary opacity-50"></i>
+                <h6 class="fw-bold text-dark">No active unread alerts or notifications.</h6>
             </div>
             {% endfor %}
         </div>

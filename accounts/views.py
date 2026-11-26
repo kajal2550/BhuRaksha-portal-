@@ -65,36 +65,93 @@ def login_view(request):
 
 
 def register_farmer_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == 'POST':
+        full_name = request.POST.get('full_name', '').strip()
         username = request.POST.get('username', '').strip()
+        email = request.POST.get('email', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        aadhaar = request.POST.get('aadhaar', '').strip()
+        role = request.POST.get('role', 'farmer').strip()
+        state = request.POST.get('state', '').strip()
+        district = request.POST.get('district', '').strip()
+        tehsil = request.POST.get('tehsil', '').strip()
+        village = request.POST.get('village', '').strip()
+        khasra_numbers = request.POST.get('khasra_numbers', '').strip()
         password = request.POST.get('password', '')
         confirm_password = request.POST.get('confirm_password', '')
-        full_name = request.POST.get('full_name', '').strip()
-        aadhaar = request.POST.get('aadhaar', '').strip()
-        phone = request.POST.get('phone', '').strip()
+        agree_terms = request.POST.get('agree_terms')
+
+        if not agree_terms:
+            messages.error(request, "Please agree to the Digital Public Infrastructure & Data Consent terms.")
+            return render(request, 'accounts/register.html', request.POST)
 
         if password != confirm_password:
-            messages.error(request, "Passwords do not match.")
-            return render(request, 'accounts/register.html')
+            messages.error(request, "Passwords do not match. Please enter again.")
+            return render(request, 'accounts/register.html', request.POST)
 
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already registered.")
-            return render(request, 'accounts/register.html')
+        if len(password) < 8:
+            messages.error(request, "Password must be at least 8 characters long.")
+            return render(request, 'accounts/register.html', request.POST)
 
-        user = User.objects.create_user(username=username, password=password)
-        user.first_name = full_name
-        user.save()
+        clean_aadhaar = aadhaar.replace(" ", "").replace("-", "")
+        if clean_aadhaar and (len(clean_aadhaar) != 12 or not clean_aadhaar.isdigit()):
+            messages.error(request, "Please enter a valid 12-digit Aadhaar / Virtual ID number.")
+            return render(request, 'accounts/register.html', request.POST)
+
+        clean_phone = phone.replace(" ", "").replace("-", "").replace("+91", "")
+        if clean_phone and (len(clean_phone) != 10 or not clean_phone.isdigit()):
+            messages.error(request, "Please enter a valid 10-digit mobile number.")
+            return render(request, 'accounts/register.html', request.POST)
+
+        if User.objects.filter(username__iexact=username).exists():
+            messages.error(request, f"Username '{username}' is already taken. Please choose another.")
+            return render(request, 'accounts/register.html', request.POST)
+
+        if email and User.objects.filter(email__iexact=email).exists():
+            messages.error(request, f"Email address '{email}' is already registered with another account.")
+            return render(request, 'accounts/register.html', request.POST)
+
+        name_parts = full_name.split(' ', 1)
+        first_name = name_parts[0]
+        last_name = name_parts[1] if len(name_parts) > 1 else ""
+
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+            first_name=first_name,
+            last_name=last_name
+        )
+
+        allowed_roles = dict(UserProfile.ROLE_CHOICES).keys()
+        if role not in allowed_roles:
+            role = 'farmer'
+
+        dept_str = f"{village}, {tehsil}, {district}, {state}".strip(", ")
+        if not dept_str:
+            dept_str = "Citizen Self-Registered"
+
+        masked_aadhaar = f"XXXX-XXXX-{clean_aadhaar[-4:]}" if len(clean_aadhaar) == 12 else clean_aadhaar
 
         profile = UserProfile.objects.create(
             user=user,
-            role='farmer',
-            phone=phone,
-            aadhaar_number=aadhaar,
-            department='Registered Farmer'
+            role=role,
+            phone=clean_phone or phone,
+            aadhaar_number=masked_aadhaar,
+            department=dept_str
         )
 
-        log_security_event(user, "FARMER_SELF_SIGNUP", "ACCOUNTS", new_vals={"username": username}, request=request)
-        messages.success(request, "Farmer registration successful! Please sign in.")
+        log_security_event(user, "CITIZEN_REGISTRATION", "ACCOUNTS", new_vals={
+            "username": username,
+            "role": role,
+            "district": district,
+            "khasra": khasra_numbers
+        }, request=request)
+
+        messages.success(request, f"Registration successful for {full_name or username}! Your digital ID is ready. Please sign in.")
         return redirect('login')
 
     return render(request, 'accounts/register.html')

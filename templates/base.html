@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
     
     <!-- Exact Reference Style UI -->
-    <link rel="stylesheet" href="/static/css/reference_ui.css">
+    <link rel="stylesheet" href="/static/css/reference_ui.css?v=4.0">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -29,13 +29,13 @@
         <div class="container-fluid px-lg-5">
             
             <!-- Brand Logo & Subtitle -->
-            <a class="navbar-brand d-flex align-items-center me-4" href="{% url 'home' %}">
+            <a class="navbar-brand d-flex align-items-center me-3 text-decoration-none" href="{% url 'home' %}">
                 <div class="brand-icon-box me-2">
                     <i class="bi bi-shield-shaded"></i>
                 </div>
-                <div>
-                    <div class="brand-title">BHURAKSHA-PORTAL</div>
-                    <div class="brand-subtitle">Integrated GIS DPI for Land Governance</div>
+                <div class="brand-text-wrapper">
+                    <span class="brand-title">BHURAKSHA</span>
+                    <span class="brand-subtitle text-muted">Land Governance DPI</span>
                 </div>
             </a>
 
@@ -44,66 +44,97 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Navigation Links -->
-            <div class="collapse navbar-collapse" id="navPortal">
-                <ul class="navbar-nav me-auto align-items-center gap-1 my-2 my-xl-0">
+            <!-- Navigation Links (Exactly 5 Centered Items) -->
+            <div class="collapse navbar-collapse justify-content-center" id="navPortal">
+                <ul class="navbar-nav mx-auto align-items-center gap-2 my-2 my-xl-0 flex-nowrap">
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
+                        <a class="nav-link text-nowrap {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
                             Home
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'map_view' %}active{% endif %}" href="{% url 'map_view' %}">
+                        <a class="nav-link text-nowrap {% if request.resolver_match.url_name == 'map_view' %}active{% endif %}" href="{% url 'map_view' %}">
                             GIS Cadastre
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'parcel_split' %}active{% endif %}" href="{% url 'parcel_split' %}">
+                        <a class="nav-link text-nowrap {% if request.resolver_match.url_name == 'parcel_split' %}active{% endif %}" href="{% url 'parcel_split' %}">
                             Parcel Split
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'land_valuation' %}active{% endif %}" href="{% url 'land_valuation' %}">
-                            Land Valuation
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'verify_public' %}active{% endif %}" href="{% url 'verify_public' %}">
+                        <a class="nav-link text-nowrap {% if request.resolver_match.url_name == 'verify_public' %}active{% endif %}" href="{% url 'verify_public' %}">
                             Verify Records
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'register' %}active{% endif %}" href="{% url 'register' %}">
-                            Cadastral Register
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'about_view' %}active{% endif %}" href="{% url 'about_view' %}">
+                        <a class="nav-link text-nowrap {% if request.resolver_match.url_name == 'about_view' %}active{% endif %}" href="{% url 'about_view' %}">
                             About
                         </a>
                     </li>
                 </ul>
 
-                <!-- Right Side Actions (Sync QGIS, User Pill, Theme Toggle) -->
-                <div class="d-flex align-items-center gap-2">
-                    
-                    <!-- Sync QGIS Button -->
-                    <a href="{% url 'export_qgis_geojson' %}" class="btn btn-nav-outline d-flex align-items-center gap-2" title="Sync QGIS Cadastral Layer">
-                        <i class="bi bi-arrow-repeat"></i>
-                        <span>Sync QGIS</span>
-                    </a>
+                <!-- Right Side Actions (Notification Bell, Theme Toggle & User Pill) -->
+                <div class="d-flex align-items-center gap-2 flex-nowrap">
+                    <!-- Notification Bell with Dropdown (Working) -->
+                    <div class="dropdown">
+                        <button class="notification-bell-btn border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
+                            <i class="bi bi-bell"></i>
+                            {% if UNREAD_NOTIFICATIONS_COUNT > 0 %}
+                                <span class="notification-badge" id="navNotifBadge" style="background:#ef4444; color:#fff; border-radius:999px; font-size:0.68rem; font-weight:700; padding:1px 6px; margin-left:2px;">{{ UNREAD_NOTIFICATIONS_COUNT }}</span>
+                            {% endif %}
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 p-0 mt-2 notif-dropdown-menu" style="width: 320px; max-width: 90vw;">
+                            <div class="p-3 border-bottom d-flex align-items-center justify-content-between bg-light rounded-top-3">
+                                <span class="fw-bold text-dark small"><i class="bi bi-bell-fill text-primary me-1"></i> Notifications</span>
+                                {% if UNREAD_NOTIFICATIONS_COUNT > 0 %}
+                                    <span class="badge bg-danger rounded-pill">{{ UNREAD_NOTIFICATIONS_COUNT }} new</span>
+                                {% else %}
+                                    <span class="badge bg-secondary-subtle text-secondary rounded-pill">0 unread</span>
+                                {% endif %}
+                            </div>
+                            <div class="notif-list-container" style="max-height: 280px; overflow-y: auto;">
+                                {% for n in RECENT_NOTIFICATIONS %}
+                                    <a href="{% url 'notifications_view' %}" class="d-block p-3 border-bottom text-decoration-none {% if not n.is_read %}bg-primary-subtle bg-opacity-10{% endif %} hover-notif">
+                                        <div class="d-flex justify-content-between align-items-start mb-1">
+                                            <strong class="text-dark small d-block text-truncate" style="max-width: 190px;">{{ n.title }}</strong>
+                                            <span class="text-muted" style="font-size: 0.7rem;">{{ n.created_at|timesince }} ago</span>
+                                        </div>
+                                        <p class="text-secondary small mb-0 text-truncate" style="font-size: 0.78rem;">{{ n.message }}</p>
+                                    </a>
+                                {% empty %}
+                                    <div class="text-center py-4 text-muted">
+                                        <i class="bi bi-bell-slash fs-3 d-block mb-1 text-secondary opacity-50"></i>
+                                        <small>No new notifications</small>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="p-2 border-top text-center bg-light rounded-bottom-3">
+                                <a href="{% url 'notifications_view' %}" class="text-primary text-decoration-none fw-semibold" style="font-size: 0.8rem;">
+                                    View All Notifications <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Theme Toggle Button (Working Dark/Light Mode) -->
+                    <button class="theme-toggle-btn border-0" type="button" id="themeToggleBtn" title="Toggle Dark/Light Mode" onclick="togglePortalTheme()">
+                        <i class="bi bi-brightness-high" id="themeIcon"></i>
+                    </button>
 
                     {% if user.is_authenticated %}
                         <!-- User Pill with Dropdown -->
                         <div class="dropdown">
                             <div class="user-pill dropdown-toggle" data-bs-toggle="dropdown">
                                 <div class="user-avatar-circle">
-                                    {{ user.username|slice:":1"|upper }}
+                                    {{ DISPLAY_NAME|slice:":1"|upper }}
                                 </div>
-                                <span>{{ user.username }}</span>
+                                <span>{{ DISPLAY_NAME }}</span>
                             </div>
                             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
                                 <li class="dropdown-header text-muted small">ROLE: {{ CURRENT_ROLE|upper }}</li>
+                                <li class="dropdown-header text-secondary small py-0">ID: {{ user.username }}</li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'profile_view' %}"><i class="bi bi-person me-2"></i>Profile</a></li>
                                 <li><a class="dropdown-item" href="{% url 'mutations' %}"><i class="bi bi-arrow-left-right me-2"></i>Mutations</a></li>
                                 <li><a class="dropdown-item" href="{% url 'disputes_list' %}"><i class="bi bi-exclamation-triangle me-2"></i>Disputes</a></li>
@@ -120,12 +151,6 @@
                             <span>Patwari Login</span>
                         </a>
                     {% endif %}
-
-                    <!-- Theme Toggle Sun Icon -->
-                    <button class="theme-toggle-btn" type="button" title="Light Theme Active">
-                        <i class="bi bi-brightness-high"></i>
-                    </button>
-
                 </div>
             </div>
 
@@ -149,61 +174,77 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- 4. Dark Slate Multi-column Footer (Matching Reference Image 3 Exactly) -->
+    <!-- 4. Clean & Professional Enterprise Footer -->
     <footer class="enterprise-footer">
         <div class="container-fluid px-lg-5">
-            <div class="row g-4">
+            <div class="row g-4 justify-content-between">
                 
-                <!-- Col 1: Brand Info & Status -->
-                <div class="col-lg-5 col-md-12">
-                    <div class="footer-brand-title">
-                        <i class="bi bi-shield-shaded text-primary"></i>
-                        <span>BHURAKSHA • Integrated GIS Land Governance</span>
+                <!-- Col 1: Project Identity & Scope -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <div class="brand-icon-box" style="width: 32px; height: 32px; font-size: 1rem;">
+                            <i class="bi bi-shield-shaded"></i>
+                        </div>
+                        <span class="fw-bold text-white fs-5">BHURAKSHA</span>
                     </div>
-                    <span class="footer-badge-tag">ENTERPRISE DPI & CONTINUOUS INTEGRITY MONITORING PLATFORM</span>
-                    <p class="footer-desc">
-                        Unified Digital Public Infrastructure framework built on top of GIS Cadastral Boundary telemetry, Nagios-grade record verification, and cryptographic SHA-256 mutation playbooks.
+                    <div class="text-primary-subtle small fw-semibold text-uppercase tracking-wider mb-2">
+                        Integrated GIS Digital Public Infrastructure
+                    </div>
+                    <p class="footer-desc text-secondary small mb-3">
+                        A modern spatial land governance system unifying GIS cadastral maps, digital Record of Rights (RoR), automated land mutations, and cryptographic audit security across Indian states.
                     </p>
-                    <div class="footer-status-pill">
+                    <div class="d-flex align-items-center gap-2 text-white-50 small bg-dark bg-opacity-50 p-2 px-3 rounded-pill border border-secondary border-opacity-25 d-inline-flex">
                         <span class="status-green-dot"></span>
-                        <span>Infrastructure Status: <strong>Punjab Cluster (Phagwara)</strong> • Live Cadastre Active</span>
+                        <span>Multi-State Cadastre: <strong>PB, UP, HR, RJ, MH</strong> • Live</span>
                     </div>
                 </div>
 
-                <!-- Col 2: Platform Navigation -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-col-title">Platform Navigation</div>
+                <!-- Col 2: Core Cadastral Services -->
+                <div class="col-lg-2 col-md-4 col-6">
+                    <div class="footer-col-title">Cadastral Tools</div>
                     <ul class="footer-link-list">
-                        <li><a href="{% url 'home' %}">Home Dashboard</a></li>
+                        <li><a href="{% url 'home' %}">Overview Portal</a></li>
                         <li><a href="{% url 'map_view' %}">GIS Cadastre Map</a></li>
                         <li><a href="{% url 'parcel_split' %}">Parcel Split Simulator</a></li>
-                        <li><a href="{% url 'land_valuation' %}">Land Valuation & Taxes</a></li>
-                        <li><a href="{% url 'verify_public' %}">RoR Certificate Verification</a></li>
-                        <li><a href="{% url 'register' %}">Cadastral Register View</a></li>
+                        <li><a href="{% url 'land_valuation' %}">Land Valuation Engine</a></li>
+                        <li><a href="{% url 'register' %}">Cadastral Register</a></li>
                     </ul>
                 </div>
 
-                <!-- Col 3: DPI Integration -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-col-title">DPI & Security Integration</div>
+                <!-- Col 3: Citizen & Farmer Services -->
+                <div class="col-lg-3 col-md-4 col-6">
+                    <div class="footer-col-title">Citizen & Agriculture</div>
                     <ul class="footer-link-list">
-                        <li><a href="{% url 'fraud_simulator' %}"><i class="bi bi-shield-slash text-danger me-1"></i> Land Fraud Attack Simulator</a></li>
-                        <li><a href="{% url 'farmer_kyc' %}"><i class="bi bi-fingerprint text-success me-1"></i> Farmer Aadhaar e-KYC</a></li>
-                        <li><a href="{% url 'weather_advisory' %}"><i class="bi bi-cloud-sun text-warning me-1"></i> Precision Agro Advisory</a></li>
-                        <li><a href="{% url 'analytics' %}"><i class="bi bi-graph-up text-info me-1"></i> Cadastral Analytics & Telemetry</a></li>
-                        <li><a href="{% url 'api_docs' %}"><i class="bi bi-code-slash text-primary me-1"></i> Open REST APIs (Swagger)</a></li>
+                        <li><a href="{% url 'verify_public' %}">RoR Title Verification</a></li>
+                        <li><a href="{% url 'mutations' %}">Ownership Mutation Workflow</a></li>
+                        <li><a href="{% url 'farmer_kyc' %}">Farmer Aadhaar e-KYC</a></li>
+                        <li><a href="{% url 'weather_advisory' %}">Agro-Climatic Advisory</a></li>
+                        <li><a href="{% url 'disputes_list' %}">Land Dispute Resolution</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Trust & Compliance -->
+                <div class="col-lg-3 col-md-4 col-12">
+                    <div class="footer-col-title">Security & Compliance</div>
+                    <ul class="footer-link-list">
+                        <li><a href="{% url 'soc_dashboard' %}"><i class="bi bi-shield-check text-success me-1"></i> SOC Integrity Monitoring</a></li>
+                        <li><a href="{% url 'audit_trail' %}"><i class="bi bi-link-45deg text-info me-1"></i> SHA-256 Hash Chain Audit</a></li>
+                        <li><a href="{% url 'fraud_simulator' %}"><i class="bi bi-exclamation-octagon text-danger me-1"></i> Threat & Fraud Simulator</a></li>
+                        <li><a href="{% url 'api_docs' %}"><i class="bi bi-file-earmark-code text-primary me-1"></i> Open REST API Specification</a></li>
                     </ul>
                 </div>
 
             </div>
 
             <!-- Footer Bottom Bar -->
-            <div class="footer-bottom-bar">
+            <div class="footer-bottom-bar text-secondary small d-flex flex-wrap align-items-center justify-content-between gap-2">
                 <div>
-                    © 2026 BhuRaksha DPI. All rights reserved.
+                    © 2026 BhuRaksha DPI. Developed for Academic CA-3 Project (Integrated GIS Land Governance).
                 </div>
-                <div>
-                    Course: CA-3 Project - Integrated GIS-based DPI for Land Governance • Verified on Cadastral Cluster (PB)
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-white-50"><i class="bi bi-lock-fill text-warning me-1"></i> Tamper-Evident Records</span>
+                    <span class="text-secondary">•</span>
+                    <span class="text-white-50"><i class="bi bi-geo-alt-fill text-primary me-1"></i> Geo-referenced Vector Maps</span>
                 </div>
             </div>
         </div>
@@ -214,6 +255,48 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+    <!-- Interactive Theme & Notification Logic -->
+    <script>
+    function applySavedTheme() {
+        const savedTheme = localStorage.getItem('bhuraksha_theme') || 'light';
+        const icon = document.getElementById('themeIcon');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            if (icon) {
+                icon.classList.remove('bi-brightness-high');
+                icon.classList.add('bi-moon-stars');
+            }
+        } else {
+            document.body.classList.remove('dark-theme');
+            if (icon) {
+                icon.classList.remove('bi-moon-stars');
+                icon.classList.add('bi-brightness-high');
+            }
+        }
+    }
+
+    function togglePortalTheme() {
+        const isDark = document.body.classList.toggle('dark-theme');
+        const icon = document.getElementById('themeIcon');
+        if (isDark) {
+            localStorage.setItem('bhuraksha_theme', 'dark');
+            if (icon) {
+                icon.classList.remove('bi-brightness-high');
+                icon.classList.add('bi-moon-stars');
+            }
+        } else {
+            localStorage.setItem('bhuraksha_theme', 'light');
+            if (icon) {
+                icon.classList.remove('bi-moon-stars');
+                icon.classList.add('bi-brightness-high');
+            }
+        }
+    }
+
+    // Run theme immediately on DOM load
+    document.addEventListener('DOMContentLoaded', applySavedTheme);
+    </script>
 
     {% block extra_js %}{% endblock %}
 </body>

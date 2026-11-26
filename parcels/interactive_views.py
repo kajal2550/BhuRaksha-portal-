@@ -7,6 +7,7 @@ from records.models import Owner, OwnershipRecord, CropRecord
 from mutations.models import Mutation, MutationStepComment
 from disputes.models import Dispute
 from security.integrity_service import log_security_event
+from security.models import Notification
 
 @csrf_exempt
 def api_draw_create_parcel(request):
@@ -37,7 +38,8 @@ def api_draw_create_parcel(request):
                 area_ha = 0.85
 
             village = Village.objects.first()
-            ulpin = f"PB-KPT-2024-{random_id := Parcel.objects.count() + 1001}"
+            next_id = Parcel.objects.count() + 1001
+            ulpin = f"PB-KPT-2024-{next_id}"
 
             parcel = Parcel(
                 parcel_id=ulpin,
@@ -62,6 +64,12 @@ def api_draw_create_parcel(request):
             CropRecord.objects.create(parcel=parcel, crop=crop_name, season="Rabi", sowing_date="2024-11-15", estimated_yield_quintals=35.0)
 
             log_security_event(request.user, "DRAW_NEW_PARCEL", parcel.parcel_id, new_vals={"khasra": khasra_no, "area": area_ha}, request=request)
+            if request.user.is_authenticated:
+                Notification.objects.create(
+                    user=request.user,
+                    title="New Parcel Registered",
+                    message=f"Khasra {khasra_no} ({ulpin}) registered on GIS map."
+                )
 
             return JsonResponse({
                 "status": "success",
@@ -89,6 +97,12 @@ def api_update_parcel_status(request, pk):
         parcel.save(skip_fingerprint=(new_status == 'Disputed'))
 
         log_security_event(request.user, f"SET_STATUS_{new_status.upper()}", parcel.parcel_id, old_vals={"status": old_status}, new_vals={"status": new_status}, request=request)
+        if request.user.is_authenticated:
+            Notification.objects.create(
+                user=request.user,
+                title="Parcel Status Updated",
+                message=f"Khasra {parcel.khasra_no} status changed from {old_status} to {new_status}."
+            )
         return JsonResponse({"status": "success", "new_status": new_status, "khasra": parcel.khasra_no})
 
     return JsonResponse({"status": "error"}, status=405)

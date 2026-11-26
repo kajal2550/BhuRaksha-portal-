@@ -80,43 +80,55 @@ body {
 .navbar-clean {
     background-color: #ffffff;
     border-bottom: 1px solid #e2e8f0;
-    padding-top: 0.85rem;
-    padding-bottom: 0.85rem;
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 .brand-icon-box {
-    width: 44px;
-    height: 44px;
+    width: 38px;
+    height: 38px;
     background-color: #2563eb;
-    border-radius: 12px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #ffffff !important;
-    font-size: 1.4rem;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.brand-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
 }
 
 .brand-title {
     font-family: var(--font-heading);
     font-weight: 800;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     color: #0f172a;
     letter-spacing: -0.3px;
     line-height: 1.1;
+    white-space: nowrap;
 }
 .brand-subtitle {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: #64748b;
     letter-spacing: 0.2px;
+    white-space: nowrap;
 }
 
 .navbar-clean .nav-link {
     color: #475569 !important;
-    font-size: 0.95rem;
+    font-size: 0.92rem !important;
     font-weight: 500;
-    padding: 0.5rem 1rem !important;
+    padding: 0.45rem 1rem !important;
     border-radius: 6px;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    display: inline-block !important;
     transition: all 0.15s ease;
 }
 .navbar-clean .nav-link:hover {
@@ -192,17 +204,114 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 1rem;
+    transition: all 0.15s ease;
+    text-decoration: none;
+}
+.theme-toggle-btn:hover {
+    background-color: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+/* Notification Bell Button */
+.notification-bell-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    position: relative;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+.notification-bell-btn:hover {
+    background-color: #f8fafc;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+/* Hover for notifications */
+.hover-notif:hover {
+    background-color: #f1f5f9 !important;
+}
+
+/* ==========================================================================
+   Dark Theme Overrides
+   ========================================================================== */
+body.dark-theme {
+    background-color: #0b1120 !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-theme .navbar-clean {
+    background-color: #0f172a !important;
+    border-bottom: 1px solid #1e293b !important;
+}
+
+body.dark-theme .brand-title {
+    color: #f8fafc !important;
+}
+
+body.dark-theme .navbar-clean .nav-link {
+    color: #94a3b8 !important;
+}
+
+body.dark-theme .navbar-clean .nav-link:hover,
+body.dark-theme .navbar-clean .nav-link.active {
+    color: #38bdf8 !important;
+}
+
+body.dark-theme .theme-toggle-btn,
+body.dark-theme .notification-bell-btn,
+body.dark-theme .user-pill {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
+}
+
+body.dark-theme .card,
+body.dark-theme .cyber-card,
+body.dark-theme .gov-card {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .dropdown-menu {
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .dropdown-item {
+    color: #cbd5e1 !important;
+}
+
+body.dark-theme .dropdown-item:hover {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+body.dark-theme .text-dark,
+body.dark-theme .card-title {
+    color: #f8fafc !important;
 }
 
 /* ==========================================================================
    2. Vibrant Royal Blue Hero Section
    ========================================================================== */
 .hero-blue-section {
-    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #1e40af 100%);
+    background: 
+        linear-gradient(135deg, rgba(15, 23, 42, 0.82) 0%, rgba(29, 78, 216, 0.85) 50%, rgba(30, 58, 138, 0.90) 100%),
+        url('https://images.unsplash.com/photo-1524813686514-a57563d77d66?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
     color: #ffffff;
-    padding: 4.5rem 1.5rem 5.5rem;
+    padding: 5rem 1.5rem 6rem;
     text-align: center;
     position: relative;
+    box-shadow: inset 0 -20px 30px -10px rgba(15, 23, 42, 0.4);
 }
 
 .hero-pill-badge {
@@ -284,75 +393,59 @@ body {
     background-color: #1d4ed8;
 }
 
-/* "Start Your Journey" Floating Card */
-.cta-floating-card {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 1rem 1.5rem;
-    max-width: 500px;
-    margin: 0 auto;
-    display: flex;
+/* Sleek Modern Cadastre Quick-Launch Pill */
+.hero-cadastre-pill {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
-    text-align: left;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 40px;
+    padding: 0.45rem 1.15rem;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    color: #0f172a !important;
 }
-.cta-icon-box {
-    width: 48px;
-    height: 48px;
+.hero-cadastre-pill:hover {
+    background: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22);
+}
+.hero-cadastre-pill .pill-icon {
+    width: 28px;
+    height: 28px;
     background: #2563eb;
-    border-radius: 12px;
+    color: #ffffff !important;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
-    font-size: 1.35rem;
-    flex-shrink: 0;
+    font-size: 0.85rem;
 }
-.cta-text-content {
-    flex-grow: 1;
-    padding: 0 1.25rem;
-}
-.cta-main-title {
-    font-family: var(--font-heading);
-    font-size: 1.1rem;
-    font-weight: 700;
+.hero-cadastre-pill .pill-text {
+    font-size: 0.88rem;
+    font-weight: 600;
     color: #0f172a;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.2rem;
+    white-space: nowrap;
 }
-.cta-badge-tag {
-    background: #dbeafe;
-    color: #1d4ed8;
+.hero-cadastre-pill .pill-badge {
+    background: #eff6ff;
+    color: #2563eb;
     font-size: 0.68rem;
     font-weight: 700;
-    padding: 0.15rem 0.5rem;
-    border-radius: 4px;
-    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    letter-spacing: 0.03em;
 }
-.cta-sub-title {
-    font-size: 0.82rem;
+.hero-cadastre-pill .pill-arrow {
     color: #64748b;
-    margin: 0;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
 }
-.cta-arrow-btn {
-    width: 40px;
-    height: 40px;
-    background: #2563eb;
-    color: #ffffff;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    font-size: 1.1rem;
-    transition: background 0.15s ease;
-}
-.cta-arrow-btn:hover {
-    background: #1d4ed8;
-    color: #ffffff;
+.hero-cadastre-pill:hover .pill-arrow {
+    color: #2563eb;
+    transform: translateX(3px);
 }
 
 /* ==========================================================================

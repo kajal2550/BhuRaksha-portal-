@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Sum, Count, Q
@@ -136,8 +137,18 @@ def register_view(request):
 
 # 5. Export QGIS GeoJSON
 def export_qgis_geojson(request):
-    resp = parcel_geojson_list_api(request._request)
-    data = json.dumps(resp.data)
+    try:
+        req_obj = getattr(request, '_request', request)
+        resp = parcel_geojson_list_api(req_obj)
+        data = json.dumps(resp.data)
+    except Exception:
+        parcels = Parcel.objects.all()
+        features = [p.to_geojson_feature() for p in parcels]
+        geojson_data = {
+            "type": "FeatureCollection",
+            "features": features
+        }
+        data = json.dumps(geojson_data)
     response = HttpResponse(data, content_type='application/geo+json')
     response['Content-Disposition'] = 'attachment; filename="bhuraksha_cadastre_qgis.geojson"'
     return response

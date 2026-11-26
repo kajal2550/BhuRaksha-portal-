@@ -1,10 +1,16 @@
 from pathlib import Path
 import os
 from datetime import timedelta
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from .env file
+load_dotenv(BASE_DIR / '.env')
+
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'bhuraksha-insecure-cyber-soc-key-9988224411@@$$')
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
+GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', '')
 
 DEBUG = True
 
