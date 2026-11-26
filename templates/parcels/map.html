@@ -813,7 +813,7 @@
                 geojsonLayerGroup = L.geoJSON(data, {
                     style: getFeatureStyle,
                     onEachFeature: onEachParcel
-                }).addTo(map);
+                });
 
                 // Place a blue pin marker on each registered plot
                 feats.forEach(f => {
@@ -1038,7 +1038,7 @@
                 geojsonLayerGroup = L.geoJSON(data, {
                     style: getFeatureStyle,
                     onEachFeature: onEachParcel
-                }).addTo(map);
+                });
 
                 allParcelsCache.forEach(f => {
                     const p = f.properties;
