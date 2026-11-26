@@ -3,386 +3,441 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Dashboard | BhuRaksha DPI</title>
+    <title>Dashboard | BhuRaksha DPI</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        body { background: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; }
-        .topbar { background: linear-gradient(90deg, #0f172a, #1e293b); }
-        .stat-card { transition: transform 0.15s, box-shadow 0.15s; border-radius: 16px; }
-        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important; }
-        .kpi-icon { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
-        .menu-card { border-radius: 16px; transition: 0.15s; cursor: pointer; text-decoration: none; }
-        .menu-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.13) !important; }
-        .timeline-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
-        .badge-role { font-size: 0.72rem; padding: 4px 10px; border-radius: 20px; font-weight: 600; }
-        .section-title { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; }
+        body { background: #f4f6fa; font-family: system-ui, -apple-system, sans-serif; color: #1e293b; }
+
+        /* Left Sidebar */
+        .user-sidebar {
+            width: 240px;
+            background: #ffffff;
+            border-right: 1px solid #e2e8f0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 1030;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .sidebar-user-box {
+            padding: 18px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: #fff;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .sidebar-nav {
+            padding: 12px 10px;
+            flex: 1;
+        }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 14px;
+            border-radius: 10px;
+            color: #475569;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 3px;
+            transition: all 0.15s;
+        }
+        .sidebar-nav a:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        .sidebar-nav a.active {
+            background: #2563eb;
+            color: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+        .sidebar-nav .nav-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #94a3b8;
+            padding: 12px 14px 4px;
+        }
+        .sidebar-footer {
+            padding: 12px 10px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .sidebar-footer a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 14px;
+            border-radius: 10px;
+            color: #ef4444;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .sidebar-footer a:hover { background: #fef2f2; }
+
+        /* Top Navbar */
+        .top-navbar {
+            margin-left: 240px;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            height: 60px;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+        }
+        .top-links a {
+            color: #475569;
+            text-decoration: none;
+            font-size: 0.86rem;
+            font-weight: 500;
+            padding: 6px 10px;
+            border-radius: 8px;
+        }
+        .top-links a:hover { background: #f1f5f9; color: #0f172a; }
+
+        /* Main Content */
+        .main-wrap {
+            margin-left: 240px;
+        }
+        .hero-banner {
+            background: linear-gradient(120deg, #1e3a8a 0%, #2563eb 60%, #0f766e 100%);
+            padding: 28px 32px 64px;
+            color: #fff;
+        }
+        .content-body {
+            padding: 0 32px 40px;
+            margin-top: -38px;
+        }
+        .stat-card {
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            padding: 18px 20px;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+            transition: transform 0.15s;
+        }
+        .stat-card:hover { transform: translateY(-2px); }
+        .stat-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+        .panel-card {
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+            overflow: hidden;
+        }
+        .list-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background 0.12s;
+        }
+        .list-row:last-child { border-bottom: none; }
+        .list-row:hover { background: #f8fafc; }
+        .row-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .profile-card-top {
+            background: linear-gradient(135deg, #1e40af, #2563eb);
+            padding: 24px 20px;
+            text-align: center;
+            color: #fff;
+        }
+        .profile-avatar-lg {
+            width: 58px;
+            height: 58px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+        }
+        @media (max-width: 991px) {
+            .user-sidebar { display: none; }
+            .top-navbar, .main-wrap { margin-left: 0; }
+            .content-body { padding: 0 16px 32px; }
+        }
     </style>
 </head>
 <body>
 
-<!-- Topbar -->
-<nav class="topbar navbar px-4 py-3 shadow-sm d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center gap-3">
-        <span class="badge bg-primary px-2 py-2 rounded-3"><i class="bi bi-shield-check fs-5"></i></span>
+<!-- ══ LEFT SIDEBAR ══ -->
+<aside class="user-sidebar">
+    <div class="sidebar-user-box">
+        <div class="avatar-circle">{{ request.user.username|slice:":1"|upper }}</div>
+        <div style="min-width:0;">
+            <div class="fw-bold text-dark text-truncate" style="font-size:0.9rem;">{{ request.user.username }}</div>
+            <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size:0.65rem;">User</span>
+        </div>
+    </div>
+
+    <div class="sidebar-nav">
+        <a href="{% url 'user_dashboard' %}" class="active"><i class="bi bi-house-door"></i>Dashboard</a>
+
+        <div class="nav-label">Land &amp; GIS</div>
+        <a href="{% url 'map_view' %}"><i class="bi bi-map"></i>GIS Map</a>
+        <a href="{% url 'verify_public' %}"><i class="bi bi-patch-check"></i>Verify Records</a>
+        <a href="{% url 'owners_list' %}"><i class="bi bi-people"></i>Ownership Records</a>
+        <a href="{% url 'mutations' %}"><i class="bi bi-arrow-left-right"></i>Mutations</a>
+        <a href="{% url 'disputes_list' %}"><i class="bi bi-exclamation-triangle"></i>Disputes</a>
+
+        <div class="nav-label">Tools &amp; Simulators</div>
+        <a href="{% url 'parcel_split' %}"><i class="bi bi-scissors"></i>Parcel Split</a>
+        <a href="{% url 'land_valuation' %}"><i class="bi bi-calculator"></i>Land Valuation</a>
+        <a href="{% url 'farmer_kyc' %}"><i class="bi bi-person-vcard"></i>Farmer KYC</a>
+        <a href="{% url 'fraud_simulator' %}"><i class="bi bi-shield-exclamation"></i>Fraud Simulator</a>
+
+        <div class="nav-label">Agriculture</div>
+        <a href="{% url 'agriculture_hub' %}"><i class="bi bi-flower1"></i>Crop &amp; Land Use</a>
+        <a href="{% url 'schemes_view' %}"><i class="bi bi-award"></i>Govt Schemes</a>
+        <a href="{% url 'weather_advisory' %}"><i class="bi bi-cloud-sun"></i>Weather Advisory</a>
+
+        <div class="nav-label">Account</div>
+        <a href="{% url 'notifications_view' %}"><i class="bi bi-bell"></i>Notifications</a>
+        <a href="{% url 'profile_view' %}"><i class="bi bi-person-gear"></i>Profile &amp; Settings</a>
+    </div>
+
+    <div class="sidebar-footer">
+        <a href="{% url 'logout' %}"><i class="bi bi-box-arrow-left"></i>Logout</a>
+    </div>
+</aside>
+
+<!-- ══ TOP NAVBAR ══ -->
+<header class="top-navbar">
+    <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-primary rounded-3 p-2"><i class="bi bi-shield-check"></i></span>
         <div>
-            <div class="fw-bold text-white lh-1" style="font-size:0.95rem;">BhuRaksha DPI — My Dashboard</div>
-            <small class="text-secondary" style="font-size:0.72rem;">Welcome back, <strong class="text-info">{{ request.user.username }}</strong></small>
+            <div class="fw-bold text-dark lh-1" style="font-size:0.92rem;">BhuRaksha</div>
+            <div class="text-muted" style="font-size:0.7rem;">Land Governance Portal</div>
         </div>
     </div>
-    <div class="d-flex gap-2 align-items-center">
-        <a href="/" class="btn btn-sm btn-outline-light" style="font-size:0.78rem;"><i class="bi bi-house me-1"></i>Home</a>
-        <a href="/map/" class="btn btn-sm btn-outline-light" style="font-size:0.78rem;"><i class="bi bi-map me-1"></i>Map</a>
-        <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-danger" style="font-size:0.78rem;"><i class="bi bi-box-arrow-right me-1"></i>Logout</a>
+
+    <div class="top-links d-none d-md-flex align-items-center gap-2">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'map_view' %}">GIS Cadastre</a>
+        <a href="{% url 'parcel_split' %}">Parcel Split</a>
+        <a href="{% url 'verify_public' %}">Verify Records</a>
+        <a href="{% url 'about_view' %}">About</a>
     </div>
-</nav>
 
-<div class="container py-4">
+    <div class="d-flex align-items-center gap-3">
+        <a href="{% url 'notifications_view' %}" class="text-secondary position-relative" title="Notifications">
+            <i class="bi bi-bell fs-5"></i>
+        </a>
+        <div class="d-flex align-items-center gap-2">
+            <div class="avatar-circle" style="width:32px;height:32px;font-size:0.82rem;">{{ request.user.username|slice:":1"|upper }}</div>
+            <span class="fw-semibold small text-dark d-none d-sm-inline">{{ request.user.username }}</span>
+        </div>
+    </div>
+</header>
 
-    <!-- Welcome Banner -->
-    <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden" style="background: linear-gradient(135deg, #2563eb, #0f766e);">
-        <div class="card-body p-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+<!-- ══ MAIN WRAPPER ══ -->
+<main class="main-wrap">
+    <!-- Hero Banner -->
+    <div class="hero-banner d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="d-flex align-items-center gap-3">
+            <div class="profile-avatar-lg m-0" style="width:48px;height:48px;font-size:1.2rem;">{{ request.user.username|slice:":1"|upper }}</div>
             <div>
-                <h4 class="fw-bold text-white mb-1">Namaste, {{ request.user.get_full_name|default:request.user.username }}! 👋</h4>
-                <p class="text-white mb-2" style="opacity:0.85; font-size:0.9rem;">
-                    Manage your land records, track mutations and disputes — all in one place.
-                </p>
-                <div class="d-flex gap-2 flex-wrap">
-                    <span class="badge bg-white bg-opacity-20 text-white px-3 py-2" style="font-size:0.75rem;">
-                        <i class="bi bi-person me-1"></i>{{ request.user.username }}
-                    </span>
-                    <span class="badge bg-white bg-opacity-20 text-white px-3 py-2" style="font-size:0.75rem;">
-                        <i class="bi bi-envelope me-1"></i>{{ request.user.email|default:"No email set" }}
-                    </span>
-                    <span class="badge bg-success bg-opacity-75 text-white px-3 py-2" style="font-size:0.75rem;">
-                        <i class="bi bi-circle-fill me-1" style="font-size:0.45rem;"></i>Active Account
-                    </span>
-                </div>
+                <h5 class="fw-bold mb-0">{{ request.user.get_full_name|default:request.user.username }}</h5>
+                <div style="font-size:0.82rem; opacity:0.85;">{{ request.user.email|default:"BhuRaksha Citizen Account" }}</div>
             </div>
-            <div class="text-center text-white">
-                <div style="width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;">
-                    <i class="bi bi-person-fill" style="font-size:2.2rem;"></i>
-                </div>
-                <div style="font-size:0.75rem; opacity:0.8;">Member Since</div>
-                <div class="fw-bold" style="font-size:0.85rem;">{{ request.user.date_joined|date:"M Y" }}</div>
-            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'map_view' %}" class="btn btn-light btn-sm fw-semibold px-3 py-2 text-primary">Explore GIS Map &rarr;</a>
+            <a href="{% url 'verify_public' %}" class="btn btn-outline-light btn-sm fw-semibold px-3 py-2">Verify Record</a>
         </div>
     </div>
 
-    <!-- KPI Stats -->
-    <div class="row g-3 mb-4">
-        <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm stat-card p-3 bg-white h-100">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <div class="section-title">My Parcels</div>
-                        <div class="fw-bold fs-2 text-primary">{{ my_parcels_count }}</div>
+    <!-- Content Body -->
+    <div class="content-body">
+
+        <!-- 4 KPI Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#eff6ff; color:#2563eb;"><i class="bi bi-map-fill"></i></div>
+                    <div class="fw-bold fs-4 text-dark">{{ my_parcels_count }}</div>
+                    <div class="text-muted small">Registered Parcels</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#f0fdf4; color:#16a34a;"><i class="bi bi-patch-check-fill"></i></div>
+                    <div class="fw-bold fs-4 text-dark">{{ my_verified_count }}</div>
+                    <div class="text-muted small">Verified Records</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#fffbeb; color:#d97706;"><i class="bi bi-arrow-left-right"></i></div>
+                    <div class="fw-bold fs-4 text-dark">{{ my_mutations_count }}</div>
+                    <div class="text-muted small">Mutations</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#fef2f2; color:#dc2626;"><i class="bi bi-exclamation-octagon-fill"></i></div>
+                    <div class="fw-bold fs-4 text-dark">{{ my_disputes_count }}</div>
+                    <div class="text-muted small">Dispute Cases</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main 2-Column Grid -->
+        <div class="row g-4">
+            <!-- Left Column: Recent Land Parcels + Mutations -->
+            <div class="col-lg-8">
+                <div class="panel-card mb-4">
+                    <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <div class="fw-bold text-dark"><i class="bi bi-map me-2 text-primary"></i>Recent Land Parcels</div>
+                        <a href="{% url 'map_view' %}" class="text-primary text-decoration-none small fw-semibold">View All &rarr;</a>
                     </div>
-                    <div class="kpi-icon" style="background:#eff6ff;"><i class="bi bi-map-fill text-primary"></i></div>
-                </div>
-                <div class="text-muted small mt-1">Land records linked to you</div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm stat-card p-3 bg-white h-100">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <div class="section-title">Verified</div>
-                        <div class="fw-bold fs-2 text-success">{{ my_verified_count }}</div>
-                    </div>
-                    <div class="kpi-icon" style="background:#f0fdf4;"><i class="bi bi-patch-check-fill text-success"></i></div>
-                </div>
-                <div class="text-muted small mt-1">SHA-256 verified records</div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm stat-card p-3 bg-white h-100">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <div class="section-title">Mutations</div>
-                        <div class="fw-bold fs-2 text-warning">{{ my_mutations_count }}</div>
-                    </div>
-                    <div class="kpi-icon" style="background:#fffbeb;"><i class="bi bi-arrow-left-right text-warning"></i></div>
-                </div>
-                <div class="text-muted small mt-1">Transfer applications</div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm stat-card p-3 bg-white h-100">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <div class="section-title">Disputes</div>
-                        <div class="fw-bold fs-2 text-danger">{{ my_disputes_count }}</div>
-                    </div>
-                    <div class="kpi-icon" style="background:#fef2f2;"><i class="bi bi-exclamation-octagon-fill text-danger"></i></div>
-                </div>
-                <div class="text-muted small mt-1">Active dispute cases</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Navigation Menu -->
-    <div class="section-title mb-3"><i class="bi bi-grid me-1"></i>Quick Access</div>
-    <div class="row g-3 mb-4">
-        <div class="col-6 col-md-4 col-lg-2">
-            <a href="/map/" class="menu-card card border-0 shadow-sm p-3 bg-white text-center d-block">
-                <i class="bi bi-map-fill text-primary fs-2 mb-2"></i>
-                <div class="fw-semibold text-dark small">GIS Map</div>
-                <div class="text-muted" style="font-size:0.7rem;">View land parcels</div>
-            </a>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-            <a href="/verify/" class="menu-card card border-0 shadow-sm p-3 bg-white text-center d-block">
-                <i class="bi bi-patch-check-fill text-success fs-2 mb-2"></i>
-                <div class="fw-semibold text-dark small">Verify Record</div>
-                <div class="text-muted" style="font-size:0.7rem;">Check authenticity</div>
-            </a>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-            <a href="/mutations/" class="menu-card card border-0 shadow-sm p-3 bg-white text-center d-block">
-                <i class="bi bi-arrow-left-right text-warning fs-2 mb-2"></i>
-                <div class="fw-semibold text-dark small">Mutations</div>
-                <div class="text-muted" style="font-size:0.7rem;">Transfer records</div>
-            </a>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-            <a href="/disputes/" class="menu-card card border-0 shadow-sm p-3 bg-white text-center d-block">
-                <i class="bi bi-exclamation-triangle text-danger fs-2 mb-2"></i>
-                <div class="fw-semibold text-dark small">Disputes</div>
-                <div class="text-muted" style="font-size:0.7rem;">Legal cases</div>
-            </a>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-            <a href="/parcel-split-simulator/" class="menu-card card border-0 shadow-sm p-3 bg-white text-center d-block">
-                <i class="bi bi-scissors text-info fs-2 mb-2"></i>
-                <div class="fw-semibold text-dark small">Parcel Split</div>
-                <div class="text-muted" style="font-size:0.7rem;">Simulate partition</div>
-            </a>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-            <a href="/about/" class="menu-card card border-0 shadow-sm p-3 bg-white text-center d-block">
-                <i class="bi bi-info-circle text-secondary fs-2 mb-2"></i>
-                <div class="fw-semibold text-dark small">About</div>
-                <div class="text-muted" style="font-size:0.7rem;">About BhuRaksha</div>
-            </a>
-        </div>
-    </div>
-
-    <!-- My Parcels Table + My Activity -->
-    <div class="row g-4 mb-4">
-        <!-- My Parcels -->
-        <div class="col-lg-7">
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
-                <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold text-dark mb-0"><i class="bi bi-map me-2 text-primary"></i>My Land Parcels</h6>
-                    <a href="/map/" class="btn btn-sm btn-outline-primary">View on Map →</a>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0 small">
-                        <thead class="table-light">
-                            <tr>
-                                <th>ULPIN</th>
-                                <th>Khasra</th>
-                                <th>Area</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for p in my_parcels %}
-                            <tr>
-                                <td class="font-monospace text-primary fw-semibold" style="font-size:0.75rem;">{{ p.parcel_id }}</td>
-                                <td class="fw-semibold">{{ p.khasra_no }}</td>
-                                <td>{{ p.area_hectares }} Ha</td>
-                                <td>
-                                    <span class="badge {% if p.status == 'Verified' %}bg-success{% elif p.status == 'Disputed' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
-                                        {{ p.status }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <a href="/verify/?parcel_id={{ p.parcel_id }}" class="btn btn-sm btn-outline-primary" style="font-size:0.72rem;">Verify</a>
-                                    <a href="/parcel/{{ p.id }}/" class="btn btn-sm btn-light border ms-1" style="font-size:0.72rem;">View</a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="5" class="text-center text-muted py-4">
-                                    <i class="bi bi-inbox fs-3 d-block mb-2"></i>
-                                    No parcels linked to your account yet.<br>
-                                    <a href="/map/" class="btn btn-sm btn-primary mt-2">Go to GIS Map →</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- My Mutations -->
-        <div class="col-lg-5">
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
-                <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold text-dark mb-0"><i class="bi bi-arrow-left-right me-2 text-warning"></i>My Mutations</h6>
-                    <a href="/mutations/" class="btn btn-sm btn-outline-warning text-dark">View All →</a>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0 small">
-                        <thead class="table-light">
-                            <tr><th>#</th><th>Type</th><th>Status</th><th>Link</th></tr>
-                        </thead>
-                        <tbody>
-                            {% for m in my_mutations %}
-                            <tr>
-                                <td class="font-monospace text-muted">#{{ m.id }}</td>
-                                <td><span class="badge bg-warning text-dark">{{ m.mutation_type|default:"Partition" }}</span></td>
-                                <td>
-                                    <span class="badge {% if m.status == 'Approved' %}bg-success{% elif m.status == 'Rejected' %}bg-danger{% else %}bg-secondary{% endif %}">
-                                        {{ m.status }}
-                                    </span>
-                                </td>
-                                <td><a href="/mutations/{{ m.id }}/" class="btn btn-sm btn-light border" style="font-size:0.72rem;">View</a></td>
-                            </tr>
-                            {% empty %}
-                            <tr><td colspan="4" class="text-center text-muted py-3">No mutation applications yet.</td></tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- My Disputes + Account Info -->
-    <div class="row g-4 mb-4">
-        <!-- My Disputes -->
-        <div class="col-lg-6">
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
-                <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold text-dark mb-0"><i class="bi bi-exclamation-triangle me-2 text-danger"></i>My Disputes</h6>
-                    <a href="/disputes/" class="btn btn-sm btn-outline-danger">View All →</a>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0 small">
-                        <thead class="table-light">
-                            <tr><th>#</th><th>Reason</th><th>Status</th><th>Link</th></tr>
-                        </thead>
-                        <tbody>
-                            {% for d in my_disputes %}
-                            <tr>
-                                <td class="font-monospace text-muted">#{{ d.id }}</td>
-                                <td style="max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-                                    {{ d.reason|default:"Boundary Dispute"|truncatechars:30 }}
-                                </td>
-                                <td><span class="badge bg-danger">{{ d.status|default:"Open" }}</span></td>
-                                <td><a href="/disputes/{{ d.id }}/" class="btn btn-sm btn-light border" style="font-size:0.72rem;">View</a></td>
-                            </tr>
-                            {% empty %}
-                            <tr><td colspan="4" class="text-center text-muted py-3">
-                                <i class="bi bi-check-circle text-success me-1"></i>No active disputes. 
-                            </td></tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Account Info Card -->
-        <div class="col-lg-6">
-            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
-                <h6 class="fw-bold text-dark mb-4"><i class="bi bi-person-circle me-2 text-primary"></i>Account Information</h6>
-                <div class="row g-3">
-                    <div class="col-6">
-                        <div class="p-3 rounded-3" style="background:#f8fafc;">
-                            <div class="section-title mb-1">Username</div>
-                            <div class="fw-semibold text-dark">{{ request.user.username }}</div>
+                    {% for p in my_parcels %}
+                    <div class="list-row">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="row-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                            <div>
+                                <div class="fw-semibold text-dark" style="font-size:0.9rem;">Khasra {{ p.khasra_no }} <span class="text-muted fw-normal">({{ p.parcel_id }})</span></div>
+                                <div class="text-muted" style="font-size:0.78rem;">{{ p.village.name|default:"Village" }} &bull; {{ p.area_hectares }} Ha ({{ p.area_acres }} Acres)</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="p-3 rounded-3" style="background:#f8fafc;">
-                            <div class="section-title mb-1">Account Type</div>
-                            <div class="fw-semibold">
-                                {% if request.user.is_superuser %}
-                                    <span class="text-primary">Administrator</span>
-                                {% elif request.user.is_staff %}
-                                    <span class="text-success">Staff</span>
-                                {% else %}
-                                    <span class="text-secondary">Regular User</span>
-                                {% endif %}
+                        <div class="text-end">
+                            <span class="badge {% if p.status == 'Verified' %}bg-success-subtle text-success{% elif p.status == 'Disputed' %}bg-danger-subtle text-danger{% else %}bg-warning-subtle text-warning{% endif %} mb-1">
+                                {{ p.status }}
+                            </span>
+                            <div>
+                                <a href="{% url 'parcel_detail' p.id %}" class="text-primary text-decoration-none" style="font-size:0.76rem; font-weight:600;">Details &rarr;</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="p-3 rounded-3" style="background:#f8fafc;">
-                            <div class="section-title mb-1">Email</div>
-                            <div class="fw-semibold text-dark" style="font-size:0.85rem;">{{ request.user.email|default:"Not set" }}</div>
-                        </div>
+                    {% empty %}
+                    <div class="p-4 text-center text-muted small">
+                        <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                        No land parcels found yet. <a href="{% url 'map_view' %}">Open GIS Map</a>
                     </div>
-                    <div class="col-6">
-                        <div class="p-3 rounded-3" style="background:#f8fafc;">
-                            <div class="section-title mb-1">Joined</div>
-                            <div class="fw-semibold text-dark">{{ request.user.date_joined|date:"d M Y" }}</div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="p-3 rounded-3" style="background:#f8fafc;">
-                            <div class="section-title mb-1">Last Login</div>
-                            <div class="fw-semibold text-dark" style="font-size:0.82rem;">{{ request.user.last_login|date:"d M, H:i"|default:"—" }}</div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="p-3 rounded-3" style="background:#f0fdf4;">
-                            <div class="section-title mb-1">Status</div>
-                            <div class="fw-semibold text-success">● Active</div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Help / Info Cards at bottom -->
-    <div class="row g-3">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4 p-3" style="background:#eff6ff; border:1px solid #bfdbfe !important;">
-                <div class="d-flex gap-3 align-items-start">
-                    <i class="bi bi-patch-check-fill text-primary fs-3 mt-1"></i>
-                    <div>
-                        <div class="fw-bold text-dark mb-1">SHA-256 Verification</div>
-                        <div class="text-muted small">Every land parcel is cryptographically hashed. Use Verify Record to check if your record is tamper-free.</div>
-                        <a href="/verify/" class="btn btn-sm btn-primary mt-2">Verify Now</a>
+                <!-- Recent Mutations -->
+                <div class="panel-card">
+                    <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <div class="fw-bold text-dark"><i class="bi bi-arrow-left-right me-2 text-warning"></i>Recent Mutations</div>
+                        <a href="{% url 'mutations' %}" class="text-primary text-decoration-none small fw-semibold">View All &rarr;</a>
                     </div>
+                    {% for m in my_mutations %}
+                    <div class="list-row">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="row-icon" style="background:#fffbeb; color:#d97706;"><i class="bi bi-file-earmark-text"></i></div>
+                            <div>
+                                <div class="fw-semibold text-dark" style="font-size:0.9rem;">Mutation #{{ m.id }} &mdash; {{ m.mutation_type|default:"Partition" }}</div>
+                                <div class="text-muted" style="font-size:0.78rem;">Parcel: {{ m.parcel|default:"—" }}</div>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge {% if m.status == 'Approved' %}bg-success-subtle text-success{% elif m.status == 'Rejected' %}bg-danger-subtle text-danger{% else %}bg-warning-subtle text-warning{% endif %}">
+                                {{ m.status }}
+                            </span>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="p-4 text-center text-muted small">No mutation applications yet.</div>
+                    {% endfor %}
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4 p-3" style="background:#fefce8; border:1px solid #fde68a !important;">
-                <div class="d-flex gap-3 align-items-start">
-                    <i class="bi bi-scissors text-warning fs-3 mt-1"></i>
-                    <div>
-                        <div class="fw-bold text-dark mb-1">Parcel Split Simulator</div>
-                        <div class="text-muted small">Simulate family land partition (Batwara). Calculate each heir's share before filing a mutation.</div>
-                        <a href="/parcel-split-simulator/" class="btn btn-sm btn-warning text-dark mt-2">Try Now</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4 p-3" style="background:#f0fdf4; border:1px solid #bbf7d0 !important;">
-                <div class="d-flex gap-3 align-items-start">
-                    <i class="bi bi-headset text-success fs-3 mt-1"></i>
-                    <div>
-                        <div class="fw-bold text-dark mb-1">Need Help?</div>
-                        <div class="text-muted small">Visit our FAQ page for guidance on mutations, disputes, parcel registration and more.</div>
-                        <a href="/help/" class="btn btn-sm btn-success mt-2">Help & FAQ</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-</div><!-- /container -->
+            <!-- Right Column: Profile Card + Notifications -->
+            <div class="col-lg-4">
+                <!-- Profile Summary Card -->
+                <div class="panel-card mb-4">
+                    <div class="profile-card-top">
+                        <div class="profile-avatar-lg">{{ request.user.username|slice:":1"|upper }}</div>
+                        <div class="fw-bold fs-6">{{ request.user.username }}</div>
+                        <div style="font-size:0.78rem; opacity:0.85;">{{ request.user.email|default:"No email set" }}</div>
+                        <span class="badge bg-success mt-2 px-3 py-1" style="font-size:0.7rem;">Active</span>
+                    </div>
+                    <div class="p-3">
+                        <div class="d-flex justify-content-between py-2 border-bottom small">
+                            <span class="text-muted">Role</span>
+                            <span class="fw-semibold text-dark">{{ CURRENT_ROLE|default:"Citizen / User" }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-2 border-bottom small">
+                            <span class="text-muted">Joined</span>
+                            <span class="fw-semibold text-dark">{{ request.user.date_joined|date:"d M Y" }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between py-2 small">
+                            <span class="text-muted">Parcels Linked</span>
+                            <span class="fw-semibold text-dark">{{ my_parcels_count }}</span>
+                        </div>
+                        <a href="{% url 'profile_view' %}" class="btn btn-light border w-100 mt-3 fw-semibold small">
+                            Profile &amp; Settings
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Notifications Card -->
+                <div class="panel-card">
+                    <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <div class="fw-bold text-dark small"><i class="bi bi-bell me-2 text-warning"></i>Notifications</div>
+                        <a href="{% url 'notifications_view' %}" class="text-primary text-decoration-none" style="font-size:0.75rem; font-weight:600;">View All</a>
+                    </div>
+                    <div class="p-3 small text-muted">
+                        <div class="d-flex gap-2 align-items-start mb-2">
+                            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+                            <div>Your BhuRaksha account is active. Explore GIS Map, Parcel Split, and Verify Records from the sidebar.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
