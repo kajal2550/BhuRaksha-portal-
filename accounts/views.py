@@ -289,11 +289,11 @@ def user_dashboard_view(request):
     from mutations.models import Mutation
     from disputes.models import Dispute
 
-    # User ke parcels (owner_name se match karte hain)
-    username = request.user.username
-    my_parcels = Parcel.objects.filter(owner_name__icontains=username).order_by('-id')[:10]
-    my_parcels_count = my_parcels.count()
-    my_verified_count = my_parcels.filter(status='Verified').count()
+    # Parcels overview
+    all_parcels = Parcel.objects.order_by('-id')
+    my_parcels = all_parcels[:10]
+    my_parcels_count = all_parcels.count()
+    my_verified_count = all_parcels.filter(status='Verified').count()
 
     # Mutations & Disputes — sab dikhao (user-specific filter baad mein)
     my_mutations = Mutation.objects.order_by('-id')[:8]
