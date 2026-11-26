@@ -103,9 +103,6 @@
                 <button class="btn btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#drawHelpModal" style="background:#0f766e; color:#fff; border:none; border-radius:8px; font-size:0.82rem; font-weight:600; padding:6px 14px; white-space:nowrap;">
                     <i class="bi bi-pencil-square"></i> Draw Plot
                 </button>
-                <button id="clearAllBtn" class="btn btn-sm d-flex align-items-center gap-1" style="background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; border-radius:8px; font-size:0.82rem; font-weight:600; padding:6px 14px; white-space:nowrap;">
-                    <i class="bi bi-trash"></i> Clear
-                </button>
                 <a href="{% url 'export_qgis_geojson' %}" class="btn btn-sm d-flex align-items-center gap-1" style="background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; border-radius:8px; font-size:0.82rem; font-weight:600; padding:6px 14px; white-space:nowrap;">
                     <i class="bi bi-download"></i> QGIS Export
                 </a>
@@ -866,9 +863,7 @@
             .catch(() => showParcelToast('Error', 'Could not clear plots'));
     }
 
-    document.getElementById('clearAllBtn').addEventListener('click', triggerClearAllPlots);
-
-    // Also add Clear button inside the map's Layer Control box
+    // Add Clear button inside the map's Layer Control box
     const layerList = document.querySelector('.leaflet-control-layers-list');
     if (layerList) {
         const sep = document.createElement('div');
