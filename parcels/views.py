@@ -237,3 +237,10 @@ def parcel_detail_api(request, parcel_id):
     except Parcel.DoesNotExist:
         parcel = get_object_or_404(Parcel, pk=parcel_id)
     return Response(ParcelDetailSerializer(parcel).data)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def clear_all_parcels(request):
+    count, _ = Parcel.objects.all().delete()
+    return Response({'status': 'success', 'deleted': count})

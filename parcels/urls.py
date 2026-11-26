@@ -35,6 +35,7 @@ urlpatterns = [
     
     # DPI REST API Endpoints
     path('api/parcels/', views.parcel_geojson_list_api, name='api_parcels_geojson'),
+    path('api/parcels/clear/', views.clear_all_parcels, name='clear_all_parcels'),
     path('api/parcels/<str:parcel_id>/', views.parcel_detail_api, name='api_parcel_detail'),
     path('api/stats/', views.dpi_stats_api, name='api_dpi_stats'),
 ]
