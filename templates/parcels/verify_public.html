@@ -132,7 +132,7 @@
             {% endif %}
 
             <!-- Info Cards -->
-            <div class="row g-3">
+            <div class="row g-3 mb-4">
                 <div class="col-md-4">
                     <div class="card border-0 shadow-sm rounded-3 p-3 h-100 text-center" style="background:#eff6ff;">
                         <i class="bi bi-qr-code-scan text-primary fs-4 mb-2"></i>
@@ -156,6 +156,97 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="container pb-2">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                <div class="text-center mb-4">
+                    <h5 class="fw-bold text-dark mb-1">How Verification Works</h5>
+                    <p class="text-muted small">BhuRaksha uses a 3-step cryptographic process to confirm record authenticity</p>
+                </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 h-100 text-center" style="background:#fff;">
+                            <div class="d-flex align-items-center justify-content-center rounded-circle mx-auto mb-3"
+                                 style="width:48px;height:48px;background:#eff6ff;">
+                                <span class="fw-bold text-primary fs-5">1</span>
+                            </div>
+                            <h6 class="fw-bold text-dark mb-1">Enter ULPIN</h6>
+                            <p class="text-muted small mb-0">Type the 14-character Unique Land Parcel Identification Number (e.g. PB-KPT-2024-1001) or scan from a printed RoR certificate QR code.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 h-100 text-center" style="background:#fff;">
+                            <div class="d-flex align-items-center justify-content-center rounded-circle mx-auto mb-3"
+                                 style="width:48px;height:48px;background:#f0fdf4;">
+                                <span class="fw-bold text-success fs-5">2</span>
+                            </div>
+                            <h6 class="fw-bold text-dark mb-1">Hash Recalculated</h6>
+                            <p class="text-muted small mb-0">The system recalculates the SHA-256 fingerprint of the parcel's boundary coordinates, area, and ownership data in real time.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 h-100 text-center" style="background:#fff;">
+                            <div class="d-flex align-items-center justify-content-center rounded-circle mx-auto mb-3"
+                                 style="width:48px;height:48px;background:#fefce8;">
+                                <span class="fw-bold fs-5" style="color:#d97706;">3</span>
+                            </div>
+                            <h6 class="fw-bold text-dark mb-1">Result Displayed</h6>
+                            <p class="text-muted small mb-0">If the stored and computed hashes match → ✅ Genuine. If they differ → ❌ Tamper Alert. No match means the record was modified.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- What is ULPIN -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background:#fff; border-left:4px solid #2563eb !important;">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-7">
+                            <h6 class="fw-bold text-dark mb-2"><i class="bi bi-info-circle-fill text-primary me-2"></i>What is a ULPIN?</h6>
+                            <p class="text-muted small mb-2">ULPIN (Unique Land Parcel Identification Number) is a 14-character permanent digital ID assigned to every cadastral land parcel in India. Format: <code>ST-DST-YYYY-NNNN</code></p>
+                            <div class="d-flex flex-wrap gap-2">
+                                <span class="badge px-3 py-2 rounded-pill" style="background:#eff6ff; color:#2563eb;">ST = State Code</span>
+                                <span class="badge px-3 py-2 rounded-pill" style="background:#f0fdf4; color:#059669;">DST = District</span>
+                                <span class="badge px-3 py-2 rounded-pill" style="background:#fefce8; color:#d97706;">YYYY = Year</span>
+                                <span class="badge px-3 py-2 rounded-pill" style="background:#fdf4ff; color:#9333ea;">NNNN = Serial</span>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="p-3 rounded-3 text-center font-monospace" style="background:#f8fafc; border:2px dashed #cbd5e1;">
+                                <div class="text-muted small mb-1">Example ULPIN</div>
+                                <div class="fw-bold fs-5 text-primary">PB-KPT-2024-1001</div>
+                                <div class="text-muted" style="font-size:0.72rem;">Punjab · Kapurthala · 2024 · Plot 1001</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tamper Detection Info -->
+                <div class="row g-3 mb-2">
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="background:#f0fdf4; border:1px solid #bbf7d0 !important;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span style="font-size:1.5rem;">✅</span>
+                                <h6 class="fw-bold text-success mb-0">Genuine Record</h6>
+                            </div>
+                            <p class="text-muted small mb-0">SHA-256 hash stored at registration matches the hash recomputed now. The parcel data — boundary, area, owner — has never been tampered with since registration.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="background:#fef2f2; border:1px solid #fecaca !important;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span style="font-size:1.5rem;">❌</span>
+                                <h6 class="fw-bold text-danger mb-0">Tamper Alert</h6>
+                            </div>
+                            <p class="text-muted small mb-0">The recomputed hash does not match the stored fingerprint. This means the parcel's area, boundary coordinates, or ownership data was changed after registration.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
