@@ -271,14 +271,16 @@
             });
         }
 
-        // Sync top Partition Ratios input -> Live Visualiser
         const topRatioInput = document.getElementById('splitRatiosInput');
-        if (topRatioInput) {
-            topRatioInput.addEventListener('input', () => {
-                document.getElementById('visRatios').value = topRatioInput.value;
-                updateVisualiser();
-            });
+
+        {% if result %}
+        // After Calculate Split: populate chart with the calculated split ratios
+        const calculatedRatios = [{% for sp in result.sub_plots %}{{ sp.ratio|cut:"%" }}{% if not forloop.last %},{% endif %}{% endfor %}].join(',');
+        if (calculatedRatios) {
+            document.getElementById('visRatios').value = calculatedRatios;
+            if (topRatioInput) topRatioInput.value = calculatedRatios;
         }
+        {% endif %}
 
         // Ratio card click → fill visualiser & top input
         document.querySelectorAll('.ratio-card').forEach(card => {
