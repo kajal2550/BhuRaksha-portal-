@@ -3,102 +3,400 @@
 {% block title %}Land Valuation & Circle Rate Calculator | BhuRaksha{% endblock %}
 
 {% block content %}
-<div class="container py-4">
+<style>
+  .val-hero {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #0f766e 100%);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .val-hero::before {
+    content: '₹';
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 8rem;
+    font-weight: 900;
+    opacity: 0.08;
+    line-height: 1;
+  }
+  .info-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 12px rgba(37,99,235,0.07);
+    padding: 1.5rem;
+    transition: box-shadow 0.2s;
+  }
+  .info-card:hover {
+    box-shadow: 0 4px 24px rgba(37,99,235,0.13);
+  }
+  .info-card .icon-box {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 0.75rem;
+  }
+  .calc-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 20px rgba(37,99,235,0.08);
+    padding: 2rem;
+  }
+  .calc-card .form-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    margin-bottom: 0.4rem;
+  }
+  .calc-card .form-control,
+  .calc-card .form-select {
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    font-size: 0.95rem;
+    color: #1e293b;
+    background: #f8fafc;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .calc-card .form-control:focus,
+  .calc-card .form-select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+    background: #fff;
+    outline: none;
+  }
+  .btn-calculate {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 2rem;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.03em;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+  }
+  .btn-calculate:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37,99,235,0.4);
+    color: #fff;
+  }
+  .result-section {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 24px rgba(37,99,235,0.1);
+    overflow: hidden;
+  }
+  .result-header {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: #fff;
+    padding: 1.25rem 2rem;
+  }
+  .breakdown-table td {
+    padding: 0.85rem 1rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #f1f5f9;
+    color: #374151;
+  }
+  .breakdown-table td:first-child {
+    color: #64748b;
+    width: 55%;
+  }
+  .breakdown-table tr:last-child td {
+    border-bottom: none;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1e3a8a;
+    background: #eff6ff;
+  }
+  .total-box {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 2px solid #16a34a;
+    border-radius: 14px;
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+  .total-box .amount {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #15803d;
+    line-height: 1.1;
+  }
+  .road-toggle .form-check-input {
+    width: 2.5em;
+    height: 1.3em;
+  }
+  .road-toggle .form-check-input:checked {
+    background-color: #2563eb;
+    border-color: #2563eb;
+  }
+  .step-badge {
+    width: 28px; height: 28px;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+  }
+</style>
 
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-calculator-fill text-info me-2"></i>GOVERNMENT_LAND_VALUATION_CALCULATOR</h4>
-            <div class="text-muted small">Official Punjab Circle Rates, Market Valuation, 7% Stamp Duty & Registry Cess</div>
+<div class="container py-4" style="max-width: 1100px;">
+
+  <!-- Hero Header -->
+  <div class="val-hero mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <div>
+        <span class="badge bg-white bg-opacity-25 text-white px-3 py-1 rounded-pill small mb-2 d-inline-block">
+          <i class="bi bi-bank me-1"></i> Official Punjab Revenue Department
+        </span>
+        <h2 class="fw-bold mb-1" style="letter-spacing:-0.5px;">
+          <i class="bi bi-calculator-fill me-2" style="color:#93c5fd;"></i>
+          Government Land Valuation Calculator
+        </h2>
+        <p class="mb-0 opacity-75">Collector Circle Rates • Stamp Duty 7% • Registration Fee 1% • Mutation Cess</p>
+      </div>
+      <div class="text-end d-none d-md-block">
+        <div class="fw-bold fs-5">Punjab Revenue Manual</div>
+        <div class="small opacity-75">As per Sections 17 & 18 — PLRC 1887</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it works info row -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="info-card text-center">
+        <div class="icon-box mx-auto" style="background:#eff6ff;">
+          <i class="bi bi-geo-alt-fill" style="color:#2563eb;"></i>
         </div>
-        <span class="badge-glow-cyan px-3 py-1 font-monospace small"><i class="bi bi-bank me-1"></i>REVENUE VALUATION</span>
+        <div class="fw-semibold text-dark mb-1" style="font-size:0.9rem;">Select Parcel</div>
+        <div class="text-muted" style="font-size:0.8rem;">Choose Khasra from cadastral register</div>
+      </div>
     </div>
-
-    <!-- Calculator Form -->
-    <div class="cyber-card p-4 mb-4">
-        <form method="POST" action="{% url 'land_valuation' %}">
-            {% csrf_token %}
-            <div class="row g-3">
-                <div class="col-md-5">
-                    <label class="form-label text-muted small font-monospace">SELECT CADASTRE PARCEL</label>
-                    <select name="parcel_id" class="form-select cyber-select" required>
-                        <option value="">-- Choose Cadastral Parcel --</option>
-                        {% for p in parcels %}
-                        <option value="{{ p.id }}">Khasra {{ p.khasra_no }} [{{ p.parcel_id }}] - {{ p.area_acres }} Acres ({{ p.village.name }})</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label text-muted small font-monospace">COLLECTOR / CIRCLE RATE (₹ PER ACRE)</label>
-                    <input type="number" name="circle_rate_per_acre" class="form-control cyber-input" value="4500000" step="50000" required>
-                </div>
-                <div class="col-md-3 d-flex flex-column justify-content-end">
-                    <div class="form-check form-switch mb-2">
-                        <input class="form-check-input" type="checkbox" name="road_facing" id="roadCheck">
-                        <label class="form-check-label text-muted small font-monospace" for="roadCheck">National / State Highway Touch (+20%)</label>
-                    </div>
-                    <button type="submit" class="btn btn-cyber-primary w-100 fw-bold">Calculate Official Valuation</button>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <!-- Valuation Breakdown Result -->
-    {% if valuation %}
-    <div class="cyber-card p-4 border-info">
-        <div class="row g-4">
-            <div class="col-lg-6">
-                <h5 class="fw-bold text-info font-monospace mb-3"><i class="bi bi-receipt me-2"></i>GOVERNMENT CHARGES BREAKDOWN</h5>
-                <div class="table-responsive">
-                    <table class="table table-cyber font-monospace small mb-0">
-                        <tbody>
-                            <tr>
-                                <td class="text-muted">Target Plot:</td>
-                                <td class="text-white fw-bold">Khasra {{ valuation.parcel.khasra_no }} ({{ valuation.parcel.area_acres }} Acres)</td>
-                            </tr>
-                            <tr>
-                                <td class="text-muted">Effective Circle Rate:</td>
-                                <td class="text-white">₹{{ valuation.effective_rate|floatformat:2 }} / Acre</td>
-                            </tr>
-                            <tr>
-                                <td class="text-muted">Total Cadastral Value:</td>
-                                <td class="text-success fw-bold fs-5">₹{{ valuation.base_market_value|floatformat:2 }}</td>
-                            </tr>
-                            <tr>
-                                <td class="text-muted">Stamp Duty (7.0%):</td>
-                                <td class="text-warning">₹{{ valuation.stamp_duty|floatformat:2 }}</td>
-                            </tr>
-                            <tr>
-                                <td class="text-muted">Registration Fees (1.0%):</td>
-                                <td class="text-warning">₹{{ valuation.registration_fee|floatformat:2 }}</td>
-                            </tr>
-                            <tr>
-                                <td class="text-muted">Mutation Docket Cess:</td>
-                                <td class="text-warning">₹{{ valuation.mutation_cess|floatformat:2 }}</td>
-                            </tr>
-                            <tr class="border-top border-secondary">
-                                <td class="text-info fw-bold">Total Transfer & Registry Cost:</td>
-                                <td class="text-info fw-bold fs-5">₹{{ valuation.total_government_charges|floatformat:2 }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="col-lg-6 d-flex flex-column justify-content-center">
-                <div class="p-4 bg-dark rounded border border-secondary text-center">
-                    <i class="bi bi-cash-stack display-3 text-success mb-2"></i>
-                    <h6 class="text-muted font-monospace">ESTIMATED TOTAL LAND VALUATION</h6>
-                    <div class="display-6 fw-bold text-white mb-2">₹{{ valuation.base_market_value|floatformat:0 }}</div>
-                    <span class="badge-glow-green px-3 py-1 font-monospace">OFFICIAL COLLECTOR CIRCLE VALUATION</span>
-                    <p class="text-muted small mt-3 mb-0">
-                        Calculated according to Punjab Revenue Manual guidelines. Can be submitted as collateral valuation for bank agricultural loans.
-                    </p>
-                </div>
-            </div>
+    <div class="col-md-3">
+      <div class="info-card text-center">
+        <div class="icon-box mx-auto" style="background:#f0fdf4;">
+          <i class="bi bi-currency-rupee" style="color:#16a34a;"></i>
         </div>
+        <div class="fw-semibold text-dark mb-1" style="font-size:0.9rem;">Enter Circle Rate</div>
+        <div class="text-muted" style="font-size:0.8rem;">Collector-notified rate per acre</div>
+      </div>
     </div>
-    {% endif %}
+    <div class="col-md-3">
+      <div class="info-card text-center">
+        <div class="icon-box mx-auto" style="background:#fffbeb;">
+          <i class="bi bi-toggles2" style="color:#d97706;"></i>
+        </div>
+        <div class="fw-semibold text-dark mb-1" style="font-size:0.9rem;">Location Bonus</div>
+        <div class="text-muted" style="font-size:0.8rem;">+20% for highway-facing plots</div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="info-card text-center">
+        <div class="icon-box mx-auto" style="background:#fdf4ff;">
+          <i class="bi bi-receipt-cutoff" style="color:#9333ea;"></i>
+        </div>
+        <div class="fw-semibold text-dark mb-1" style="font-size:0.9rem;">Get Report</div>
+        <div class="text-muted" style="font-size:0.8rem;">Full duty & charges breakdown</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calculator Form Card -->
+  <div class="calc-card mb-4">
+    <h5 class="fw-bold text-dark mb-4 d-flex align-items-center gap-2">
+      <i class="bi bi-sliders text-primary"></i>
+      Valuation Parameters
+    </h5>
+    <form method="POST" action="{% url 'land_valuation' %}">
+      {% csrf_token %}
+      <div class="row g-3 align-items-end">
+
+        <!-- Parcel Select -->
+        <div class="col-lg-5">
+          <label class="form-label">
+            <span class="step-badge">1</span> Select Cadastre Parcel
+          </label>
+          <select name="parcel_id" class="form-select" required>
+            <option value="">— Choose Cadastral Parcel —</option>
+            {% for p in parcels %}
+            <option value="{{ p.id }}" {% if valuation and valuation.parcel.id == p.id %}selected{% endif %}>
+              Khasra {{ p.khasra_no }} — {{ p.area_acres }} Acres ({{ p.village.name }})
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Circle Rate -->
+        <div class="col-lg-4">
+          <label class="form-label">
+            <span class="step-badge">2</span> Collector / Circle Rate (₹ per Acre)
+          </label>
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0" style="border:1.5px solid #cbd5e1; border-right:0; border-radius:8px 0 0 8px;">
+              <i class="bi bi-currency-rupee text-success fw-bold"></i>
+            </span>
+            <input type="number" name="circle_rate_per_acre"
+                   class="form-control border-start-0"
+                   style="border-left:0; border-radius:0 8px 8px 0;"
+                   value="{{ request.POST.circle_rate_per_acre|default:'4500000' }}"
+                   step="50000" min="100000" required>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="col-lg-3">
+          <button type="submit" class="btn-calculate w-100">
+            <i class="bi bi-calculator me-2"></i>Calculate Valuation
+          </button>
+        </div>
+
+        <!-- Road Facing toggle — full width row -->
+        <div class="col-12">
+          <div class="p-3 rounded-3 d-flex align-items-center gap-3 road-toggle"
+               style="background:#eff6ff; border:1px solid #bfdbfe;">
+            <div class="form-check form-switch mb-0">
+              <input class="form-check-input" type="checkbox" name="road_facing" id="roadCheck"
+                     {% if request.POST.road_facing %}checked{% endif %}>
+              <label class="form-check-label fw-semibold text-dark" for="roadCheck" style="font-size:0.95rem;">
+                <i class="bi bi-signpost-2 me-2 text-primary"></i>
+                National / State Highway Touch (+20% premium)
+              </label>
+            </div>
+            <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-1 ms-auto rounded-pill small fw-semibold">
+              Location Premium
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <!-- Result Section -->
+  {% if valuation %}
+  <div class="result-section mb-4">
+
+    <!-- Result Header -->
+    <div class="result-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <div>
+        <h5 class="mb-0 fw-bold"><i class="bi bi-clipboard2-data-fill me-2"></i>Official Valuation Report</h5>
+        <div class="small opacity-75">Khasra {{ valuation.parcel.khasra_no }} • {{ valuation.parcel.village.name }} • {{ valuation.parcel.area_acres }} Acres</div>
+      </div>
+      <div class="d-flex gap-2">
+        <button onclick="window.print()" class="btn btn-sm btn-light">
+          <i class="bi bi-printer me-1"></i> Print
+        </button>
+        <span class="badge bg-success px-3 py-2 fs-6 rounded-pill">
+          <i class="bi bi-patch-check-fill me-1"></i> Official
+        </span>
+      </div>
+    </div>
+
+    <div class="row g-0">
+      <!-- Left: Breakdown Table -->
+      <div class="col-lg-7 p-4">
+        <h6 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+          <i class="bi bi-receipt text-primary"></i> Government Charges Breakdown
+        </h6>
+        <table class="table table-borderless breakdown-table w-100 mb-0">
+          <tbody>
+            <tr>
+              <td>Target Plot</td>
+              <td class="fw-semibold text-dark">Khasra {{ valuation.parcel.khasra_no }} ({{ valuation.parcel.area_acres }} Acres)</td>
+            </tr>
+            <tr>
+              <td>Effective Circle Rate</td>
+              <td class="fw-semibold">₹{{ valuation.effective_rate|floatformat:0 }} / Acre</td>
+            </tr>
+            <tr>
+              <td>Base Market Value</td>
+              <td class="fw-bold text-success fs-6">₹{{ valuation.base_market_value|floatformat:0 }}</td>
+            </tr>
+            <tr>
+              <td><i class="bi bi-dot text-warning"></i> Stamp Duty (7.0%)</td>
+              <td class="text-warning fw-semibold">₹{{ valuation.stamp_duty|floatformat:0 }}</td>
+            </tr>
+            <tr>
+              <td><i class="bi bi-dot text-warning"></i> Registration Fees (1.0%)</td>
+              <td class="text-warning fw-semibold">₹{{ valuation.registration_fee|floatformat:0 }}</td>
+            </tr>
+            <tr>
+              <td><i class="bi bi-dot text-warning"></i> Mutation Docket Cess</td>
+              <td class="text-warning fw-semibold">₹{{ valuation.mutation_cess|floatformat:0 }}</td>
+            </tr>
+            <tr>
+              <td>Total Transfer & Registry Cost</td>
+              <td>₹{{ valuation.total_government_charges|floatformat:0 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Right: Big Total -->
+      <div class="col-lg-5 p-4 d-flex align-items-center justify-content-center"
+           style="background:#f8fafc; border-left:1px solid #e2e8f0;">
+        <div class="w-100">
+          <div class="total-box mb-3">
+            <i class="bi bi-cash-stack" style="font-size:2.5rem; color:#16a34a;"></i>
+            <div class="text-muted small fw-semibold mt-2 mb-1" style="letter-spacing:0.05em; text-transform:uppercase; font-size:0.75rem;">
+              Estimated Total Land Value
+            </div>
+            <div class="amount">₹{{ valuation.base_market_value|floatformat:0 }}</div>
+            <div class="mt-2">
+              <span class="badge bg-success px-3 py-1 rounded-pill small fw-semibold">
+                <i class="bi bi-check-circle me-1"></i> Official Collector Valuation
+              </span>
+            </div>
+          </div>
+
+          <!-- Mini Stat Chips -->
+          <div class="d-flex flex-wrap gap-2 justify-content-center">
+            <div class="text-center p-2 rounded-3" style="background:#fff; border:1px solid #e2e8f0; min-width:90px;">
+              <div class="fw-bold text-primary" style="font-size:0.95rem;">7%</div>
+              <div class="text-muted" style="font-size:0.7rem;">Stamp Duty</div>
+            </div>
+            <div class="text-center p-2 rounded-3" style="background:#fff; border:1px solid #e2e8f0; min-width:90px;">
+              <div class="fw-bold text-info" style="font-size:0.95rem;">1%</div>
+              <div class="text-muted" style="font-size:0.7rem;">Reg. Fee</div>
+            </div>
+            <div class="text-center p-2 rounded-3" style="background:#fff; border:1px solid #e2e8f0; min-width:90px;">
+              <div class="fw-bold text-success" style="font-size:0.95rem;">Punjab</div>
+              <div class="text-muted" style="font-size:0.7rem;">PLRC 1887</div>
+            </div>
+          </div>
+
+          <p class="text-muted text-center mt-3 mb-0" style="font-size:0.78rem; line-height:1.5;">
+            As per Punjab Revenue Manual. Valid for bank collateral & agricultural loan documentation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+  <!-- Empty State -->
+  <div class="text-center py-5" style="background:#f8fafc; border-radius:16px; border:2px dashed #cbd5e1;">
+    <i class="bi bi-calculator" style="font-size:3.5rem; color:#94a3b8;"></i>
+    <h5 class="mt-3 fw-semibold text-dark">Select a Parcel & Calculate</h5>
+    <p class="text-muted mb-0">Choose a cadastral parcel, enter the circle rate and click Calculate to see the full valuation report.</p>
+  </div>
+  {% endif %}
 
 </div>
 {% endblock %}
