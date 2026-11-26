@@ -26,7 +26,7 @@
                     <select name="parcel_id" class="form-select" required>
                         <option value="">-- Choose Parcel to Subdivide --</option>
                         {% for p in parcels %}
-                        <option value="{{ p.id }}">Khasra {{ p.khasra_no }} [{{ p.parcel_id }}] - {{ p.area_hectares }} Ha ({{ p.village.name }})</option>
+                        <option value="{{ p.id }}">Khasra {{ p.khasra_no }} [{{ p.parcel_id }}] - {{ p.area_hectares }} Ha</option>
                         {% endfor %}
                     </select>
                 </div>
