@@ -850,7 +850,7 @@
     });
     document.getElementById('filterStatus').addEventListener('change', loadParcels);
 
-    document.getElementById('clearAllBtn').addEventListener('click', function() {
+    function triggerClearAllPlots() {
         if (!confirm('Delete all registered plots from the map and database?')) return;
         fetch('/api/parcels/clear/', { method: 'POST' })
             .then(res => res.json())
@@ -864,7 +864,26 @@
                 }
             })
             .catch(() => showParcelToast('Error', 'Could not clear plots'));
-    });
+    }
+
+    document.getElementById('clearAllBtn').addEventListener('click', triggerClearAllPlots);
+
+    // Also add Clear button inside the map's Layer Control box
+    const layerList = document.querySelector('.leaflet-control-layers-list');
+    if (layerList) {
+        const sep = document.createElement('div');
+        sep.className = 'leaflet-control-layers-separator';
+        const clearBtn = document.createElement('button');
+        clearBtn.type = 'button';
+        clearBtn.innerHTML = '&#128465; Clear All Registered';
+        clearBtn.style.cssText = 'width:100%; margin-top:4px; padding:4px 8px; background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; border-radius:5px; font-size:12px; font-weight:600; cursor:pointer;';
+        clearBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            triggerClearAllPlots();
+        });
+        layerList.appendChild(sep);
+        layerList.appendChild(clearBtn);
+    }
 
     // 4. 3-Level Drill-Down: State -> District (Zila) -> Village -> Plots (Khasra + Owner)
     const drillLayerGroup = L.layerGroup().addTo(map);
