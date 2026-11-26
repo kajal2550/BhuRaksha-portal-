@@ -1,9 +1,11 @@
 from django.urls import path
 from . import views
+from accounts import views as account_views
 
 urlpatterns = [
     # 1. Main Home / Landing
     path('', views.home_view, name='home'),
+    path('admin-dashboard/', account_views.admin_dashboard_view, name='admin_dashboard'),
     
     # 2. Dedicated Interactive Web GIS Map
     path('map/', views.map_view, name='map_view'),

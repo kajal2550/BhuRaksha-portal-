@@ -32,6 +32,8 @@ def login_view(request):
                 profile, _ = UserProfile.objects.get_or_create(user=u)
                 request.session['mfa_verified'] = True
                 messages.success(request, f"Logged in as {u.username} ({profile.get_role_display()}) successfully!")
+                if u.is_superuser or quick_role == 'admin':
+                    return redirect('admin_dashboard')
                 return redirect('home')
 
     if request.method == 'POST':
@@ -53,6 +55,8 @@ def login_view(request):
             )
             log_security_event(user, "USER_LOGIN_SUCCESS", "AUTH", new_vals={"role": profile.role}, request=request)
             messages.success(request, f"Welcome back, {user.username} [{profile.get_role_display()}].")
+            if user.is_superuser:
+                return redirect('admin_dashboard')
             return redirect('home')
         else:
             LoginHistory.objects.create(
@@ -224,3 +228,19 @@ def logout_view(request):
 
 def lockout_view(request):
     return render(request, 'accounts/lockout.html')
+
+
+def admin_dashboard_view(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        return redirect('login')
+    from parcels.models import Parcel
+    from mutations.models import Mutation
+    context = {
+        'total_parcels': Parcel.objects.count(),
+        'verified_parcels': Parcel.objects.filter(status='Verified').count(),
+        'pending_mutations': Mutation.objects.filter(status='Pending').count(),
+        'total_users': User.objects.count(),
+        'recent_parcels': Parcel.objects.order_by('-id')[:15],
+        'users_list': User.objects.order_by('-id')[:15],
+    }
+    return render(request, 'accounts/admin_dashboard.html', context)
