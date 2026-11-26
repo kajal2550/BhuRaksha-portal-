@@ -238,7 +238,20 @@ def admin_dashboard_view(request):
     from disputes.models import Dispute
     disputed_parcels = Parcel.objects.filter(status__in=['Disputed', 'Tampered']).count()
     verified_parcels = Parcel.objects.filter(status='Verified').count()
-    pending_parcels = Parcel.objects.filter(status='Mutation Pending').count()
+    pending_parcels = Parcel.objects.filter(status__in=['Mutation Pending', 'Pending']).count()
+
+    # User breakdown
+    superuser_count = User.objects.filter(is_superuser=True).count()
+    staff_count = User.objects.filter(is_staff=True, is_superuser=False).count()
+    regular_users = User.objects.filter(is_superuser=False, is_staff=False).count()
+    active_users = User.objects.filter(is_active=True).count()
+    inactive_users = User.objects.filter(is_active=False).count()
+
+    # Security stats
+    login_success_count = LoginHistory.objects.filter(status='SUCCESS').count()
+    login_failed_count = LoginHistory.objects.filter(status='FAILED').count()
+    failed_logins = LoginHistory.objects.filter(status='FAILED').order_by('-timestamp')[:5]
+
     context = {
         'total_parcels': Parcel.objects.count(),
         'verified_parcels': verified_parcels,
@@ -247,10 +260,19 @@ def admin_dashboard_view(request):
         'pending_mutations': Mutation.objects.filter(status='Pending').count(),
         'active_disputes': Dispute.objects.count(),
         'total_users': User.objects.count(),
-        'recent_parcels': Parcel.objects.order_by('-id')[:15],
-        'users_list': User.objects.order_by('-id')[:15],
+        'superuser_count': superuser_count,
+        'staff_count': staff_count,
+        'regular_users': regular_users,
+        'active_users': active_users,
+        'inactive_users': inactive_users,
+        'login_success_count': login_success_count,
+        'login_failed_count': login_failed_count,
+        'failed_logins': failed_logins,
+        'recent_parcels': Parcel.objects.order_by('-id')[:20],
+        'pending_list': Parcel.objects.filter(status__in=['Mutation Pending', 'Pending']).order_by('-id')[:10],
+        'users_list': User.objects.order_by('-id')[:20],
         'recent_mutations': Mutation.objects.order_by('-id')[:10],
         'recent_disputes': Dispute.objects.order_by('-id')[:10],
-        'recent_logins': LoginHistory.objects.order_by('-timestamp')[:10],
+        'recent_logins': LoginHistory.objects.order_by('-timestamp')[:15],
     }
     return render(request, 'accounts/admin_dashboard.html', context)

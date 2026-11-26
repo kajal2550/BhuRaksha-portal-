@@ -6,183 +6,469 @@
     <title>Admin Control Center | BhuRaksha DPI</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; }
+        .stat-card { transition: transform 0.15s, box-shadow 0.15s; }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important; }
+        .section-header { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; }
+        .admin-badge { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+        .alert-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+        .activity-item { border-left: 3px solid #e2e8f0; padding-left: 12px; margin-bottom: 14px; }
+        .activity-item.success-ev { border-color: #16a34a; }
+        .activity-item.danger-ev  { border-color: #ef4444; }
+        .activity-item.warn-ev    { border-color: #f59e0b; }
+        .health-bar { height: 8px; border-radius: 4px; background: #e2e8f0; overflow: hidden; }
+        .health-fill { height: 100%; border-radius: 4px; transition: width 0.6s; }
+        .quick-link-btn { font-size: 0.78rem; padding: 6px 12px; border-radius: 8px; font-weight: 600; }
+        .role-pill { font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+        .nav-side { background: linear-gradient(180deg,#0f172a,#1e293b); min-height: 100vh; width: 220px; position: fixed; left: 0; top: 0; z-index: 1000; padding-top: 70px; }
+        .nav-side a { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: #94a3b8; font-size: 0.83rem; font-weight: 500; text-decoration: none; transition: 0.15s; border-left: 3px solid transparent; }
+        .nav-side a:hover, .nav-side a.active { color: #fff; background: rgba(255,255,255,0.07); border-color: #3b82f6; }
+        .nav-side .nav-section { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #475569; padding: 14px 20px 4px; letter-spacing: 0.08em; }
+        .main-content { margin-left: 220px; }
+        .topbar { background: linear-gradient(90deg,#0f172a,#1e293b); position: fixed; top: 0; left: 0; right: 0; z-index: 1100; height: 60px; }
+        @media(max-width:768px){ .nav-side{display:none;} .main-content{margin-left:0;} }
+        .table th { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; }
+        .table td { font-size: 0.83rem; vertical-align: middle; }
+        .kpi-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+        .timeline-dot { width: 10px; height: 10px; border-radius: 50%; background: #3b82f6; border: 2px solid #fff; box-shadow: 0 0 0 2px #3b82f6; flex-shrink: 0; margin-top: 4px; }
+    </style>
 </head>
-<body style="background:#f1f5f9; font-family:system-ui,-apple-system,sans-serif;">
+<body>
 
-<!-- Admin-Only Topbar -->
-<nav class="navbar navbar-dark px-4 py-3 shadow-sm" style="background:linear-gradient(90deg,#0f172a,#1e293b);">
+<!-- ══ TOPBAR ══ -->
+<nav class="topbar d-flex align-items-center justify-content-between px-4">
     <div class="d-flex align-items-center gap-3">
-        <span class="badge bg-primary px-2 py-2 rounded-3"><i class="bi bi-shield-lock-fill fs-5"></i></span>
+        <span class="badge admin-badge px-2 py-2 rounded-3"><i class="bi bi-shield-lock-fill fs-5"></i></span>
         <div>
-            <div class="fw-bold text-white fs-6 lh-1">BhuRaksha Admin Control Center</div>
-            <small class="text-secondary" style="font-size:0.75rem;">Administrator Portal &bull; Logged in as {{ request.user.username }}</small>
+            <div class="fw-bold text-white lh-1" style="font-size:0.95rem;">BhuRaksha Admin Control Center</div>
+            <small class="text-secondary" style="font-size:0.72rem;">Administrator Portal &bull; Logged in as <strong class="text-info">{{ request.user.username }}</strong></small>
         </div>
     </div>
     <div class="d-flex align-items-center gap-2">
-        <a href="/admin/" class="btn btn-sm btn-primary fw-semibold px-3">
-            <i class="bi bi-database-gear me-1"></i> Full Database Admin
+        <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-25 px-2 py-1" style="font-size:0.7rem;">
+            <i class="bi bi-circle-fill me-1" style="font-size:0.45rem;"></i>System Online
+        </span>
+        <a href="/map/" target="_blank" class="btn btn-sm btn-outline-light px-3" style="font-size:0.78rem;">
+            <i class="bi bi-map me-1"></i>View Map
         </a>
-        <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-light px-3">
-            <i class="bi bi-box-arrow-right me-1"></i> Logout
+        <a href="/admin/" class="btn btn-sm btn-primary fw-semibold px-3" style="font-size:0.78rem;">
+            <i class="bi bi-database-gear me-1"></i>DB Admin
+        </a>
+        <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-light px-3" style="font-size:0.78rem;">
+            <i class="bi bi-box-arrow-right me-1"></i>Logout
         </a>
     </div>
 </nav>
 
-<div class="container py-4">
+<!-- ══ SIDEBAR ══ -->
+<div class="nav-side">
+    <div class="nav-section">Overview</div>
+    <a href="#kpi-row" class="active"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <a href="#alerts-section"><i class="bi bi-bell"></i>Alerts <span class="badge bg-danger ms-auto" style="font-size:0.65rem;">{{ disputed_parcels }}</span></a>
 
-    <!-- Quick Admin Actions -->
-    <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-white">
+    <div class="nav-section">Land Records</div>
+    <a href="#parcels-section"><i class="bi bi-map"></i>Parcels</a>
+    <a href="#pending-section"><i class="bi bi-hourglass-split"></i>Pending Approval</a>
+    <a href="#mutations-section"><i class="bi bi-arrow-left-right"></i>Mutations</a>
+    <a href="#disputes-section"><i class="bi bi-exclamation-triangle"></i>Disputes</a>
+
+    <div class="nav-section">People</div>
+    <a href="#users-section"><i class="bi bi-people"></i>Users</a>
+    <a href="#logins-section"><i class="bi bi-clock-history"></i>Login Logs</a>
+    <a href="#security-section"><i class="bi bi-shield-exclamation"></i>Security</a>
+
+    <div class="nav-section">Analytics</div>
+    <a href="#charts-section"><i class="bi bi-bar-chart"></i>Charts</a>
+    <a href="#health-section"><i class="bi bi-activity"></i>System Health</a>
+
+    <div class="nav-section">Actions</div>
+    <a href="/admin/parcels/parcel/add/"><i class="bi bi-plus-circle"></i>Add Parcel</a>
+    <a href="/admin/auth/user/add/"><i class="bi bi-person-plus"></i>Add User</a>
+    <a href="/export/qgis-geojson/"><i class="bi bi-download"></i>Export GeoJSON</a>
+</div>
+
+<!-- ══ MAIN CONTENT ══ -->
+<div class="main-content" style="padding-top:60px;">
+<div class="container-fluid px-4 py-4">
+
+    <!-- Quick Actions Bar -->
+    <div class="card border-0 shadow-sm rounded-3 p-3 mb-4 bg-white">
         <div class="d-flex flex-wrap align-items-center gap-2">
             <span class="text-muted small fw-bold text-uppercase me-2"><i class="bi bi-lightning-fill text-warning me-1"></i>Quick Actions:</span>
-            <a href="/admin/parcels/parcel/add/" class="btn btn-sm btn-primary fw-semibold"><i class="bi bi-plus-circle me-1"></i>Add Parcel</a>
-            <a href="/admin/auth/user/add/" class="btn btn-sm btn-success fw-semibold"><i class="bi bi-person-plus me-1"></i>Add User</a>
-            <a href="/admin/mutations/mutation/" class="btn btn-sm btn-warning fw-semibold text-dark"><i class="bi bi-arrow-left-right me-1"></i>Mutations</a>
-            <a href="/admin/disputes/dispute/" class="btn btn-sm btn-danger fw-semibold"><i class="bi bi-exclamation-triangle me-1"></i>Disputes</a>
-            <a href="/admin/accounts/loginhistory/" class="btn btn-sm btn-outline-secondary fw-semibold"><i class="bi bi-clock-history me-1"></i>Login Logs</a>
-            <a href="/export/qgis-geojson/" class="btn btn-sm btn-outline-primary fw-semibold ms-auto"><i class="bi bi-download me-1"></i>Export GeoJSON</a>
+            <a href="/admin/parcels/parcel/add/" class="btn btn-sm btn-primary quick-link-btn"><i class="bi bi-plus-circle me-1"></i>Add Parcel</a>
+            <a href="/admin/auth/user/add/" class="btn btn-sm btn-success quick-link-btn"><i class="bi bi-person-plus me-1"></i>Add User</a>
+            <a href="/admin/mutations/mutation/" class="btn btn-sm btn-warning quick-link-btn text-dark"><i class="bi bi-arrow-left-right me-1"></i>Mutations</a>
+            <a href="/admin/disputes/dispute/" class="btn btn-sm btn-danger quick-link-btn"><i class="bi bi-exclamation-triangle me-1"></i>Disputes</a>
+            <a href="/admin/accounts/loginhistory/" class="btn btn-sm btn-outline-secondary quick-link-btn"><i class="bi bi-clock-history me-1"></i>Login Logs</a>
+            <a href="/parcel-split-simulator/" class="btn btn-sm btn-outline-primary quick-link-btn"><i class="bi bi-scissors me-1"></i>Parcel Split</a>
+            <a href="/verify/" class="btn btn-sm btn-outline-dark quick-link-btn"><i class="bi bi-patch-check me-1"></i>Verify Record</a>
+            <a href="/export/qgis-geojson/" class="btn btn-sm btn-outline-primary quick-link-btn ms-auto"><i class="bi bi-download me-1"></i>Export GeoJSON</a>
         </div>
     </div>
 
-    <!-- 6 Stats Row -->
-    <div class="row g-3 mb-4">
-        <div class="col-6 col-md-2">
-            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                <div class="text-muted small fw-semibold text-uppercase">Total Parcels</div>
-                <div class="fw-bold fs-2 text-primary">{{ total_parcels }}</div>
+    <!-- ══ KPI STAT CARDS (8 cards) ══ -->
+    <div id="kpi-row" class="row g-3 mb-4">
+        <div class="col-6 col-md-3 col-xl">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100 stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase" style="font-size:0.68rem;">Total Parcels</div>
+                        <div class="fw-bold fs-2 text-primary">{{ total_parcels }}</div>
+                    </div>
+                    <div class="kpi-icon" style="background:#eff6ff;"><i class="bi bi-map-fill text-primary"></i></div>
+                </div>
+                <div class="text-success small mt-1"><i class="bi bi-arrow-up"></i> Land Records</div>
             </div>
         </div>
-        <div class="col-6 col-md-2">
-            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                <div class="text-muted small fw-semibold text-uppercase">Verified</div>
-                <div class="fw-bold fs-2 text-success">{{ verified_parcels }}</div>
+        <div class="col-6 col-md-3 col-xl">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100 stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase" style="font-size:0.68rem;">Verified</div>
+                        <div class="fw-bold fs-2 text-success">{{ verified_parcels }}</div>
+                    </div>
+                    <div class="kpi-icon" style="background:#f0fdf4;"><i class="bi bi-patch-check-fill text-success"></i></div>
+                </div>
+                <div class="text-muted small mt-1">SHA-256 Verified</div>
             </div>
         </div>
-        <div class="col-6 col-md-2">
-            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                <div class="text-muted small fw-semibold text-uppercase">Disputed</div>
-                <div class="fw-bold fs-2 text-danger">{{ disputed_parcels }}</div>
+        <div class="col-6 col-md-3 col-xl">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100 stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase" style="font-size:0.68rem;">Disputed</div>
+                        <div class="fw-bold fs-2 text-danger">{{ disputed_parcels }}</div>
+                    </div>
+                    <div class="kpi-icon" style="background:#fef2f2;"><i class="bi bi-exclamation-octagon-fill text-danger"></i></div>
+                </div>
+                <div class="text-danger small mt-1">Needs Attention</div>
             </div>
         </div>
-        <div class="col-6 col-md-2">
-            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                <div class="text-muted small fw-semibold text-uppercase">Mutations</div>
-                <div class="fw-bold fs-2 text-warning">{{ pending_mutations }}</div>
+        <div class="col-6 col-md-3 col-xl">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100 stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase" style="font-size:0.68rem;">Pending</div>
+                        <div class="fw-bold fs-2 text-warning">{{ pending_parcels }}</div>
+                    </div>
+                    <div class="kpi-icon" style="background:#fffbeb;"><i class="bi bi-hourglass-split text-warning"></i></div>
+                </div>
+                <div class="text-muted small mt-1">Awaiting Review</div>
             </div>
         </div>
-        <div class="col-6 col-md-2">
-            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                <div class="text-muted small fw-semibold text-uppercase">Disputes</div>
-                <div class="fw-bold fs-2 text-danger">{{ active_disputes }}</div>
+        <div class="col-6 col-md-3 col-xl">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100 stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase" style="font-size:0.68rem;">Mutations</div>
+                        <div class="fw-bold fs-2 text-warning">{{ pending_mutations }}</div>
+                    </div>
+                    <div class="kpi-icon" style="background:#fffbeb;"><i class="bi bi-arrow-left-right text-warning"></i></div>
+                </div>
+                <div class="text-muted small mt-1">Pending Mutations</div>
             </div>
         </div>
-        <div class="col-6 col-md-2">
-            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
-                <div class="text-muted small fw-semibold text-uppercase">Users</div>
-                <div class="fw-bold fs-2 text-dark">{{ total_users }}</div>
+        <div class="col-6 col-md-3 col-xl">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100 stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase" style="font-size:0.68rem;">Disputes</div>
+                        <div class="fw-bold fs-2 text-danger">{{ active_disputes }}</div>
+                    </div>
+                    <div class="kpi-icon" style="background:#fef2f2;"><i class="bi bi-shield-x text-danger"></i></div>
+                </div>
+                <div class="text-muted small mt-1">Active Cases</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3 col-xl">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100 stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase" style="font-size:0.68rem;">Total Users</div>
+                        <div class="fw-bold fs-2 text-dark">{{ total_users }}</div>
+                    </div>
+                    <div class="kpi-icon" style="background:#f8fafc;"><i class="bi bi-people-fill text-secondary"></i></div>
+                </div>
+                <div class="text-muted small mt-1">Registered</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3 col-xl">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100 stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase" style="font-size:0.68rem;">Superusers</div>
+                        <div class="fw-bold fs-2 text-primary">{{ superuser_count }}</div>
+                    </div>
+                    <div class="kpi-icon" style="background:#eff6ff;"><i class="bi bi-person-badge-fill text-primary"></i></div>
+                </div>
+                <div class="text-muted small mt-1">Admins</div>
             </div>
         </div>
     </div>
 
-    <!-- Row: Parcels Table + Status Chart -->
-    <div class="row g-4 mb-4">
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
-                <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold text-dark mb-0"><i class="bi bi-map me-2 text-primary"></i>Registered Land Parcels</h6>
-                    <a href="/admin/parcels/parcel/" class="btn btn-sm btn-outline-primary">Manage All &rarr;</a>
+    <!-- ══ ALERTS PANEL ══ -->
+    {% if disputed_parcels or active_disputes %}
+    <div id="alerts-section" class="card border-0 shadow-sm rounded-4 mb-4" style="border-left: 4px solid #ef4444 !important; background: #fff;">
+        <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h6 class="fw-bold text-danger mb-0"><i class="bi bi-bell-fill me-2"></i>Active Alerts — Action Required</h6>
+            <span class="badge bg-danger">{{ disputed_parcels|add:active_disputes }} Issues</span>
+        </div>
+        <div class="p-4">
+            <div class="row g-3">
+                {% if disputed_parcels %}
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start gap-3 p-3 rounded-3" style="background:#fef2f2;">
+                        <i class="bi bi-exclamation-octagon-fill text-danger fs-4 mt-1"></i>
+                        <div>
+                            <div class="fw-bold text-dark">{{ disputed_parcels }} Disputed Parcel(s)</div>
+                            <div class="text-muted small">Land parcels with Disputed / Tampered status require immediate review and resolution.</div>
+                            <a href="/admin/parcels/parcel/?status=Disputed" class="btn btn-sm btn-danger mt-2">Review Now →</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0 small">
-                        <thead class="table-light">
-                            <tr>
-                                <th>ULPIN</th>
-                                <th>Khasra No.</th>
-                                <th>Area (Ha)</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for p in recent_parcels %}
-                            <tr>
-                                <td class="font-monospace fw-semibold">{{ p.parcel_id }}</td>
-                                <td>{{ p.khasra_no }}</td>
-                                <td>{{ p.area_hectares }} Ha</td>
-                                <td>
-                                    <span class="badge {% if p.status == 'Verified' %}bg-success{% elif p.status == 'Disputed' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
-                                        {{ p.status }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <a href="/admin/parcels/parcel/{{ p.id }}/change/" class="btn btn-sm btn-light border">Edit</a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr><td colspan="5" class="text-center text-muted py-4">No parcels registered yet.</td></tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                {% endif %}
+                {% if active_disputes %}
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start gap-3 p-3 rounded-3" style="background:#fef2f2;">
+                        <i class="bi bi-shield-x text-danger fs-4 mt-1"></i>
+                        <div>
+                            <div class="fw-bold text-dark">{{ active_disputes }} Active Dispute Case(s)</div>
+                            <div class="text-muted small">Legal dispute filings pending resolution by Revenue Officer / Court order.</div>
+                            <a href="/admin/disputes/dispute/" class="btn btn-sm btn-danger mt-2">Resolve Now →</a>
+                        </div>
+                    </div>
                 </div>
+                {% endif %}
+                {% if pending_mutations %}
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start gap-3 p-3 rounded-3" style="background:#fffbeb;">
+                        <i class="bi bi-arrow-left-right text-warning fs-4 mt-1"></i>
+                        <div>
+                            <div class="fw-bold text-dark">{{ pending_mutations }} Pending Mutation(s)</div>
+                            <div class="text-muted small">Ownership transfer / partition mutation applications awaiting officer approval.</div>
+                            <a href="/admin/mutations/mutation/" class="btn btn-sm btn-warning mt-2 text-dark">Approve →</a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
+    </div>
+    {% endif %}
+
+    <!-- ══ CHARTS ROW ══ -->
+    <div id="charts-section" class="row g-4 mb-4">
+        <!-- Parcel Status Donut -->
         <div class="col-lg-4">
-            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-center">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
                 <h6 class="fw-bold text-dark mb-3 text-center"><i class="bi bi-pie-chart-fill me-2 text-primary"></i>Parcel Status Breakdown</h6>
-                <canvas id="adminParcelChart" height="220"></canvas>
+                <canvas id="adminParcelChart" height="200"></canvas>
+                <div class="row g-2 mt-3 text-center">
+                    <div class="col-4"><div class="fw-bold text-success">{{ verified_parcels }}</div><div class="text-muted" style="font-size:0.7rem;">Verified</div></div>
+                    <div class="col-4"><div class="fw-bold text-danger">{{ disputed_parcels }}</div><div class="text-muted" style="font-size:0.7rem;">Disputed</div></div>
+                    <div class="col-4"><div class="fw-bold text-warning">{{ pending_parcels }}</div><div class="text-muted" style="font-size:0.7rem;">Pending</div></div>
+                </div>
+            </div>
+        </div>
+        <!-- Role Breakdown Bar -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                <h6 class="fw-bold text-dark mb-3 text-center"><i class="bi bi-bar-chart-fill me-2 text-teal" style="color:#0f766e;"></i>User Role Distribution</h6>
+                <canvas id="roleChart" height="200"></canvas>
+            </div>
+        </div>
+        <!-- System Info -->
+        <div class="col-lg-4">
+            <div id="health-section" class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-activity me-2 text-info"></i>System Health</h6>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span class="fw-semibold">Database</span>
+                        <span class="text-success">Healthy</span>
+                    </div>
+                    <div class="health-bar"><div class="health-fill" style="width:95%; background:#16a34a;"></div></div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span class="fw-semibold">Parcel Verification Rate</span>
+                        <span class="text-primary" id="verifyRate">—</span>
+                    </div>
+                    <div class="health-bar"><div class="health-fill" id="verifyBar" style="width:0%; background:#2563eb;"></div></div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span class="fw-semibold">Dispute Rate</span>
+                        <span class="text-danger" id="disputeRate">—</span>
+                    </div>
+                    <div class="health-bar"><div class="health-fill" id="disputeBar" style="width:0%; background:#ef4444;"></div></div>
+                </div>
+                <hr class="my-3">
+                <div class="row g-2 text-center">
+                    <div class="col-6">
+                        <div class="p-2 rounded-3" style="background:#f8fafc;">
+                            <div class="fw-bold text-dark small">Django 4.x</div>
+                            <div class="text-muted" style="font-size:0.68rem;">Framework</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 rounded-3" style="background:#f8fafc;">
+                            <div class="fw-bold text-dark small">SQLite3</div>
+                            <div class="text-muted" style="font-size:0.68rem;">Database</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 rounded-3" style="background:#f8fafc;">
+                            <div class="fw-bold text-dark small">Leaflet.js</div>
+                            <div class="text-muted" style="font-size:0.68rem;">GIS Engine</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 rounded-3" style="background:#f8fafc;">
+                            <div class="fw-bold text-dark small">SHA-256</div>
+                            <div class="text-muted" style="font-size:0.68rem;">Hash Algorithm</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Row: Mutations & Disputes -->
+    <!-- ══ PARCELS TABLE ══ -->
+    <div id="parcels-section" class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-4">
+        <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h6 class="fw-bold text-dark mb-0"><i class="bi bi-map me-2 text-primary"></i>Registered Land Parcels</h6>
+            <div class="d-flex gap-2">
+                <a href="/admin/parcels/parcel/add/" class="btn btn-sm btn-primary"><i class="bi bi-plus me-1"></i>Add</a>
+                <a href="/admin/parcels/parcel/" class="btn btn-sm btn-outline-primary">Manage All →</a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>ULPIN</th>
+                        <th>Khasra No.</th>
+                        <th>Owner</th>
+                        <th>Area (Ha)</th>
+                        <th>Village</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in recent_parcels %}
+                    <tr>
+                        <td class="text-muted">{{ forloop.counter }}</td>
+                        <td class="font-monospace fw-semibold text-primary" style="font-size:0.78rem;">{{ p.parcel_id }}</td>
+                        <td class="fw-semibold">{{ p.khasra_no }}</td>
+                        <td>{{ p.owner_name|default:"—" }}</td>
+                        <td>{{ p.area_hectares }} Ha</td>
+                        <td class="text-muted">{{ p.village|default:"—" }}</td>
+                        <td>
+                            <span class="badge {% if p.status == 'Verified' %}bg-success{% elif p.status == 'Disputed' %}bg-danger{% elif p.status == 'Tampered' %}bg-dark{% else %}bg-warning text-dark{% endif %}">
+                                {{ p.status }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="/admin/parcels/parcel/{{ p.id }}/change/" class="btn btn-sm btn-light border me-1">Edit</a>
+                            <a href="/verify/?parcel_id={{ p.parcel_id }}" class="btn btn-sm btn-outline-primary">Verify</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="8" class="text-center text-muted py-4"><i class="bi bi-inbox fs-3 d-block mb-2"></i>No parcels registered yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ══ PENDING APPROVALS ══ -->
+    <div id="pending-section" class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-4">
+        <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center" style="background:#fffbeb;">
+            <h6 class="fw-bold text-dark mb-0"><i class="bi bi-hourglass-split me-2 text-warning"></i>Parcels Pending Verification</h6>
+            <span class="badge bg-warning text-dark">{{ pending_parcels }} Pending</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>ULPIN</th><th>Khasra</th><th>Owner</th><th>Area</th><th>Registered</th><th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in pending_list %}
+                    <tr>
+                        <td class="font-monospace fw-semibold text-warning" style="font-size:0.78rem;">{{ p.parcel_id }}</td>
+                        <td>{{ p.khasra_no }}</td>
+                        <td>{{ p.owner_name|default:"—" }}</td>
+                        <td>{{ p.area_hectares }} Ha</td>
+                        <td class="text-muted" style="font-size:0.78rem;">{{ p.created_at|date:"d M Y"|default:"—" }}</td>
+                        <td>
+                            <a href="/admin/parcels/parcel/{{ p.id }}/change/" class="btn btn-sm btn-warning text-dark">Approve</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" class="text-center text-muted py-3"><i class="bi bi-check-circle text-success me-1"></i>All parcels are verified! No pending approvals.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ══ MUTATIONS + DISPUTES ROW ══ -->
     <div class="row g-4 mb-4">
-        <div class="col-md-6">
+        <div class="col-md-6" id="mutations-section">
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
                 <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
                     <h6 class="fw-bold text-dark mb-0"><i class="bi bi-arrow-left-right me-2 text-warning"></i>Recent Mutations</h6>
-                    <a href="/admin/mutations/mutation/" class="btn btn-sm btn-outline-warning text-dark">Manage &rarr;</a>
+                    <a href="/admin/mutations/mutation/" class="btn btn-sm btn-outline-warning text-dark">Manage →</a>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0 small">
+                    <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
-                            <tr><th>ID</th><th>Type</th><th>Status</th><th>Action</th></tr>
+                            <tr><th>#</th><th>Type</th><th>Parcel</th><th>Status</th><th>Action</th></tr>
                         </thead>
                         <tbody>
                             {% for m in recent_mutations %}
                             <tr>
-                                <td class="font-monospace">#{{ m.id }}</td>
-                                <td>{{ m.mutation_type|default:"Partition" }}</td>
-                                <td><span class="badge bg-warning text-dark">{{ m.status }}</span></td>
+                                <td class="font-monospace text-muted">#{{ m.id }}</td>
+                                <td><span class="badge bg-warning text-dark">{{ m.mutation_type|default:"Partition" }}</span></td>
+                                <td class="text-muted" style="font-size:0.78rem;">{{ m.parcel|default:"—" }}</td>
+                                <td><span class="badge {% if m.status == 'Approved' %}bg-success{% elif m.status == 'Rejected' %}bg-danger{% else %}bg-secondary{% endif %}">{{ m.status }}</span></td>
                                 <td><a href="/admin/mutations/mutation/{{ m.id }}/change/" class="btn btn-sm btn-light border">Review</a></td>
                             </tr>
                             {% empty %}
-                            <tr><td colspan="4" class="text-center text-muted py-3">No mutations found.</td></tr>
+                            <tr><td colspan="5" class="text-center text-muted py-3">No mutations found.</td></tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" id="disputes-section">
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
                 <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
                     <h6 class="fw-bold text-dark mb-0"><i class="bi bi-exclamation-triangle me-2 text-danger"></i>Active Disputes</h6>
-                    <a href="/admin/disputes/dispute/" class="btn btn-sm btn-outline-danger">Manage &rarr;</a>
+                    <a href="/admin/disputes/dispute/" class="btn btn-sm btn-outline-danger">Manage →</a>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0 small">
+                    <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
-                            <tr><th>ID</th><th>Case / Reason</th><th>Status</th><th>Action</th></tr>
+                            <tr><th>#</th><th>Case / Reason</th><th>Parcel</th><th>Status</th><th>Action</th></tr>
                         </thead>
                         <tbody>
                             {% for d in recent_disputes %}
                             <tr>
-                                <td class="font-monospace">#{{ d.id }}</td>
-                                <td>{{ d.reason|default:d.dispute_type|default:"Boundary Dispute"|truncatechars:32 }}</td>
+                                <td class="font-monospace text-muted">#{{ d.id }}</td>
+                                <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ d.reason|default:d.dispute_type|default:"Boundary Dispute" }}</td>
+                                <td class="text-muted" style="font-size:0.78rem;">{{ d.parcel|default:"—" }}</td>
                                 <td><span class="badge bg-danger">{{ d.status|default:"Open" }}</span></td>
                                 <td><a href="/admin/disputes/dispute/{{ d.id }}/change/" class="btn btn-sm btn-light border">Resolve</a></td>
                             </tr>
                             {% empty %}
-                            <tr><td colspan="4" class="text-center text-muted py-3">No active disputes.</td></tr>
+                            <tr><td colspan="5" class="text-center text-muted py-3"><i class="bi bi-check-circle text-success me-1"></i>No active disputes.</td></tr>
                             {% endfor %}
                         </tbody>
                     </table>
@@ -191,26 +477,44 @@
         </div>
     </div>
 
-    <!-- Row: System Users + Login Audit Logs -->
-    <div class="row g-4">
-        <div class="col-md-6">
+    <!-- ══ USERS + SECURITY ROW ══ -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-7" id="users-section">
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
                 <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
                     <h6 class="fw-bold text-dark mb-0"><i class="bi bi-people me-2 text-success"></i>System Users</h6>
-                    <a href="/admin/auth/user/" class="btn btn-sm btn-outline-success">Manage Users &rarr;</a>
+                    <div class="d-flex gap-2">
+                        <a href="/admin/auth/user/add/" class="btn btn-sm btn-success"><i class="bi bi-person-plus me-1"></i>Add</a>
+                        <a href="/admin/auth/user/" class="btn btn-sm btn-outline-success">Manage →</a>
+                    </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0 small">
+                    <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
-                            <tr><th>Username</th><th>Email</th><th>Role</th><th>Status</th></tr>
+                            <tr><th>#</th><th>Username</th><th>Email</th><th>Role</th><th>Joined</th><th>Status</th></tr>
                         </thead>
                         <tbody>
                             {% for u in users_list %}
                             <tr>
-                                <td class="fw-semibold">{{ u.username }}</td>
-                                <td class="text-muted">{{ u.email }}</td>
-                                <td>{% if u.is_superuser %}<span class="badge bg-primary">Admin</span>{% else %}<span class="badge bg-secondary">User</span>{% endif %}</td>
-                                <td>{% if u.is_active %}<span class="text-success fw-semibold">Active</span>{% else %}<span class="text-danger">Inactive</span>{% endif %}</td>
+                                <td class="text-muted">{{ forloop.counter }}</td>
+                                <td class="fw-semibold">
+                                    {% if u.is_superuser %}<i class="bi bi-shield-fill text-primary me-1" style="font-size:0.75rem;"></i>{% endif %}
+                                    {{ u.username }}
+                                </td>
+                                <td class="text-muted" style="font-size:0.78rem;">{{ u.email|default:"—" }}</td>
+                                <td>
+                                    {% if u.is_superuser %}
+                                        <span class="role-pill" style="background:#eff6ff; color:#1d4ed8;">Admin</span>
+                                    {% elif u.is_staff %}
+                                        <span class="role-pill" style="background:#f0fdf4; color:#15803d;">Staff</span>
+                                    {% else %}
+                                        <span class="role-pill" style="background:#f1f5f9; color:#475569;">User</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-muted" style="font-size:0.75rem;">{{ u.date_joined|date:"d M Y" }}</td>
+                                <td>
+                                    {% if u.is_active %}<span class="text-success fw-semibold small">● Active</span>{% else %}<span class="text-danger small">● Inactive</span>{% endif %}
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -218,55 +522,217 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-lg-5" id="security-section">
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
                 <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold text-dark mb-0"><i class="bi bi-shield-check me-2 text-info"></i>Recent Login Audit</h6>
-                    <a href="/admin/accounts/loginhistory/" class="btn btn-sm btn-outline-secondary">All Logs &rarr;</a>
+                    <h6 class="fw-bold text-dark mb-0"><i class="bi bi-shield-exclamation me-2 text-info"></i>Security Overview</h6>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0 small">
-                        <thead class="table-light">
-                            <tr><th>Username</th><th>IP</th><th>Status</th><th>Time</th></tr>
-                        </thead>
-                        <tbody>
-                            {% for l in recent_logins %}
-                            <tr>
-                                <td class="fw-semibold">{{ l.username_attempted }}</td>
-                                <td class="font-monospace text-muted">{{ l.ip_address }}</td>
-                                <td><span class="badge {% if l.status == 'SUCCESS' %}bg-success{% else %}bg-danger{% endif %}">{{ l.status }}</span></td>
-                                <td class="text-muted">{{ l.timestamp|date:"d M, H:i" }}</td>
-                            </tr>
-                            {% empty %}
-                            <tr><td colspan="4" class="text-center text-muted py-3">No login logs yet.</td></tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                <div class="p-4">
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <div class="p-3 rounded-3 text-center" style="background:#f0fdf4;">
+                                <div class="fw-bold fs-4 text-success">{{ login_success_count }}</div>
+                                <div class="text-muted small">Successful Logins</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded-3 text-center" style="background:#fef2f2;">
+                                <div class="fw-bold fs-4 text-danger">{{ login_failed_count }}</div>
+                                <div class="text-muted small">Failed Attempts</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="section-header mb-2">Recent Failed Logins</div>
+                        {% for l in failed_logins %}
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <div>
+                                <div class="fw-semibold small text-danger">{{ l.username_attempted }}</div>
+                                <div class="text-muted" style="font-size:0.72rem;">IP: {{ l.ip_address }}</div>
+                            </div>
+                            <div class="text-muted" style="font-size:0.72rem;">{{ l.timestamp|date:"d M, H:i" }}</div>
+                        </div>
+                        {% empty %}
+                        <div class="text-muted small text-center py-2"><i class="bi bi-check-circle text-success me-1"></i>No failed login attempts</div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-</div>
+    <!-- ══ LOGIN AUDIT LOG ══ -->
+    <div id="logins-section" class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mb-4">
+        <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h6 class="fw-bold text-dark mb-0"><i class="bi bi-clock-history me-2 text-info"></i>Recent Login Audit Log</h6>
+            <a href="/admin/accounts/loginhistory/" class="btn btn-sm btn-outline-secondary">All Logs →</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr><th>#</th><th>Username</th><th>IP Address</th><th>Browser / Device</th><th>Status</th><th>Time</th></tr>
+                </thead>
+                <tbody>
+                    {% for l in recent_logins %}
+                    <tr>
+                        <td class="text-muted">{{ forloop.counter }}</td>
+                        <td class="fw-semibold">{{ l.username_attempted }}</td>
+                        <td class="font-monospace text-muted" style="font-size:0.78rem;">{{ l.ip_address }}</td>
+                        <td class="text-muted" style="font-size:0.75rem; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                            {% if l.user_agent %}{{ l.user_agent|truncatechars:50 }}{% else %}—{% endif %}
+                        </td>
+                        <td><span class="badge {% if l.status == 'SUCCESS' %}bg-success{% else %}bg-danger{% endif %}">{{ l.status }}</span></td>
+                        <td class="text-muted" style="font-size:0.78rem;">{{ l.timestamp|date:"d M Y, H:i" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" class="text-center text-muted py-3">No login logs yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ══ ACTIVITY TIMELINE + DATA EXPORT ROW ══ -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                <h6 class="fw-bold text-dark mb-4"><i class="bi bi-clock me-2 text-primary"></i>Recent Activity Timeline</h6>
+                {% for l in recent_logins|slice:":6" %}
+                <div class="d-flex gap-3 mb-3">
+                    <div class="timeline-dot {% if l.status == 'SUCCESS' %}bg-success{% else %}bg-danger{% endif %}" style="background:{% if l.status == 'SUCCESS' %}#16a34a{% else %}#ef4444{% endif %};"></div>
+                    <div>
+                        <div class="fw-semibold small">{{ l.username_attempted }} — <span class="{% if l.status == 'SUCCESS' %}text-success{% else %}text-danger{% endif %}">{{ l.status }}</span></div>
+                        <div class="text-muted" style="font-size:0.72rem;">Login from {{ l.ip_address }} &bull; {{ l.timestamp|date:"d M, H:i" }}</div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted small">No recent activity.</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                <h6 class="fw-bold text-dark mb-4"><i class="bi bi-cloud-download me-2 text-primary"></i>Data Export &amp; Reports</h6>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <a href="/export/qgis-geojson/" class="d-block p-3 rounded-3 text-decoration-none" style="background:#eff6ff; border:1px solid #bfdbfe;">
+                            <i class="bi bi-filetype-json text-primary fs-3"></i>
+                            <div class="fw-bold text-dark mt-2 small">GeoJSON Export</div>
+                            <div class="text-muted" style="font-size:0.72rem;">Download all parcel geodata</div>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="/admin/parcels/parcel/" class="d-block p-3 rounded-3 text-decoration-none" style="background:#f0fdf4; border:1px solid #bbf7d0;">
+                            <i class="bi bi-table text-success fs-3"></i>
+                            <div class="fw-bold text-dark mt-2 small">Full Parcel DB</div>
+                            <div class="text-muted" style="font-size:0.72rem;">Django admin table view</div>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="/admin/auth/user/" class="d-block p-3 rounded-3 text-decoration-none" style="background:#fefce8; border:1px solid #fde68a;">
+                            <i class="bi bi-people text-warning fs-3"></i>
+                            <div class="fw-bold text-dark mt-2 small">User Export</div>
+                            <div class="text-muted" style="font-size:0.72rem;">Manage all user accounts</div>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="/admin/accounts/loginhistory/" class="d-block p-3 rounded-3 text-decoration-none" style="background:#fdf4ff; border:1px solid #e9d5ff;">
+                            <i class="bi bi-shield-lock text-purple fs-3" style="color:#7c3aed;"></i>
+                            <div class="fw-bold text-dark mt-2 small">Audit Log Export</div>
+                            <div class="text-muted" style="font-size:0.72rem;">Full security logs</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ PLATFORM INFO FOOTER CARDS ══ -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center" style="background:linear-gradient(135deg,#2563eb,#1d4ed8); color:#fff;">
+                <i class="bi bi-map-fill fs-2 mb-2"></i>
+                <div class="fw-bold">BhuRaksha DPI</div>
+                <div style="font-size:0.72rem; opacity:0.8;">Digital Public Infrastructure</div>
+                <div style="font-size:0.72rem; opacity:0.8;">for Land Governance</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center bg-white">
+                <i class="bi bi-geo-alt-fill text-success fs-2 mb-2"></i>
+                <div class="fw-bold text-dark">36+ States</div>
+                <div class="text-muted small">All Indian States &amp; UTs</div>
+                <div class="text-muted small">covered in GIS map</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center bg-white">
+                <i class="bi bi-lock-fill text-warning fs-2 mb-2"></i>
+                <div class="fw-bold text-dark">SHA-256</div>
+                <div class="text-muted small">Cryptographic hashing</div>
+                <div class="text-muted small">for tamper detection</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center bg-white">
+                <i class="bi bi-github text-dark fs-2 mb-2"></i>
+                <div class="fw-bold text-dark">Open Source</div>
+                <div class="text-muted small">CA-3 Academic Project</div>
+                <div class="text-muted small">GitHub: kajal2550</div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /container-fluid -->
+</div><!-- /main-content -->
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script>
-    const ctx = document.getElementById('adminParcelChart').getContext('2d');
-    new Chart(ctx, {
+    // ── Parcel Status Donut ──
+    new Chart(document.getElementById('adminParcelChart').getContext('2d'), {
         type: 'doughnut',
         data: {
             labels: ['Verified', 'Disputed', 'Pending'],
+            datasets: [{ data: [{{ verified_parcels }}, {{ disputed_parcels }}, {{ pending_parcels }}], backgroundColor: ['#16a34a','#ef4444','#f59e0b'], borderWidth: 2, borderColor: '#fff' }]
+        },
+        options: { cutout: '62%', plugins: { legend: { position: 'bottom', labels: { font:{size:11}, boxWidth:12 } } } }
+    });
+
+    // ── Role Breakdown Bar Chart ──
+    new Chart(document.getElementById('roleChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Admin', 'Staff', 'Regular Users', 'Active', 'Inactive'],
             datasets: [{
-                data: [{{ verified_parcels }}, {{ disputed_parcels }}, {{ pending_parcels }}],
-                backgroundColor: ['#16a34a', '#ef4444', '#f59e0b'],
-                borderWidth: 2,
-                borderColor: '#fff'
+                label: 'Count',
+                data: [{{ superuser_count }}, {{ staff_count }}, {{ regular_users }}, {{ active_users }}, {{ inactive_users }}],
+                backgroundColor: ['#2563eb','#0f766e','#64748b','#16a34a','#ef4444'],
+                borderRadius: 6,
+                borderSkipped: false
             }]
         },
         options: {
-            cutout: '62%',
-            plugins: { legend: { position: 'bottom' } }
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } }, x: { grid: { display: false } } }
         }
+    });
+
+    // ── Health bars ──
+    const totalP = {{ total_parcels }} || 1;
+    const verifyPct = Math.round({{ verified_parcels }} / totalP * 100);
+    const disputePct = Math.round({{ disputed_parcels }} / totalP * 100);
+    document.getElementById('verifyBar').style.width = verifyPct + '%';
+    document.getElementById('disputeBar').style.width = disputePct + '%';
+    document.getElementById('verifyRate').textContent = verifyPct + '%';
+    document.getElementById('disputeRate').textContent = disputePct + '%';
+
+    // ── Smooth scroll for sidebar links ──
+    document.querySelectorAll('.nav-side a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
     });
 </script>
 </body>
