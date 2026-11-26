@@ -5,68 +5,155 @@
 {% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            
-            <div class="cyber-card p-4 p-md-5 mb-4">
-                <div class="text-center mb-4">
-                    <i class="bi bi-patch-check-fill text-success display-4 mb-2"></i>
-                    <h3 class="fw-bold text-white font-monospace">PUBLIC_PARCEL_VERIFICATION</h3>
-                    <p class="text-secondary small">
-                        Scan the QR code on any printed Record of Rights (RoR) certificate or enter the 14-character ULPIN to verify if the record is genuine or tampered.
-                    </p>
+        <div class="col-lg-7">
+
+            <!-- Header Card -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-4 text-center" style="background:#ffffff;">
+                <div class="mb-3">
+                    <span style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:50%;background:#dcfce7;margin-bottom:12px;">
+                        <i class="bi bi-patch-check-fill text-success" style="font-size:2rem;"></i>
+                    </span>
+                    <h3 class="fw-bold text-dark mb-1">Public Parcel Verification</h3>
+                    <p class="text-muted small mb-0">Scan the QR code on any printed Record of Rights (RoR) certificate or enter the ULPIN to verify if the record is genuine or tampered.</p>
                 </div>
 
-                <form method="GET" action="{% url 'verify_public' %}" class="mb-4">
-                    <div class="input-group input-group-lg">
-                        <span class="input-group-text bg-dark border-secondary text-info"><i class="bi bi-qr-code-scan"></i></span>
-                        <input type="text" name="parcel_id" value="{{ query }}" class="form-control cyber-input" placeholder="e.g. PB-KPT-2024-1000 or Khasra 101/1" required>
-                        <button type="submit" class="btn btn-cyber-primary px-4 fw-bold">Verify Authenticity</button>
+                <!-- Search Bar -->
+                <form method="GET" action="{% url 'verify_public' %}">
+                    <div class="input-group input-group-lg shadow-sm" style="border-radius:12px; overflow:hidden;">
+                        <span class="input-group-text" style="background:#f1f5f9; border:1px solid #cbd5e1; border-right:none;">
+                            <i class="bi bi-qr-code-scan text-secondary"></i>
+                        </span>
+                        <input type="text" name="parcel_id" value="{{ query }}" class="form-control"
+                               style="border:1px solid #cbd5e1; border-left:none; border-right:none; font-size:0.95rem;"
+                               placeholder="e.g. PB-KPT-2024-1000" required>
+                        <button type="submit" class="btn fw-semibold text-white px-4"
+                                style="background:#2563eb; border:none; border-radius:0 10px 10px 0;">
+                            <i class="bi bi-shield-check me-1"></i> Verify
+                        </button>
                     </div>
                 </form>
+            </div>
 
-                {% if parcel %}
-                <div class="p-4 bg-dark rounded border {% if integrity.valid %}border-success{% else %}border-danger{% endif %} mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="fw-bold text-white mb-0 font-monospace">VERIFICATION RESULT: {{ parcel.parcel_id }}</h5>
-                        {% if integrity.valid %}
-                            <span class="badge-glow-green px-3 py-1 fw-bold"><i class="bi bi-check-circle-fill me-1"></i>GENUINE RECORD</span>
-                        {% else %}
-                            <span class="badge-glow-red px-3 py-1 fw-bold"><i class="bi bi-x-circle-fill me-1"></i>TAMPER ALERT</span>
-                        {% endif %}
+            <!-- Result Card -->
+            {% if parcel %}
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4"
+                 style="border-left:5px solid {% if integrity.valid %}#16a34a{% else %}#dc2626{% endif %} !important;">
+
+                <!-- Result Header -->
+                <div class="px-4 py-3 d-flex justify-content-between align-items-center"
+                     style="background:{% if integrity.valid %}#f0fdf4{% else %}#fef2f2{% endif %};">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Verification Result</div>
+                        <h5 class="fw-bold text-dark mb-0 font-monospace">{{ parcel.parcel_id }}</h5>
                     </div>
+                    {% if integrity.valid %}
+                    <span class="badge px-3 py-2 rounded-pill fw-semibold"
+                          style="background:#dcfce7; color:#15803d; font-size:0.8rem;">
+                        <i class="bi bi-check-circle-fill me-1"></i> Genuine Record
+                    </span>
+                    {% else %}
+                    <span class="badge px-3 py-2 rounded-pill fw-semibold"
+                          style="background:#fee2e2; color:#b91c1c; font-size:0.8rem;">
+                        <i class="bi bi-x-circle-fill me-1"></i> Tamper Alert
+                    </span>
+                    {% endif %}
+                </div>
 
-                    <div class="row g-2 mb-3 small font-monospace">
-                        <div class="col-sm-4 text-muted">KHASRA NUMBER:</div>
-                        <div class="col-sm-8 text-white fw-bold">{{ parcel.khasra_no }}</div>
-
-                        <div class="col-sm-4 text-muted">JURISDICTION:</div>
-                        <div class="col-sm-8 text-white">{{ parcel.village.name }}, {{ parcel.village.tehsil }} ({{ parcel.village.district }})</div>
-
-                        <div class="col-sm-4 text-muted">TOTAL AREA:</div>
-                        <div class="col-sm-8 text-white">{{ parcel.area_hectares }} Hectares ({{ parcel.area_acres }} Acres)</div>
-
-                        <div class="col-sm-4 text-muted">RECORD STATUS:</div>
-                        <div class="col-sm-8">
-                            <span class="badge {% if parcel.status == 'Verified' %}bg-success{% elif parcel.status == 'Disputed' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
-                                {{ parcel.status }}
-                            </span>
+                <!-- Result Body -->
+                <div class="px-4 py-4" style="background:#ffffff;">
+                    <div class="row g-3">
+                        <!-- Khasra -->
+                        <div class="col-6">
+                            <div class="p-3 rounded-3" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                                <div class="text-muted small fw-semibold text-uppercase mb-1">Khasra Number</div>
+                                <div class="fw-bold text-dark fs-5">{{ parcel.khasra_no }}</div>
+                            </div>
                         </div>
-
-                        <div class="col-sm-4 text-muted">STORED FINGERPRINT:</div>
-                        <div class="col-sm-8 text-info text-break">{{ integrity.fingerprint }}</div>
-
-                        <div class="col-sm-4 text-muted">REAL-TIME HASH:</div>
-                        <div class="col-sm-8 text-break {% if integrity.valid %}text-success{% else %}text-danger fw-bold{% endif %}">{{ integrity.recalc }}</div>
+                        <!-- Area -->
+                        <div class="col-6">
+                            <div class="p-3 rounded-3" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                                <div class="text-muted small fw-semibold text-uppercase mb-1">Total Area</div>
+                                <div class="fw-bold text-dark fs-5">{{ parcel.area_hectares }} Ha</div>
+                                <div class="text-muted small">{{ parcel.area_acres }} Acres</div>
+                            </div>
+                        </div>
+                        <!-- Jurisdiction -->
+                        <div class="col-12">
+                            <div class="p-3 rounded-3" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                                <div class="text-muted small fw-semibold text-uppercase mb-1">Jurisdiction</div>
+                                <div class="fw-semibold text-dark">{{ parcel.village.name }}, {{ parcel.village.tehsil }} &mdash; {{ parcel.village.district }}</div>
+                            </div>
+                        </div>
+                        <!-- Status -->
+                        <div class="col-6">
+                            <div class="p-3 rounded-3" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                                <div class="text-muted small fw-semibold text-uppercase mb-1">Record Status</div>
+                                <span class="badge rounded-pill px-3 py-2 fw-semibold
+                                    {% if parcel.status == 'Verified' %}bg-success
+                                    {% elif parcel.status == 'Disputed' %}bg-danger
+                                    {% else %}bg-warning text-dark{% endif %}">
+                                    {{ parcel.status }}
+                                </span>
+                            </div>
+                        </div>
+                        <!-- Integrity -->
+                        <div class="col-6">
+                            <div class="p-3 rounded-3" style="background:{% if integrity.valid %}#f0fdf4{% else %}#fef2f2{% endif %}; border:1px solid {% if integrity.valid %}#bbf7d0{% else %}#fecaca{% endif %};">
+                                <div class="text-muted small fw-semibold text-uppercase mb-1">Integrity Check</div>
+                                <div class="fw-bold {% if integrity.valid %}text-success{% else %}text-danger{% endif %}">
+                                    {% if integrity.valid %}✅ Hash Match{% else %}❌ Mismatch{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Stored Fingerprint -->
+                        <div class="col-12">
+                            <div class="p-3 rounded-3" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                                <div class="text-muted small fw-semibold text-uppercase mb-1">SHA-256 Stored Fingerprint</div>
+                                <div class="font-monospace text-primary small text-break">{{ integrity.fingerprint }}</div>
+                            </div>
+                        </div>
+                        <!-- Real-time Hash -->
+                        <div class="col-12">
+                            <div class="p-3 rounded-3" style="background:#f8fafc; border:1px solid #e2e8f0;">
+                                <div class="text-muted small fw-semibold text-uppercase mb-1">Real-Time Computed Hash</div>
+                                <div class="font-monospace small text-break {% if integrity.valid %}text-success{% else %}text-danger fw-bold{% endif %}">{{ integrity.recalc }}</div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="d-flex justify-content-end">
-                        <a href="{% url 'parcel_detail' parcel.id %}" class="btn btn-cyber-outline btn-sm">
-                            <i class="bi bi-eye me-1"></i> View Public Record Dossier
+                    <div class="d-flex justify-content-end mt-3">
+                        <a href="{% url 'parcel_detail' parcel.id %}" class="btn fw-semibold"
+                           style="background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; border-radius:8px; padding:8px 20px;">
+                            <i class="bi bi-eye me-1"></i> View Full Public Dossier
                         </a>
                     </div>
                 </div>
-                {% endif %}
+            </div>
+            {% endif %}
 
+            <!-- Info Cards -->
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-3 p-3 h-100 text-center" style="background:#eff6ff;">
+                        <i class="bi bi-qr-code-scan text-primary fs-4 mb-2"></i>
+                        <div class="fw-semibold text-dark small">Scan QR Code</div>
+                        <div class="text-muted" style="font-size:0.75rem;">From any printed RoR certificate</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-3 p-3 h-100 text-center" style="background:#f0fdf4;">
+                        <i class="bi bi-shield-lock text-success fs-4 mb-2"></i>
+                        <div class="fw-semibold text-dark small">SHA-256 Secured</div>
+                        <div class="text-muted" style="font-size:0.75rem;">Cryptographic hash chain audit</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-3 p-3 h-100 text-center" style="background:#fefce8;">
+                        <i class="bi bi-clock-history text-warning fs-4 mb-2"></i>
+                        <div class="fw-semibold text-dark small">Real-Time Check</div>
+                        <div class="text-muted" style="font-size:0.75rem;">Live hash recalculated on request</div>
+                    </div>
+                </div>
             </div>
 
         </div>
