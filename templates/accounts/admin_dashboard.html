@@ -30,104 +30,244 @@
 
 <div class="container py-4">
 
-    <!-- Stats Row -->
+    <!-- Quick Admin Actions -->
+    <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-white">
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <span class="text-muted small fw-bold text-uppercase me-2"><i class="bi bi-lightning-fill text-warning me-1"></i>Quick Actions:</span>
+            <a href="/admin/parcels/parcel/add/" class="btn btn-sm btn-primary fw-semibold"><i class="bi bi-plus-circle me-1"></i>Add Parcel</a>
+            <a href="/admin/auth/user/add/" class="btn btn-sm btn-success fw-semibold"><i class="bi bi-person-plus me-1"></i>Add User</a>
+            <a href="/admin/mutations/mutation/" class="btn btn-sm btn-warning fw-semibold text-dark"><i class="bi bi-arrow-left-right me-1"></i>Mutations</a>
+            <a href="/admin/disputes/dispute/" class="btn btn-sm btn-danger fw-semibold"><i class="bi bi-exclamation-triangle me-1"></i>Disputes</a>
+            <a href="/admin/accounts/loginhistory/" class="btn btn-sm btn-outline-secondary fw-semibold"><i class="bi bi-clock-history me-1"></i>Login Logs</a>
+            <a href="/export/qgis-geojson/" class="btn btn-sm btn-outline-primary fw-semibold ms-auto"><i class="bi bi-download me-1"></i>Export GeoJSON</a>
+        </div>
+    </div>
+
+    <!-- 6 Stats Row -->
     <div class="row g-3 mb-4">
-        <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+        <div class="col-6 col-md-2">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
                 <div class="text-muted small fw-semibold text-uppercase">Total Parcels</div>
                 <div class="fw-bold fs-2 text-primary">{{ total_parcels }}</div>
             </div>
         </div>
-        <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
-                <div class="text-muted small fw-semibold text-uppercase">Verified Plots</div>
+        <div class="col-6 col-md-2">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
+                <div class="text-muted small fw-semibold text-uppercase">Verified</div>
                 <div class="fw-bold fs-2 text-success">{{ verified_parcels }}</div>
             </div>
         </div>
-        <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
-                <div class="text-muted small fw-semibold text-uppercase">Pending Mutations</div>
+        <div class="col-6 col-md-2">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
+                <div class="text-muted small fw-semibold text-uppercase">Disputed</div>
+                <div class="fw-bold fs-2 text-danger">{{ disputed_parcels }}</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-2">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
+                <div class="text-muted small fw-semibold text-uppercase">Mutations</div>
                 <div class="fw-bold fs-2 text-warning">{{ pending_mutations }}</div>
             </div>
         </div>
-        <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
-                <div class="text-muted small fw-semibold text-uppercase">Registered Users</div>
+        <div class="col-6 col-md-2">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
+                <div class="text-muted small fw-semibold text-uppercase">Disputes</div>
+                <div class="fw-bold fs-2 text-danger">{{ active_disputes }}</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-2">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
+                <div class="text-muted small fw-semibold text-uppercase">Users</div>
                 <div class="fw-bold fs-2 text-dark">{{ total_users }}</div>
             </div>
         </div>
     </div>
 
-    <!-- Registered Parcels Management -->
-    <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden bg-white">
-        <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
-            <h6 class="fw-bold text-dark mb-0"><i class="bi bi-map me-2 text-primary"></i>Registered Land Parcels</h6>
-            <a href="/admin/parcels/parcel/" class="btn btn-sm btn-outline-primary">Manage All in DB &rarr;</a>
+    <!-- Row: Parcels Table + Status Chart -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold text-dark mb-0"><i class="bi bi-map me-2 text-primary"></i>Registered Land Parcels</h6>
+                    <a href="/admin/parcels/parcel/" class="btn btn-sm btn-outline-primary">Manage All &rarr;</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0 small">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ULPIN</th>
+                                <th>Khasra No.</th>
+                                <th>Area (Ha)</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in recent_parcels %}
+                            <tr>
+                                <td class="font-monospace fw-semibold">{{ p.parcel_id }}</td>
+                                <td>{{ p.khasra_no }}</td>
+                                <td>{{ p.area_hectares }} Ha</td>
+                                <td>
+                                    <span class="badge {% if p.status == 'Verified' %}bg-success{% elif p.status == 'Disputed' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                                        {{ p.status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="/admin/parcels/parcel/{{ p.id }}/change/" class="btn btn-sm btn-light border">Edit</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="5" class="text-center text-muted py-4">No parcels registered yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0 small">
-                <thead class="table-light">
-                    <tr>
-                        <th>ULPIN</th>
-                        <th>Khasra No.</th>
-                        <th>Area (Ha)</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for p in recent_parcels %}
-                    <tr>
-                        <td class="font-monospace fw-semibold">{{ p.parcel_id }}</td>
-                        <td>{{ p.khasra_no }}</td>
-                        <td>{{ p.area_hectares }} Ha</td>
-                        <td>
-                            <span class="badge {% if p.status == 'Verified' %}bg-success{% elif p.status == 'Disputed' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
-                                {{ p.status }}
-                            </span>
-                        </td>
-                        <td>
-                            <a href="/admin/parcels/parcel/{{ p.id }}/change/" class="btn btn-sm btn-light border">Edit</a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr><td colspan="5" class="text-center text-muted py-4">No parcels registered yet.</td></tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 d-flex flex-column justify-content-center">
+                <h6 class="fw-bold text-dark mb-3 text-center"><i class="bi bi-pie-chart-fill me-2 text-primary"></i>Parcel Status Breakdown</h6>
+                <canvas id="adminParcelChart" height="220"></canvas>
+            </div>
         </div>
     </div>
 
-    <!-- Users Management -->
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-        <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
-            <h6 class="fw-bold text-dark mb-0"><i class="bi bi-people me-2 text-success"></i>System Users</h6>
-            <a href="/admin/auth/user/" class="btn btn-sm btn-outline-success">Manage Users &rarr;</a>
+    <!-- Row: Mutations & Disputes -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold text-dark mb-0"><i class="bi bi-arrow-left-right me-2 text-warning"></i>Recent Mutations</h6>
+                    <a href="/admin/mutations/mutation/" class="btn btn-sm btn-outline-warning text-dark">Manage &rarr;</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0 small">
+                        <thead class="table-light">
+                            <tr><th>ID</th><th>Type</th><th>Status</th><th>Action</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for m in recent_mutations %}
+                            <tr>
+                                <td class="font-monospace">#{{ m.id }}</td>
+                                <td>{{ m.mutation_type|default:"Partition" }}</td>
+                                <td><span class="badge bg-warning text-dark">{{ m.status }}</span></td>
+                                <td><a href="/admin/mutations/mutation/{{ m.id }}/change/" class="btn btn-sm btn-light border">Review</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="text-center text-muted py-3">No mutations found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0 small">
-                <thead class="table-light">
-                    <tr>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for u in users_list %}
-                    <tr>
-                        <td class="fw-semibold">{{ u.username }}</td>
-                        <td class="text-muted">{{ u.email }}</td>
-                        <td>{% if u.is_superuser %}<span class="badge bg-primary">Admin</span>{% else %}<span class="badge bg-secondary">User</span>{% endif %}</td>
-                        <td>{% if u.is_active %}<span class="text-success fw-semibold">Active</span>{% else %}<span class="text-danger">Inactive</span>{% endif %}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold text-dark mb-0"><i class="bi bi-exclamation-triangle me-2 text-danger"></i>Active Disputes</h6>
+                    <a href="/admin/disputes/dispute/" class="btn btn-sm btn-outline-danger">Manage &rarr;</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0 small">
+                        <thead class="table-light">
+                            <tr><th>ID</th><th>Case / Reason</th><th>Status</th><th>Action</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for d in recent_disputes %}
+                            <tr>
+                                <td class="font-monospace">#{{ d.id }}</td>
+                                <td>{{ d.reason|default:d.dispute_type|default:"Boundary Dispute"|truncatechars:32 }}</td>
+                                <td><span class="badge bg-danger">{{ d.status|default:"Open" }}</span></td>
+                                <td><a href="/admin/disputes/dispute/{{ d.id }}/change/" class="btn btn-sm btn-light border">Resolve</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="text-center text-muted py-3">No active disputes.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row: System Users + Login Audit Logs -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold text-dark mb-0"><i class="bi bi-people me-2 text-success"></i>System Users</h6>
+                    <a href="/admin/auth/user/" class="btn btn-sm btn-outline-success">Manage Users &rarr;</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0 small">
+                        <thead class="table-light">
+                            <tr><th>Username</th><th>Email</th><th>Role</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for u in users_list %}
+                            <tr>
+                                <td class="fw-semibold">{{ u.username }}</td>
+                                <td class="text-muted">{{ u.email }}</td>
+                                <td>{% if u.is_superuser %}<span class="badge bg-primary">Admin</span>{% else %}<span class="badge bg-secondary">User</span>{% endif %}</td>
+                                <td>{% if u.is_active %}<span class="text-success fw-semibold">Active</span>{% else %}<span class="text-danger">Inactive</span>{% endif %}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white h-100">
+                <div class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold text-dark mb-0"><i class="bi bi-shield-check me-2 text-info"></i>Recent Login Audit</h6>
+                    <a href="/admin/accounts/loginhistory/" class="btn btn-sm btn-outline-secondary">All Logs &rarr;</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0 small">
+                        <thead class="table-light">
+                            <tr><th>Username</th><th>IP</th><th>Status</th><th>Time</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for l in recent_logins %}
+                            <tr>
+                                <td class="fw-semibold">{{ l.username_attempted }}</td>
+                                <td class="font-monospace text-muted">{{ l.ip_address }}</td>
+                                <td><span class="badge {% if l.status == 'SUCCESS' %}bg-success{% else %}bg-danger{% endif %}">{{ l.status }}</span></td>
+                                <td class="text-muted">{{ l.timestamp|date:"d M, H:i" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="text-center text-muted py-3">No login logs yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+    const ctx = document.getElementById('adminParcelChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Verified', 'Disputed', 'Pending'],
+            datasets: [{
+                data: [{{ verified_parcels }}, {{ disputed_parcels }}, {{ pending_parcels }}],
+                backgroundColor: ['#16a34a', '#ef4444', '#f59e0b'],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            cutout: '62%',
+            plugins: { legend: { position: 'bottom' } }
+        }
+    });
+</script>
 </body>
 </html>

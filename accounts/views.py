@@ -235,12 +235,22 @@ def admin_dashboard_view(request):
         return redirect('login')
     from parcels.models import Parcel
     from mutations.models import Mutation
+    from disputes.models import Dispute
+    disputed_parcels = Parcel.objects.filter(status__in=['Disputed', 'Tampered']).count()
+    verified_parcels = Parcel.objects.filter(status='Verified').count()
+    pending_parcels = Parcel.objects.filter(status='Mutation Pending').count()
     context = {
         'total_parcels': Parcel.objects.count(),
-        'verified_parcels': Parcel.objects.filter(status='Verified').count(),
+        'verified_parcels': verified_parcels,
+        'disputed_parcels': disputed_parcels,
+        'pending_parcels': pending_parcels,
         'pending_mutations': Mutation.objects.filter(status='Pending').count(),
+        'active_disputes': Dispute.objects.count(),
         'total_users': User.objects.count(),
         'recent_parcels': Parcel.objects.order_by('-id')[:15],
         'users_list': User.objects.order_by('-id')[:15],
+        'recent_mutations': Mutation.objects.order_by('-id')[:10],
+        'recent_disputes': Dispute.objects.order_by('-id')[:10],
+        'recent_logins': LoginHistory.objects.order_by('-timestamp')[:10],
     }
     return render(request, 'accounts/admin_dashboard.html', context)
