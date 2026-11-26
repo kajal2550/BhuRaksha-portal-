@@ -157,16 +157,27 @@
         </div>
     </nav>
 
-    <!-- Global Flash Messages -->
+    <!-- Global Flash Messages (Compact Toast under Notification Bell) -->
     {% if messages %}
-    <div class="container mt-3">
+    <div id="globalToastStack" style="position:fixed; top:70px; right:24px; z-index:1080; display:flex; flex-direction:column; gap:8px; max-width:340px; width:calc(100% - 32px);">
         {% for message in messages %}
-        <div class="alert alert-primary alert-dismissible fade show shadow-sm border-0" role="alert">
-            <i class="bi bi-info-circle me-2"></i> {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="alert alert-dismissible fade show shadow border-0 d-flex align-items-start gap-2 mb-0 py-2 px-3"
+             role="alert"
+             style="background:#ffffff; color:#1e293b; border-left:4px solid #2563eb !important; border-radius:10px; box-shadow:0 8px 24px rgba(15,23,42,0.12) !important; font-size:0.84rem;">
+            <i class="bi bi-bell-fill text-primary mt-1" style="font-size:0.95rem;"></i>
+            <div class="flex-grow-1 lh-sm">{{ message }}</div>
+            <button type="button" class="btn-close btn-close-sm ms-1" data-bs-dismiss="alert" style="font-size:0.65rem; padding:0.5rem;"></button>
         </div>
         {% endfor %}
     </div>
+    <script>
+        setTimeout(() => {
+            document.querySelectorAll('#globalToastStack .alert').forEach(el => {
+                el.classList.remove('show');
+                setTimeout(() => el.remove(), 300);
+            });
+        }, 4500);
+    </script>
     {% endif %}
 
     <!-- Main View Content -->
