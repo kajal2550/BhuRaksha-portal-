@@ -16,6 +16,7 @@ import analytics.views as analytics_views
 urlpatterns = [
     # Core Admin
     path('admin/', admin.site.urls),
+    path('admin-dashboard/', account_views.admin_dashboard_view, name='admin_dashboard'),
 
     # 1. Landing / Home
     path('', core_views.home_view, name='home'),
