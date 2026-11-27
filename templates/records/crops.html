@@ -3,139 +3,480 @@
 {% block title %}Agri & Crop Cultivation Hub | BhuRaksha{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-3 px-lg-4 py-3">
+<style>
+  .agri-hero {
+    background: linear-gradient(135deg, #14532d 0%, #15803d 55%, #166534 100%);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .agri-hero::before {
+    content: '🌾';
+    position: absolute;
+    right: 2.5rem; top: 50%;
+    transform: translateY(-50%);
+    font-size: 6rem;
+    opacity: 0.12;
+    line-height: 1;
+  }
 
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-flower1 text-success me-2"></i>AGRICULTURE_&_CROP_HUB</h4>
-            <div class="text-muted small">Agri Officer Management • Multi-Season Records, Yields, Irrigation Profiles & Schemes</div>
+  .stat-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: box-shadow 0.2s;
+  }
+  .stat-card:hover { box-shadow: 0 4px 20px rgba(21,128,61,0.12); }
+  .stat-card .icon-box {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 0.6rem;
+  }
+  .stat-card .num { font-size: 1.9rem; font-weight: 800; color: #0f172a; line-height: 1.1; }
+  .stat-card .label { font-size: 0.78rem; color: #64748b; font-weight: 500; }
+
+  .table-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .table-card-header {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #f1f5f9;
+    background: #fff;
+  }
+  .table-card-header h6 { font-weight: 700; color: #0f172a; margin: 0; font-size: 1rem; }
+
+  .crops-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .crops-table thead tr { background: #f8fafc; }
+  .crops-table thead th {
+    padding: 0.85rem 1.1rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #64748b;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+  }
+  .crops-table tbody td {
+    padding: 0.9rem 1.1rem;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.88rem;
+    color: #374151;
+    vertical-align: middle;
+  }
+  .crops-table tbody tr:last-child td { border-bottom: none; }
+  .crops-table tbody tr:hover { background: #f8fffe; }
+
+  .parcel-code {
+    font-size: 0.7rem;
+    font-family: 'Courier New', monospace;
+    color: #94a3b8;
+  }
+
+  .season-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .season-rabi   { background: #dcfce7; color: #166534; }
+  .season-kharif { background: #dbeafe; color: #1e40af; }
+  .season-zaid   { background: #fef9c3; color: #854d0e; }
+  .season-other  { background: #f3f4f6; color: #374151; }
+
+  .irrig-badge {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    background: #eff6ff; color: #1d4ed8;
+    padding: 0.2rem 0.65rem;
+    border-radius: 100px;
+    font-size: 0.75rem; font-weight: 500;
+  }
+
+  .btn-view {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    text-decoration: none;
+    transition: all 0.15s;
+    background: #f8fafc;
+  }
+  .btn-view:hover { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+
+  .btn-add {
+    background: linear-gradient(135deg, #15803d, #16a34a);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.55rem 1.2rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 3px 10px rgba(21,128,61,0.3);
+    text-decoration: none;
+  }
+  .btn-add:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 16px rgba(21,128,61,0.4);
+    color: #fff;
+  }
+
+  .btn-schemes {
+    background: #fff;
+    border: 1.5px solid #16a34a;
+    color: #16a34a;
+    border-radius: 10px;
+    padding: 0.55rem 1.2rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .btn-schemes:hover { background: #16a34a; color: #fff; }
+
+  /* Search Bar */
+  .search-wrap {
+    position: relative;
+    max-width: 280px;
+  }
+  .search-wrap input {
+    padding: 0.5rem 1rem 0.5rem 2.4rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    width: 100%;
+    background: #f8fafc;
+    color: #0f172a;
+    transition: border-color 0.2s;
+  }
+  .search-wrap input:focus { border-color: #16a34a; outline: none; box-shadow: 0 0 0 3px rgba(22,163,74,0.1); }
+  .search-wrap .search-icon {
+    position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%);
+    color: #94a3b8; font-size: 0.85rem;
+  }
+
+  /* Modal */
+  .agri-modal .modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    overflow: hidden;
+  }
+  .agri-modal .modal-header {
+    background: linear-gradient(135deg, #15803d, #16a34a);
+    color: #fff;
+    border: none;
+    padding: 1.25rem 1.5rem;
+  }
+  .agri-modal .modal-header .btn-close { filter: brightness(0) invert(1); opacity: 0.8; }
+  .agri-modal .modal-body { padding: 1.5rem; }
+  .agri-modal .form-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #64748b;
+    margin-bottom: 0.4rem;
+  }
+  .agri-modal .form-control,
+  .agri-modal .form-select {
+    border: 1.5px solid #cbd5e1;
+    border-radius: 9px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.9rem;
+    color: #0f172a;
+    background: #f8fafc;
+    transition: border-color 0.2s;
+  }
+  .agri-modal .form-control:focus,
+  .agri-modal .form-select:focus {
+    border-color: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22,163,74,0.12);
+    background: #fff;
+    outline: none;
+  }
+  .agri-modal .modal-footer { border-top: 1px solid #f1f5f9; padding: 1rem 1.5rem; }
+  .btn-commit {
+    background: linear-gradient(135deg, #15803d, #16a34a);
+    color: #fff; border: none;
+    border-radius: 9px; padding: 0.6rem 1.5rem; font-weight: 700;
+  }
+  .btn-commit:hover { color: #fff; opacity: 0.92; }
+</style>
+
+<div class="container-fluid px-3 px-lg-4 py-4" style="max-width: 1300px;">
+
+  <!-- Hero Header -->
+  <div class="agri-hero mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3" style="position:relative;z-index:1;">
+      <div>
+        <span class="badge rounded-pill mb-2 d-inline-block"
+              style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.78rem;padding:0.4rem 1rem;">
+          <i class="bi bi-flower1 me-1"></i> Agri Officer Management Module
+        </span>
+        <h2 class="fw-bold mb-1" style="letter-spacing:-0.5px;">
+          Agriculture &amp; Crop Cultivation Hub
+        </h2>
+        <p class="mb-0 opacity-75">Multi-Season Records • Yields • Irrigation Profiles • Govt. Schemes Integration</p>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <a href="{% url 'schemes_view' %}" class="btn-schemes">
+          <i class="bi bi-award"></i> Schemes &amp; Subsidies
+        </a>
+        <button class="btn-add" data-bs-toggle="modal" data-bs-target="#newCropModal">
+          <i class="bi bi-plus-circle-fill"></i> Log New Crop
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="stat-card">
+        <div class="icon-box" style="background:#dcfce7;"><i class="bi bi-flower2" style="color:#16a34a;"></i></div>
+        <div class="num text-success">{{ crops|length }}</div>
+        <div class="label">Total Crop Records</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card">
+        <div class="icon-box" style="background:#dbeafe;"><i class="bi bi-cloud-rain" style="color:#2563eb;"></i></div>
+        <div class="num" style="color:#2563eb;">
+          {{ crops|length }}
         </div>
-        <div class="d-flex gap-2">
-            <a href="{% url 'schemes_view' %}" class="btn btn-cyber-outline btn-sm">
-                <i class="bi bi-award me-1"></i> Schemes & Subsidies
-            </a>
-            <button class="btn btn-cyber-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newCropModal">
-                <i class="bi bi-plus-circle me-1"></i> Log New Crop Cultivation
-            </button>
+        <div class="label">Active Seasons</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card">
+        <div class="icon-box" style="background:#fef9c3;"><i class="bi bi-bar-chart-fill" style="color:#d97706;"></i></div>
+        <div class="num" style="color:#d97706;">PAU</div>
+        <div class="label">Certified Varieties</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card">
+        <div class="icon-box" style="background:#fdf4ff;"><i class="bi bi-droplet-fill" style="color:#9333ea;"></i></div>
+        <div class="num" style="color:#9333ea;">100%</div>
+        <div class="label">Irrigation Linked</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table Card -->
+  <div class="table-card">
+    <div class="table-card-header">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-table text-success fs-5"></i>
+        <h6>Crop Cultivation Records</h6>
+        <span class="badge bg-success bg-opacity-10 text-success px-2 py-1 rounded-pill" style="font-size:0.72rem;">
+          {{ crops|length }} entries
+        </span>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <div class="search-wrap">
+          <i class="bi bi-search search-icon"></i>
+          <input type="text" id="cropSearch" placeholder="Search crop, khasra, village..." oninput="filterCrops()">
         </div>
+      </div>
     </div>
 
-    <!-- Crops Table -->
-    <div class="cyber-card p-0">
-        <div class="table-responsive">
-            <table class="table table-cyber align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>Target Parcel</th>
-                        <th>Village</th>
-                        <th>Crop & Variety</th>
-                        <th>Season</th>
-                        <th>Sowing Date</th>
-                        <th>Estimated Harvest</th>
-                        <th>Est. Yield (Qt)</th>
-                        <th>Irrigation Type</th>
-                        <th class="text-end">RoR</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for c in crops %}
-                    <tr>
-                        <td>
-                            <strong class="text-white">Khasra {{ c.parcel.khasra_no }}</strong><br>
-                            <span class="font-monospace small text-muted">{{ c.parcel.parcel_id }}</span>
-                        </td>
-                        <td>{{ c.parcel.village.name }}</td>
-                        <td>
-                            <div class="fw-semibold text-success">{{ c.crop }}</div>
-                            <small class="text-muted">{{ c.variety }}</small>
-                        </td>
-                        <td>
-                            {% if c.season == 'Rabi' %}
-                                <span class="badge-glow-green px-2 py-0 small">Rabi (Winter)</span>
-                            {% elif c.season == 'Kharif' %}
-                                <span class="badge-glow-cyan px-2 py-0 small">Kharif (Monsoon)</span>
-                            {% else %}
-                                <span class="badge-glow-amber px-2 py-0 small">{{ c.season }}</span>
-                            {% endif %}
-                        </td>
-                        <td>{{ c.sowing_date }}</td>
-                        <td>{{ c.harvest_date|default:"Active Season" }}</td>
-                        <td><strong>{{ c.estimated_yield_quintals }} Qt</strong></td>
-                        <td>{{ c.irrigation_used }}</td>
-                        <td class="text-end">
-                            <a href="{% url 'parcel_detail' c.parcel.id %}" class="btn btn-cyber-outline btn-sm">
-                                <i class="bi bi-eye"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="9" class="text-center py-4 text-muted">No crop entries logged.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+    <div class="table-responsive">
+      <table class="crops-table" id="cropTable">
+        <thead>
+          <tr>
+            <th>Target Parcel</th>
+            <th>Village</th>
+            <th>Crop &amp; Variety</th>
+            <th>Season</th>
+            <th>Sowing Date</th>
+            <th>Estimated Harvest</th>
+            <th>Est. Yield (Qt)</th>
+            <th>Irrigation</th>
+            <th style="text-align:right;">RoR</th>
+          </tr>
+        </thead>
+        <tbody id="cropTbody">
+          {% for c in crops %}
+          <tr class="crop-row">
+            <td>
+              <div class="fw-bold text-dark">Khasra {{ c.parcel.khasra_no }}</div>
+              <div class="parcel-code">{{ c.parcel.parcel_id }}</div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center gap-1">
+                <i class="bi bi-geo-alt-fill text-success" style="font-size:0.75rem;"></i>
+                {{ c.parcel.village.name }}
+              </div>
+            </td>
+            <td>
+              <div class="fw-semibold text-success">{{ c.crop }}</div>
+              <div class="text-muted" style="font-size:0.76rem;">{{ c.variety }}</div>
+            </td>
+            <td>
+              {% if c.season == 'Rabi' %}
+                <span class="season-badge season-rabi"><i class="bi bi-snow2"></i> Rabi (Winter)</span>
+              {% elif c.season == 'Kharif' %}
+                <span class="season-badge season-kharif"><i class="bi bi-cloud-rain"></i> Kharif (Monsoon)</span>
+              {% elif c.season == 'Zaid' %}
+                <span class="season-badge season-zaid"><i class="bi bi-sun"></i> Zaid (Summer)</span>
+              {% else %}
+                <span class="season-badge season-other">{{ c.season }}</span>
+              {% endif %}
+            </td>
+            <td>
+              <i class="bi bi-calendar3 text-muted me-1" style="font-size:0.8rem;"></i>
+              {{ c.sowing_date }}
+            </td>
+            <td>
+              {% if c.harvest_date %}
+                <span class="text-dark">{{ c.harvest_date }}</span>
+              {% else %}
+                <span class="badge bg-green-subtle text-success px-2 py-1 rounded-pill"
+                      style="background:#dcfce7;font-size:0.74rem;">
+                  <i class="bi bi-activity me-1"></i>Active Season
+                </span>
+              {% endif %}
+            </td>
+            <td>
+              <span class="fw-bold text-dark">{{ c.estimated_yield_quintals }}</span>
+              <span class="text-muted" style="font-size:0.8rem;">Qt</span>
+            </td>
+            <td>
+              <span class="irrig-badge">
+                <i class="bi bi-droplet-half"></i>
+                {{ c.irrigation_used }}
+              </span>
+            </td>
+            <td style="text-align:right;">
+              <a href="{% url 'parcel_detail' c.parcel.id %}" class="btn-view" title="View RoR">
+                <i class="bi bi-eye"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="9" class="text-center py-5">
+              <i class="bi bi-leaf" style="font-size:3rem;color:#94a3b8;"></i>
+              <div class="mt-2 fw-semibold text-muted">No crop cultivation records logged yet.</div>
+              <button class="btn-add mt-3" data-bs-toggle="modal" data-bs-target="#newCropModal">
+                <i class="bi bi-plus-circle-fill"></i> Log First Crop
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
+  </div>
 
 </div>
 
 <!-- Modal: New Crop Entry -->
-<div class="modal fade" id="newCropModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content cyber-card p-0">
-            <form method="POST" action="{% url 'agriculture_hub' %}">
-                {% csrf_token %}
-                <div class="cyber-card-header text-white font-monospace">
-                    <i class="bi bi-flower1 text-success me-1"></i> LOG_CROP_SEASON_DATA
-                </div>
-                <div class="p-4">
-                    <div class="mb-3">
-                        <label class="form-label text-muted small font-monospace">TARGET PARCEL</label>
-                        <select name="parcel_id" class="form-select cyber-select" required>
-                            <option value="">-- Choose Parcel --</option>
-                            {% for p in parcels %}
-                            <option value="{{ p.id }}">Khasra {{ p.khasra_no }} [{{ p.parcel_id }}] - {{ p.village.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="row g-2 mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label text-muted small font-monospace">CROP NAME</label>
-                            <input type="text" name="crop" class="form-control cyber-input" placeholder="e.g. Wheat / Paddy / Mustard" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label text-muted small font-monospace">SEASON</label>
-                            <select name="season" class="form-select cyber-select" required>
-                                <option value="Rabi">Rabi (Winter)</option>
-                                <option value="Kharif">Kharif (Monsoon)</option>
-                                <option value="Zaid">Zaid (Summer)</option>
-                                <option value="Perennial">Perennial / Commercial</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row g-2 mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label text-muted small font-monospace">SEED VARIETY</label>
-                            <input type="text" name="variety" class="form-control cyber-input" placeholder="e.g. PBW-725" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label text-muted small font-monospace">EST. YIELD (QUINTALS)</label>
-                            <input type="number" step="0.5" name="estimated_yield_quintals" class="form-control cyber-input" value="30.0" required>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label text-muted small font-monospace">SOWING DATE</label>
-                        <input type="date" name="sowing_date" class="form-control cyber-input" required>
-                    </div>
-                </div>
-                <div class="modal-footer border-secondary">
-                    <button type="button" class="btn btn-cyber-outline" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-cyber-primary">Commit Crop Record</button>
-                </div>
-            </form>
+<div class="modal fade agri-modal" id="newCropModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form method="POST" action="{% url 'agriculture_hub' %}">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">
+            <i class="bi bi-flower1 me-2"></i> Log Crop Season Data
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
+        <div class="modal-body">
+
+          <div class="mb-3">
+            <label class="form-label">Target Parcel</label>
+            <select name="parcel_id" class="form-select" required>
+              <option value="">— Choose Parcel —</option>
+              {% for p in parcels %}
+              <option value="{{ p.id }}">Khasra {{ p.khasra_no }} [{{ p.parcel_id }}] — {{ p.village.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Crop Name</label>
+              <input type="text" name="crop" class="form-control" placeholder="e.g. Wheat / Paddy / Mustard" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Season</label>
+              <select name="season" class="form-select" required>
+                <option value="Rabi">❄️ Rabi (Winter)</option>
+                <option value="Kharif">🌧️ Kharif (Monsoon)</option>
+                <option value="Zaid">☀️ Zaid (Summer)</option>
+                <option value="Perennial">🌿 Perennial / Commercial</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Seed Variety</label>
+              <input type="text" name="variety" class="form-control" placeholder="e.g. PBW-725" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Est. Yield (Quintals)</label>
+              <input type="number" step="0.5" name="estimated_yield_quintals" class="form-control" value="30.0" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Sowing Date</label>
+            <input type="date" name="sowing_date" class="form-control" required>
+          </div>
+
+          <!-- Info box -->
+          <div class="p-3 rounded-3 d-flex gap-2 align-items-start"
+               style="background:#f0fdf4;border:1px solid #bbf7d0;font-size:0.8rem;color:#166534;">
+            <i class="bi bi-info-circle-fill flex-shrink-0 mt-1"></i>
+            <span>Crop record will be linked to the selected parcel's RoR and included in the agri analytics dashboard.</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn-commit btn">
+            <i class="bi bi-check-circle me-1"></i> Commit Crop Record
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
+
+<script>
+function filterCrops() {
+  const q = document.getElementById('cropSearch').value.toLowerCase();
+  document.querySelectorAll('.crop-row').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+</script>
 {% endblock %}
