@@ -168,30 +168,30 @@
 
     <!-- ══ LEFT SLIDE-OUT DASHBOARD PANEL (OFFCANVAS) ══ -->
     <style>
-        #portalSidebarDrawer a { color: rgba(255,255,255,0.92) !important; transition: background 0.15s, color 0.15s; }
-        #portalSidebarDrawer a:hover { background: rgba(255,255,255,0.14) !important; color: #ffffff !important; }
-        #portalSidebarDrawer a i { color: rgba(255,255,255,0.85) !important; }
-        #portalSidebarDrawer a.bg-white { background: #ffffff !important; color: #1d4ed8 !important; }
-        #portalSidebarDrawer a.bg-white i { color: #1d4ed8 !important; }
+        #portalSidebarDrawer a { color: #334155 !important; transition: background 0.15s, color 0.15s; }
+        #portalSidebarDrawer a:hover { background: #f1f5f9 !important; color: #0f172a !important; }
+        #portalSidebarDrawer a i { color: #64748b !important; }
+        #portalSidebarDrawer a.bg-white { background: #2563eb !important; color: #ffffff !important; }
+        #portalSidebarDrawer a.bg-white i { color: #ffffff !important; }
     </style>
-    <div class="offcanvas offcanvas-start text-white" tabindex="-1" id="portalSidebarDrawer" aria-labelledby="portalSidebarDrawerLabel" style="width:260px; background:linear-gradient(180deg, #1e3a8a 0%, #1d4ed8 55%, #0f172a 100%); border-right:1px solid rgba(255,255,255,0.12);">
-        <div class="offcanvas-header py-3" style="border-bottom:1px solid rgba(255,255,255,0.14);">
+    <div class="offcanvas offcanvas-start" data-bs-backdrop="static" data-bs-scroll="true" tabindex="-1" id="portalSidebarDrawer" aria-labelledby="portalSidebarDrawerLabel" style="width:260px; background:#ffffff; color:#0f172a; border-right:1px solid #e2e8f0;">
+        <div class="offcanvas-header py-3" style="border-bottom:1px solid #e2e8f0;">
             {% if user.is_authenticated %}
             <div class="d-flex align-items-center gap-2">
-                <div class="rounded-circle bg-white text-primary fw-bold d-flex align-items-center justify-content-center" style="width:38px;height:38px;font-size:0.95rem;">
+                <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center" style="width:38px;height:38px;font-size:0.95rem;">
                     {{ user.username|slice:":1"|upper }}
                 </div>
                 <div>
-                    <div class="fw-bold lh-1" style="font-size:0.9rem;color:#ffffff !important;">{{ user.username }}</div>
-                    <span class="badge bg-white bg-opacity-25 text-white mt-1" style="font-size:0.65rem;">
+                    <div class="fw-bold lh-1" style="font-size:0.9rem;color:#0f172a !important;">{{ user.username }}</div>
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 mt-1" style="font-size:0.65rem;">
                         {% if user.is_superuser %}Admin{% else %}User{% endif %}
                     </span>
                 </div>
             </div>
             {% else %}
-            <h6 class="offcanvas-title fw-bold text-white mb-0" id="portalSidebarDrawerLabel">BhuRaksha Menu</h6>
+            <h6 class="offcanvas-title fw-bold text-dark mb-0" id="portalSidebarDrawerLabel">BhuRaksha Menu</h6>
             {% endif %}
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body p-2 d-flex flex-column" style="overflow-y:auto;">
             <div class="flex-grow-1">
