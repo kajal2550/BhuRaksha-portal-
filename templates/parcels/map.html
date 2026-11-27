@@ -271,21 +271,21 @@
                 <div id="inspectorTabsContainer" class="d-none flex-grow-1 p-3">
                     
                     <!-- Parcel Summary Banner -->
-                    <div class="p-3 bg-dark rounded border border-secondary mb-3">
+                    <div class="p-3 rounded-3 mb-3 shadow-sm" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #ffffff;">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <span class="text-muted small font-monospace">KHASRA:</span>
+                                <span class="small font-monospace" style="color: rgba(255,255,255,0.8);">KHASRA:</span>
                                 <span class="fs-4 fw-bold text-white ms-1" id="inspectKhasra">-</span>
                             </div>
-                            <span class="badge-glow-green px-2 py-1 small" id="integrityBadge"><i class="bi bi-shield-check me-1"></i>VERIFIED</span>
+                            <span class="badge bg-white text-success fw-semibold px-2 py-1 small" id="integrityBadge"><i class="bi bi-shield-check me-1"></i>VERIFIED</span>
                         </div>
-                        <div class="text-muted small font-monospace mt-1">
-                            ULPIN: <span class="text-info" id="inspectUlpin">-</span>
+                        <div class="small font-monospace mt-1" style="color: rgba(255,255,255,0.85);">
+                            ULPIN: <span class="fw-semibold text-white" id="inspectUlpin">-</span>
                         </div>
                     </div>
 
                     <!-- Inspector Nav Tabs -->
-                    <ul class="nav nav-pills nav-fill mb-3 bg-dark p-1 rounded border border-secondary" id="dossierTabs" role="tablist">
+                    <ul class="nav nav-pills nav-fill mb-3 bg-light p-1 rounded border" id="dossierTabs" role="tablist">
                         <li class="nav-item">
                             <button class="nav-link active py-1 small" data-bs-toggle="pill" data-bs-target="#tabOverview">Overview</button>
                         </li>
