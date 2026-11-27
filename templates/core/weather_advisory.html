@@ -3,104 +3,302 @@
 {% block title %}Weather Advisory & Crop Intelligence | BhuRaksha{% endblock %}
 
 {% block content %}
-<div class="container py-4">
+<style>
+  .weather-hero {
+    background: linear-gradient(135deg, #0369a1 0%, #0284c7 50%, #0f766e 100%);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .weather-hero::after {
+    content: '🌤️';
+    position: absolute;
+    right: 2.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 6rem;
+    opacity: 0.14;
+    line-height: 1;
+  }
+  .live-station-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    border-radius: 100px;
+    padding: 0.45rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    display: inline-block;
+  }
 
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-cloud-sun text-warning me-2"></i>PRECISION_AGRI_WEATHER_ADVISORY</h4>
-            <div class="text-muted small">Real-time Micro-Climate Sensor Data, Soil Moisture & Precision Spray Advisory</div>
+  .selector-card {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 12px rgba(2,132,199,0.06);
+    padding: 1.25rem 1.5rem;
+  }
+  .selector-card .form-select {
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 0.65rem 1rem;
+    font-size: 0.92rem;
+    color: #0f172a;
+    background: #f8fafc;
+  }
+  .selector-card .form-select:focus {
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2,132,199,0.12);
+    background: #fff;
+    outline: none;
+  }
+  .coord-pill {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    border-radius: 10px;
+    padding: 0.6rem 0.9rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .telemetry-card {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    padding: 1.4rem;
+    text-align: center;
+    height: 100%;
+    transition: transform 0.15s, box-shadow 0.2s;
+  }
+  .telemetry-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(2,132,199,0.1);
+  }
+  .telemetry-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .telemetry-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #64748b;
+    margin-bottom: 0.35rem;
+  }
+  .telemetry-value {
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.15;
+    margin-bottom: 0.35rem;
+  }
+
+  .advisory-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    padding: 1.6rem;
+    height: 100%;
+  }
+  .advisory-callout-green {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .advisory-callout-blue {
+    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+    border: 1px solid #bae6fd;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .advisory-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .advisory-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #475569;
+  }
+</style>
+
+<div class="container py-4" style="max-width: 1150px;">
+
+  <!-- Hero Header -->
+  <div class="weather-hero mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3" style="position:relative;z-index:1;">
+      <div>
+        <span class="badge rounded-pill mb-2 d-inline-block"
+              style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.78rem;padding:0.4rem 1rem;">
+          <i class="bi bi-cloud-sun-fill me-1"></i> Micro-Climate &amp; Crop Intelligence
+        </span>
+        <h2 class="fw-bold mb-1" style="letter-spacing:-0.5px;">
+          Precision Agri Weather Advisory
+        </h2>
+        <p class="mb-0 opacity-75">Real-time Micro-Climate Sensor Data, Soil Moisture &amp; Precision Spray Advisory</p>
+      </div>
+      <div>
+        <span class="live-station-pill">
+          <span class="live-dot"></span> Phagwara Station Live
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parcel Selector -->
+  <div class="selector-card mb-4">
+    <form method="GET" action="{% url 'weather_advisory' %}" class="row g-3 align-items-center">
+      <div class="col-lg-8">
+        <label class="form-label small fw-bold text-muted text-uppercase mb-1" style="letter-spacing:0.06em;">
+          <i class="bi bi-geo-alt-fill text-primary me-1"></i> Geotag Parcel Weather
+        </label>
+        <select name="parcel_id" class="form-select" onchange="this.form.submit()">
+          <option value="">— Choose Cadastral Parcel to Geotag Weather —</option>
+          {% for p in parcels %}
+          <option value="{{ p.id }}" {% if selected_parcel.id == p.id %}selected{% endif %}>
+            Khasra {{ p.khasra_no }} [{{ p.parcel_id }}] — {{ p.village.name }} ({{ p.area_hectares }} Ha)
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-lg-4 d-flex align-items-end">
+        <div class="coord-pill mt-lg-4">
+          <i class="bi bi-compass"></i>
+          <span>{{ lat|floatformat:4 }}° N, {{ lng|floatformat:4 }}° E</span>
         </div>
-        <span class="badge-glow-green px-3 py-1 font-monospace small"><i class="bi bi-broadcast me-1"></i>PHAGWARA STATION LIVE</span>
+      </div>
+    </form>
+  </div>
+
+  <!-- Live Telemetry Weather Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="telemetry-card">
+        <div class="telemetry-icon mx-auto" style="background:#fef3c7;color:#d97706;">
+          <i class="bi bi-thermometer-half"></i>
+        </div>
+        <div class="telemetry-label">Surface Temperature</div>
+        <div class="telemetry-value">{{ weather.temp }}</div>
+        <small class="text-success fw-semibold"><i class="bi bi-arrow-up-right"></i> Optimal for Wheat</small>
+      </div>
     </div>
 
-    <!-- Parcel Selector -->
-    <div class="cyber-card p-3 mb-4">
-        <form method="GET" action="{% url 'weather_advisory' %}" class="row g-2 align-items-center">
-            <div class="col-md-9">
-                <select name="parcel_id" class="form-select cyber-select" onchange="this.form.submit()">
-                    <option value="">-- Choose Cadastral Parcel to Geotag Weather --</option>
-                    {% for p in parcels %}
-                    <option value="{{ p.id }}" {% if selected_parcel.id == p.id %}selected{% endif %}>
-                        Khasra {{ p.khasra_no }} [{{ p.parcel_id }}] - {{ p.village.name }} ({{ p.area_hectares }} Ha)
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-3">
-                <span class="font-monospace small text-info">Coordinates: {{ lat|floatformat:4 }}° N, {{ lng|floatformat:4 }}° E</span>
-            </div>
-        </form>
+    <div class="col-6 col-md-3">
+      <div class="telemetry-card">
+        <div class="telemetry-icon mx-auto" style="background:#e0f2fe;color:#0284c7;">
+          <i class="bi bi-droplet-half"></i>
+        </div>
+        <div class="telemetry-label">Relative Humidity</div>
+        <div class="telemetry-value" style="color:#0284c7;">{{ weather.humidity }}</div>
+        <small class="text-muted">Standard atmospheric</small>
+      </div>
     </div>
 
-    <!-- Live Telemetry Weather Cards -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-3">
-            <div class="cyber-card p-3 border-start border-3 border-warning text-center">
-                <i class="bi bi-thermometer-half display-5 text-warning mb-1"></i>
-                <div class="text-muted small font-monospace">SURFACE TEMPERATURE</div>
-                <div class="fs-2 fw-bold text-white mt-1">{{ weather.temp }}</div>
-                <small class="text-success"><i class="bi bi-arrow-up-right"></i> Optimal for Wheat</small>
-            </div>
+    <div class="col-6 col-md-3">
+      <div class="telemetry-card">
+        <div class="telemetry-icon mx-auto" style="background:#dcfce7;color:#16a34a;">
+          <i class="bi bi-wind"></i>
         </div>
-        <div class="col-md-3">
-            <div class="cyber-card p-3 border-start border-3 border-info text-center">
-                <i class="bi bi-droplet-half display-5 text-info mb-1"></i>
-                <div class="text-muted small font-monospace">RELATIVE HUMIDITY</div>
-                <div class="fs-2 fw-bold text-info mt-1">{{ weather.humidity }}</div>
-                <small class="text-muted">Standard atmospheric</small>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="cyber-card p-3 border-start border-3 border-success text-center">
-                <i class="bi bi-wind display-5 text-success mb-1"></i>
-                <div class="text-muted small font-monospace">WIND VELOCITY</div>
-                <div class="fs-2 fw-bold text-success mt-1">{{ weather.wind_speed }}</div>
-                <small class="text-success"><i class="bi bi-check-circle"></i> Low Drift Risk</small>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="cyber-card p-3 border-start border-3 border-primary text-center">
-                <i class="bi bi-water display-5 text-primary mb-1"></i>
-                <div class="text-muted small font-monospace">SOIL MOISTURE</div>
-                <div class="fs-3 fw-bold text-white mt-1">0.28 <small class="fs-6 text-muted">m³/m³</small></div>
-                <small class="text-info">Optimal Root Zone</small>
-            </div>
-        </div>
+        <div class="telemetry-label">Wind Velocity</div>
+        <div class="telemetry-value" style="color:#16a34a;">{{ weather.wind_speed }}</div>
+        <small class="text-success fw-semibold"><i class="bi bi-check-circle-fill"></i> Low Drift Risk</small>
+      </div>
     </div>
 
-    <!-- Automated Agronomic Advisories -->
-    <div class="row g-4">
-        <div class="col-lg-6">
-            <div class="cyber-card p-4 h-100 border-success">
-                <h5 class="fw-bold text-success font-monospace mb-3"><i class="bi bi-flower1 me-2"></i>PESTICIDE & FERTILIZER SPRAY ADVISORY</h5>
-                <div class="p-3 bg-dark rounded border border-secondary mb-3">
-                    <strong class="text-white d-block mb-1">Current Spray Window:</strong>
-                    <p class="text-secondary small mb-0">{{ weather.spray_advisory }}</p>
-                </div>
-                <div class="small font-monospace text-muted">
-                    • Minimum spray drift hazard detected under 15 km/h winds.<br>
-                    • High absorption rate expected due to ambient humidity.<br>
-                    • Suitable for PAU-recommended Rabi weedicide applications.
-                </div>
-            </div>
+    <div class="col-6 col-md-3">
+      <div class="telemetry-card">
+        <div class="telemetry-icon mx-auto" style="background:#eff6ff;color:#2563eb;">
+          <i class="bi bi-water"></i>
         </div>
-
-        <div class="col-lg-6">
-            <div class="cyber-card p-4 h-100 border-info">
-                <h5 class="fw-bold text-info font-monospace mb-3"><i class="bi bi-moisture me-2"></i>GROUNDWATER & IRRIGATION PLANNING</h5>
-                <div class="p-3 bg-dark rounded border border-secondary mb-3">
-                    <strong class="text-white d-block mb-1">Irrigation Directive:</strong>
-                    <p class="text-secondary small mb-0">{{ weather.irrigation_advice }}</p>
-                </div>
-                <div class="small font-monospace text-muted">
-                    • Conserves tubewell electricity and diesel expenses.<br>
-                    • Avoids waterlogging in clay-rich alluvial root systems.<br>
-                    • Prevents fungal rust in wheat crop canopy.
-                </div>
-            </div>
-        </div>
+        <div class="telemetry-label">Soil Moisture</div>
+        <div class="telemetry-value">0.28 <span class="fs-6 fw-normal text-muted">m³/m³</span></div>
+        <small class="text-primary fw-semibold">Optimal Root Zone</small>
+      </div>
     </div>
+  </div>
+
+  <!-- Automated Agronomic Advisories -->
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="advisory-card">
+        <h5 class="fw-bold text-success mb-3 d-flex align-items-center gap-2">
+          <span style="width:36px;height:36px;background:#dcfce7;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;">
+            <i class="bi bi-flower1 text-success"></i>
+          </span>
+          Pesticide &amp; Fertilizer Spray Advisory
+        </h5>
+        <div class="advisory-callout-green">
+          <div class="fw-bold text-success small text-uppercase mb-1" style="letter-spacing:0.05em;">
+            Current Spray Window
+          </div>
+          <p class="text-dark mb-0" style="font-size:0.9rem;">{{ weather.spray_advisory }}</p>
+        </div>
+        <ul class="advisory-list">
+          <li><i class="bi bi-check-circle-fill text-success mt-1"></i> Minimum spray drift hazard detected under 15 km/h winds.</li>
+          <li><i class="bi bi-check-circle-fill text-success mt-1"></i> High absorption rate expected due to ambient humidity.</li>
+          <li><i class="bi bi-check-circle-fill text-success mt-1"></i> Suitable for PAU-recommended Rabi weedicide applications.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="advisory-card">
+        <h5 class="fw-bold text-primary mb-3 d-flex align-items-center gap-2">
+          <span style="width:36px;height:36px;background:#e0f2fe;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;">
+            <i class="bi bi-moisture text-primary"></i>
+          </span>
+          Groundwater &amp; Irrigation Planning
+        </h5>
+        <div class="advisory-callout-blue">
+          <div class="fw-bold text-primary small text-uppercase mb-1" style="letter-spacing:0.05em;">
+            Irrigation Directive
+          </div>
+          <p class="text-dark mb-0" style="font-size:0.9rem;">{{ weather.irrigation_advice }}</p>
+        </div>
+        <ul class="advisory-list">
+          <li><i class="bi bi-check-circle-fill text-primary mt-1"></i> Conserves tubewell electricity and diesel expenses.</li>
+          <li><i class="bi bi-check-circle-fill text-primary mt-1"></i> Avoids waterlogging in clay-rich alluvial root systems.</li>
+          <li><i class="bi bi-check-circle-fill text-primary mt-1"></i> Prevents fungal rust in wheat crop canopy.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
 </div>
 {% endblock %}
