@@ -3,88 +3,349 @@
 {% block title %}Schemes & Subsidies | BhuRaksha{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-3 px-lg-4 py-3">
+<style>
+  .schemes-hero {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #0f766e 100%);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .schemes-hero::after {
+    content: '🏛️';
+    position: absolute;
+    right: 2.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 6rem;
+    opacity: 0.12;
+    line-height: 1;
+  }
+  .btn-back-crops {
+    background: rgba(255,255,255,0.16);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #fff;
+    border-radius: 10px;
+    padding: 0.55rem 1.15rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: background 0.15s;
+  }
+  .btn-back-crops:hover {
+    background: rgba(255,255,255,0.28);
+    color: #fff;
+  }
 
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="fw-bold text-white mb-0 font-monospace"><i class="bi bi-award text-warning me-2"></i>SCHEMES_&_SUBSIDIES_REGISTRY</h4>
-            <div class="text-muted small">Rule-based eligibility verification for PM-KISAN, PMFBY Insurance, and Micro-Irrigation</div>
-        </div>
-        <a href="{% url 'agriculture_hub' %}" class="btn btn-cyber-outline btn-sm">
-            <i class="bi bi-arrow-left me-1"></i> Back to Crops
+  .scheme-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.06);
+    padding: 1.6rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s, box-shadow 0.2s;
+  }
+  .scheme-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(37,99,235,0.12);
+  }
+  .scheme-code {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.25rem 0.7rem;
+    border-radius: 100px;
+    margin-bottom: 0.85rem;
+    width: fit-content;
+  }
+  .scheme-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+  }
+  .scheme-desc {
+    font-size: 0.86rem;
+    color: #475569;
+    line-height: 1.55;
+    margin-bottom: 1.15rem;
+    flex-grow: 1;
+  }
+  .benefit-box {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  .benefit-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #166534;
+  }
+  .benefit-amount {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #15803d;
+    font-family: 'Courier New', monospace;
+  }
+  .threshold-chip {
+    font-size: 0.78rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .ledger-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .ledger-header {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    background: #fff;
+  }
+  .search-wrap {
+    position: relative;
+    min-width: 250px;
+  }
+  .search-wrap input {
+    padding: 0.5rem 1rem 0.5rem 2.35rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    width: 100%;
+    background: #f8fafc;
+    color: #0f172a;
+  }
+  .search-wrap input:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    background: #fff;
+  }
+  .search-wrap .search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.85rem;
+  }
+
+  .schemes-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .schemes-table thead tr { background: #f8fafc; }
+  .schemes-table thead th {
+    padding: 0.85rem 1.1rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #64748b;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+  }
+  .schemes-table tbody td {
+    padding: 0.9rem 1.1rem;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.88rem;
+    color: #374151;
+    vertical-align: middle;
+  }
+  .schemes-table tbody tr:last-child td { border-bottom: none; }
+  .schemes-table tbody tr:hover { background: #f8fafc; }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .status-eligible { background: #dcfce7; color: #166534; }
+  .status-ineligible { background: #fee2e2; color: #991b1b; }
+
+  .btn-view {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    text-decoration: none;
+    background: #f8fafc;
+    transition: all 0.15s;
+  }
+  .btn-view:hover {
+    background: #eff6ff;
+    color: #2563eb;
+    border-color: #bfdbfe;
+  }
+</style>
+
+<div class="container-fluid px-3 px-lg-4 py-4" style="max-width: 1300px;">
+
+  <!-- Hero Header -->
+  <div class="schemes-hero mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3" style="position:relative;z-index:1;">
+      <div>
+        <span class="badge rounded-pill mb-2 d-inline-block"
+              style="background:rgba(255,255,255,0.2);color:#fff;font-size:0.78rem;padding:0.4rem 1rem;">
+          <i class="bi bi-award-fill me-1"></i> Govt. Welfare &amp; Subsidy Engine
+        </span>
+        <h2 class="fw-bold mb-1" style="letter-spacing:-0.5px;">
+          Schemes &amp; Subsidies Registry
+        </h2>
+        <p class="mb-0 opacity-75">Rule-based eligibility verification for PM-KISAN, PMFBY Insurance &amp; Micro-Irrigation</p>
+      </div>
+      <div>
+        <a href="{% url 'agriculture_hub' %}" class="btn-back-crops">
+          <i class="bi bi-arrow-left"></i> Back to Crops
         </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Schemes Cards -->
+  <div class="row g-4 mb-4">
+    {% for s in schemes %}
+    <div class="col-md-4">
+      <div class="scheme-card">
+        <span class="scheme-code">
+          <i class="bi bi-patch-check-fill"></i> {{ s.code }}
+        </span>
+        <h5 class="scheme-title">{{ s.name }}</h5>
+        <p class="scheme-desc">{{ s.description }}</p>
+
+        <div class="benefit-box">
+          <span class="benefit-label">Subsidy Benefit</span>
+          <span class="benefit-amount">₹{{ s.subsidy_amount_per_ha }}/Ha</span>
+        </div>
+
+        <div class="threshold-chip">
+          <i class="bi bi-rulers text-primary"></i>
+          <span>Eligible Threshold: <strong class="text-dark">&le; {{ s.max_area_hectares }} Hectares</strong></span>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="text-center py-4 bg-white rounded-4 border text-muted">
+        No active government schemes configured.
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Eligibility Ledger Table -->
+  <div class="ledger-card">
+    <div class="ledger-header">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-check2-all text-success fs-5"></i>
+        <h6 class="fw-bold text-dark mb-0">Parcel Scheme Verification Ledger</h6>
+        <span class="badge bg-primary bg-opacity-10 text-primary px-2 py-1 rounded-pill" style="font-size:0.72rem;">
+          {{ eligibilities|length }} records
+        </span>
+      </div>
+      <div class="search-wrap">
+        <i class="bi bi-search search-icon"></i>
+        <input type="text" id="schemeSearch" placeholder="Search parcel, village, scheme..." oninput="filterSchemes()">
+      </div>
     </div>
 
-    <!-- Active Schemes Cards -->
-    <div class="row g-4 mb-5">
-        {% for s in schemes %}
-        <div class="col-md-4">
-            <div class="cyber-card p-4 h-100">
-                <span class="badge-glow-amber px-2 py-1 small font-monospace mb-2 d-inline-block">{{ s.code }}</span>
-                <h5 class="fw-bold text-white mb-2">{{ s.name }}</h5>
-                <p class="text-secondary small mb-3">{{ s.description }}</p>
-                <div class="p-2 bg-dark rounded border border-secondary font-monospace small mb-3">
-                    <span class="text-muted">SUBSIDY BENEFIT:</span>
-                    <span class="text-success fw-bold">₹{{ s.subsidy_amount_per_ha }}/Ha</span>
-                </div>
-                <div class="small text-muted font-monospace">Eligible Threshold: &le; {{ s.max_area_hectares }} Hectares</div>
-            </div>
-        </div>
-        {% endfor %}
+    <div class="table-responsive">
+      <table class="schemes-table">
+        <thead>
+          <tr>
+            <th>Target Parcel</th>
+            <th>Village</th>
+            <th>Area (Ha)</th>
+            <th>Target Scheme</th>
+            <th>Status</th>
+            <th>Rule Verification Notes</th>
+            <th style="text-align:right;">RoR</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for el in eligibilities %}
+          <tr class="scheme-row">
+            <td>
+              <div class="fw-bold text-dark">Khasra {{ el.parcel.khasra_no }}</div>
+              <div class="text-muted font-monospace" style="font-size:0.72rem;">{{ el.parcel.parcel_id }}</div>
+            </td>
+            <td>
+              <i class="bi bi-geo-alt-fill text-primary me-1" style="font-size:0.75rem;"></i>
+              {{ el.parcel.village.name }}
+            </td>
+            <td class="fw-semibold text-dark">{{ el.parcel.area_hectares }} Ha</td>
+            <td class="fw-semibold text-primary">{{ el.scheme.name }}</td>
+            <td>
+              {% if el.is_eligible %}
+                <span class="status-pill status-eligible"><i class="bi bi-check-circle-fill"></i> Eligible</span>
+              {% else %}
+                <span class="status-pill status-ineligible"><i class="bi bi-x-circle-fill"></i> Ineligible</span>
+              {% endif %}
+            </td>
+            <td class="small text-muted">{{ el.reason }}</td>
+            <td style="text-align:right;">
+              <a href="{% url 'parcel_detail' el.parcel.id %}" class="btn-view" title="View RoR">
+                <i class="bi bi-eye"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" class="text-center py-5">
+              <i class="bi bi-clipboard-check" style="font-size:2.8rem;color:#94a3b8;"></i>
+              <div class="mt-2 fw-semibold text-muted">No scheme verification logs found.</div>
+              <div class="small text-muted">Verification logs appear here once parcels are evaluated against scheme rules.</div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-
-    <!-- Eligibility Table -->
-    <div class="cyber-card p-0">
-        <div class="cyber-card-header text-white font-monospace">
-            <i class="bi bi-check-all text-success me-1"></i> PARCEL_SCHEME_VERIFICATION_LEDGER
-        </div>
-        <div class="table-responsive">
-            <table class="table table-cyber align-middle mb-0">
-                <thead>
-                    <tr>
-                        <th>Target Parcel</th>
-                        <th>Village</th>
-                        <th>Area (Ha)</th>
-                        <th>Target Scheme</th>
-                        <th>Status</th>
-                        <th>Rule Verification Notes</th>
-                        <th class="text-end">RoR</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for el in eligibilities %}
-                    <tr>
-                        <td>
-                            <strong class="text-white">Khasra {{ el.parcel.khasra_no }}</strong><br>
-                            <span class="font-monospace small text-muted">{{ el.parcel.parcel_id }}</span>
-                        </td>
-                        <td>{{ el.parcel.village.name }}</td>
-                        <td>{{ el.parcel.area_hectares }} Ha</td>
-                        <td class="font-monospace text-info fw-bold">{{ el.scheme.name }}</td>
-                        <td>
-                            {% if el.is_eligible %}
-                                <span class="badge-glow-green px-2 py-0 small"><i class="bi bi-check-circle"></i> Eligible</span>
-                            {% else %}
-                                <span class="badge-glow-red px-2 py-0 small">Ineligible</span>
-                            {% endif %}
-                        </td>
-                        <td class="small text-secondary">{{ el.reason }}</td>
-                        <td class="text-end">
-                            <a href="{% url 'parcel_detail' el.parcel.id %}" class="btn btn-cyber-outline btn-sm">
-                                <i class="bi bi-eye"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="7" class="text-center py-4 text-muted">No scheme verification logs found.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+  </div>
 
 </div>
+
+<script>
+function filterSchemes() {
+  const q = document.getElementById('schemeSearch').value.toLowerCase();
+  document.querySelectorAll('.scheme-row').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+</script>
 {% endblock %}
